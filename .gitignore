@@ -1,0 +1,12 @@
+.project
+.c9revisions
+.c9/
+.settings/
+/nbproject/
+
+# PHP Composer
+composer.phar
+vendor/
+
+# User settings
+config/user.ini

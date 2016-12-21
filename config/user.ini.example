@@ -1,0 +1,21 @@
+; Required environment variables
+; Database must be PostgreSQL at the moment
+[database]
+;database_url = postgres://username:password@hostname:port/database-name
+
+; Strongly recommended environment variables
+[google]
+;google-js-api-key = 
+;google-analytics-key = 
+;google-gcm-api-key = 
+
+;# Optional environment variables
+[mailgun]
+;mailgun-api-key = 
+;mailgun-api-domain = 
+;mailgun-from-email = 
+
+[proximo]
+;promimo-user = 
+;promimo-pass = 
+;promimo-host = 

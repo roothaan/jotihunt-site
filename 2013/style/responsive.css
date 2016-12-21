@@ -1,0 +1,178 @@
+@media all and (max-width: 1260px) {
+    #mapcontainer {
+        max-width: 600px;
+    }
+    
+        .vossenContainer #mapcenter {
+            top: 213px;
+            left: 287px;
+        }
+    
+    .vossenContainer #map {
+        height: 450px;
+    }
+}
+
+@media all and (max-width: 1023px) {
+    #mapcontainer {
+        max-width: 400px;
+    }
+    
+    .headerContainer {
+	background-image: none;
+    }
+    
+        #menu ul.menu_container {
+            background-color: #cc3300;
+        }
+    
+        .vossenContainer #mapcenter {
+            top: 133px;
+            left: 187px;
+        }
+    
+    .vossenContainer #map {
+        height: 300px;
+    }
+    .invoerLeft, .invoerRight {
+        float: none !important;
+        margin: 0 auto 20px;
+    }
+    
+    #footer {
+        background-image: none;
+    }
+}
+
+@media all and (max-width: 860px) {
+    #menu ul.menu_container {
+        padding-right: 70px;
+    }
+    
+    #menu li.showMenuItem {
+        display: block;
+    }
+    
+    .vossenMenuContainer {
+        width: 450px;
+    }
+    
+    #mapcontainer {
+        max-width: 100%;
+    }
+    
+        .vossenContainer #mapcenter {
+            top: 133px;
+            left: 48%;
+        }
+    
+    .vossenContainer #map {
+        height: 300px;
+    }
+    
+    .vossenContainer .vossenMenuItem {
+        margin: 5px 5px;
+        padding: 5px 5px;
+    }
+    
+    .vossenContainer .vossenMenuItem span.deelgebied {
+        font-size: 20px;
+    }
+    
+    .vossenContainer .vossenMenuItem span.team {
+        display: none;
+    }
+    
+    #vos_lijst {
+        padding: 0;
+        width: auto;
+    }
+}
+
+@media all and (max-width: 600px) {
+    .headerContainer {
+	    height: 40px;
+    }
+    
+    #menu {
+        width: auto;
+        margin-left: 40px;
+    }
+    
+        #menu ul.menu_container {
+            width: 440px;
+            height: 40px;
+            padding-right: 40px;
+        }
+        
+    #logo img {
+        width: 40px;
+    }
+    
+    #logbox {
+	    top: 4px;
+	    right: 5px;
+	    padding: 5px;
+    }
+    
+    #inlogButton {
+    	top: 9px;
+    	right: 10px;
+    }
+    
+    #menu li.menu_item {
+    	height: 30px;
+    	width: 30px;
+    	padding: 5px;
+    }
+    
+    #menu li.menu_item a {
+        height: 30px;
+        width: 30px;
+    }
+
+    #menu li.showMenuItem {
+        display: none;
+    }
+}
+
+@media all and (max-width: 530px) {
+    #menu ul.menu_container {
+        width: auto;
+    }
+    
+    #menu li.showMenuItem {
+        display: block;
+    }
+    
+    .vossenContainer .vossenMenuItem span.deelgebied {
+        font-size: 40px;
+        width: 26px;
+        overflow: hidden;
+    }   
+    
+    .vossenContainer .vossenMenuItem {
+        margin: 2px 2px;
+        padding: 5px 5px;
+        width: 29px;
+    }
+    
+    .vossenMenuContainer {
+        width: 260px;
+    }
+}
+
+@media all and (max-width: 405px) {
+    #logbox form input {
+        display: block;
+        margin: 3px 0;
+    }
+    
+    #logbox {
+        display: none;
+    }
+    
+    #inlogButton {
+        display: block;
+    }
+}

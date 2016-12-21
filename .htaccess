@@ -1,0 +1,18 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+
+# Docker will replace the below line
+#PROXY_BASE_URL#
+
+# If you're not using Docker, uncomment this
+# And replace PROXY_BASE_URL with the actual value
+#RewriteRule ^PROXY_BASE_URL/(.*)$ $1 [QSA]
+
+RewriteRule ^api/ indexApi.php [L]
+RewriteRule ^images/([0-9]+)$ 2013/loadImage.php?imageId=$1 [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^.*$ /2013/index.php [L]
+</IfModule>

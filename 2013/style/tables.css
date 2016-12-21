@@ -1,0 +1,11 @@
+table.dataTable td {
+	padding: 3px 5px !important;
+}
+
+table.dataTable tr.even.row_selected td {
+	background-color: #B0BED9;
+}
+
+table.dataTable tr.odd.row_selected td {
+	background-color: #9FAFD1;
+}
