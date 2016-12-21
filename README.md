@@ -48,14 +48,14 @@ Zie  `config/user.ini.example` voor voorbeelden. Kopieer dit naar naar `config/u
 
 
 ## Required environment variables
-`DATABASE_URL`\
+`DATABASE_URL`  
 Dit moet in Postgres formaat: `postgres://username:password@hostname:port/database-name`
 
-`DATABASE_OPTIONS`\
+`DATABASE_OPTIONS`  
 Voor Heroku: `sslmode=require options='--client_encoding=UTF8'`
 
 # Strongly recommended environment variables
-`GOOGLE_JS_API_KEY`\
+`GOOGLE_JS_API_KEY`  
 `GOOGLE_ANALYTICS_KEY`
 
 # Optional environment variables
@@ -66,28 +66,28 @@ Google GCM wordt gebruikt om notificaties naar de Android app te sturen.
 ## Mailgun
 Mailgun is een gratis dienst om e-mail te versturen.
 
-`MAILGUN_API_KEY`\
-`MAINGUN_API_DOMAIN`\
+`MAILGUN_API_KEY`  
+`MAINGUN_API_DOMAIN`  
 `MAILGUN_FROM_EMAIL`
 
 ## Proximo
-Promino is een service waardoor je gegarandeerd een vast IP naar buiten na gebruikt.\
+Promino is een service waardoor je gegarandeerd een vast IP naar buiten na gebruikt.  
 Dit is handig als in een cloud dienst (Amazon, Heroku) toch een vast IP (voor Google GCM bijvoorbeeld) nodig hebt.
 
-`PROXIMO_USER`\
-`PROXIMO_PASS`\
+`PROXIMO_USER`  
+`PROXIMO_PASS`  
 `PROXIMO_HOST`
 
 # In case you're behind a reverse proxy
-`PROXY_SERVER_PORT`\
+`PROXY_SERVER_PORT`  
 Bijvoorbeeld `8443`
 
-`PROXY_BASE_URL`\
+`PROXY_BASE_URL`  
 Bijvoorbeeld `/forwarded`
 
 # Jotihunt site settings
-`SITE_SHOW_ERRORS`\
-Dit is een `boolean` waarde ((`1`/`true` of `0`/`false`).\
+`SITE_SHOW_ERRORS`  
+Dit is een `boolean` waarde ((`1`/`true` of `0`/`false`).  
 Standaard staan de errors uit.
 
 
@@ -115,6 +115,7 @@ sudo apt-get install php7.0-zip
 ```
 
 # Update Composer stuff
-De site gebruikt `composer` als PHP Dependency manager.\
-Als deze geupdate moet worden of nieuwe dependencies gedownload, run dan\
+De site gebruikt `composer` als PHP Dependency manager.  
+Als deze geupdate moet worden of nieuwe dependencies gedownload, run dan  
 `./composer.phar update`
+
