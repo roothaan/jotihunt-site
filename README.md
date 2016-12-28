@@ -9,7 +9,7 @@
     |__/                                   
     ------------------------------------
 
-In 2016 heeft de Scouting Roothaangroep besloten op de Jotihunt site en de Jotihunt Android app beschikbaar te stellen aan alle groepen die meedoen.
+In 2016 heeft de Scouting Roothaangroep besloten op de Jotihunt site en de Jotihunt Android app (https://play.google.com/store/apps/details?id=org.roothaan.jotihunt) beschikbaar te stellen aan alle groepen die meedoen.
 
 Groepen zijn welkom om via de Roothaan in de gehoste versie mee te doen (zodat er geen hosting of setup nodig is) of zelf met deze code een prive site op te zetten.
 
@@ -22,7 +22,6 @@ Groepen zijn welkom om via de Roothaan in de gehoste versie mee te doen (zodat e
 - PostgreSQL - Database
 - Codeship - Continues integration
 - Cloud 9 - Cloud PHP IDE / testing
-
 
 ## Heroku Plugins
 - Heroku Postgres
@@ -119,3 +118,7 @@ De site gebruikt `composer` als PHP Dependency manager.
 Als deze geupdate moet worden of nieuwe dependencies gedownload, run dan  
 `./composer.phar update`
 
+# Zelf aan de slag
+Ben jij een (PHP of Android) ontwikkelaar, of wil je een nieuwe app (IOS?) maken met de data uit je eigen Jotihunt site? Dat kan!
+
+De site bied alle data ook via een REST API aan (deze gebruikt de Android app bijvoorbeeld). De documentatie hiervoor staat op http://docs.jotihunt.apiary.io/.
