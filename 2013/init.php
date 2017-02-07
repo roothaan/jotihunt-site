@@ -5,7 +5,7 @@ require_once BASE_DIR . 'includes/global_include.php';
 require_once BASE_DIR . 'includes/functions.php';
 
 $authMgr->attemptAuth();
-if (! $driver->isReady()) {
+if (!isset($driver) || ! $driver->isReady()) {
     if (! defined('NO_DB_REQUIRED')) {
         echo 'not ready yet. Try <a href="' . WEBSITE_URL . 'admin">/admin</a>?';
         die();

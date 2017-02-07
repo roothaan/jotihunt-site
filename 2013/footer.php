@@ -8,7 +8,7 @@ if (isset($footerOptions)) {
 <?php
 if ($_footerOptions['includeHtml']) { ?>
     <div id="footer">
-        <p>Jotihunt <?php echo date('Y');?></p>
+        <p>Jotihunt <?php echo date('Y');?> - <a href="<?=WEBSITE_URL?>privacy">Privacy</a></p>
     </div>
     <!-- end #footer -->
 <?php } // end of 'includeHtml'?> 

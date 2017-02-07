@@ -23,17 +23,20 @@ $paths = array(
     "opdrachten"=> "opdrachten.php",
     "invoer"=>"invoer.php",
     "events" => "choose_event.php",
-    'admin-gcm' => 'gcm.php'
+    'admin-gcm' => 'gcm.php',
+    'privacy' => 'privacy.php'
 );
 
 $needsNoEvent = array(
     'login',
     'logout',
-    'events'
+    'events',
+    'privacy'
 );
 
 $needsNoDb = array(
-    'admin' => 1
+    'admin' => 1,
+    'privacy' => 1
 );
 
 $noHeaderFooter = array(
