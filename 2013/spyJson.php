@@ -3,18 +3,29 @@
 
 require_once 'init.php';
 JotihuntUtils::requireLogin();
+$result = array();
+$result['vossen'] = array();
 
 // Vossen
 function showStatusByTeamLetter($deelgebiedName) {
-    global $driver;
+    global $driver, $result;
     
     $vos = $driver->getVosIncludingLocations($deelgebiedName);
     if (!$vos) {
         return;
     }
     $vos_locations = $vos->getLocations();
+
+    $result['vossen'][$vos->getDeelgebied()] = array();
+    $result['vossen'][$vos->getDeelgebied()]['id'] = intval($vos->getId());
+    $result['vossen'][$vos->getDeelgebied()]['name'] = $vos->getName();
+    $result['vossen'][$vos->getDeelgebied()]['date'] = 0;
+    $result['vossen'][$vos->getDeelgebied()]['address'] = 0;
+    $result['vossen'][$vos->getDeelgebied()]['lat'] = 0;
+    $result['vossen'][$vos->getDeelgebied()]['lng'] = 0;
+    $result['vossen'][$vos->getDeelgebied()]['lastHuntTime'] = 0;
     
-    echo $vos->getStatus() . "|||";
+    $result['vossen'][$vos->getDeelgebied()]['status'] = $vos->getStatus();
     if (! empty($vos_locations) && count($vos_locations)) {
         $last_location = $vos->getLastLocation();
         $adres = $last_location->getAddress();
@@ -31,12 +42,12 @@ function showStatusByTeamLetter($deelgebiedName) {
         
         $lat = $last_location->getLatitude();
         if(empty($lat)) {
-            $lat = "0";
+            $lat = 0;
         }
         
-        $long = $last_location->getLongitude();
-        if(empty($long)) {
-            $long = "0";
+        $lng = $last_location->getLongitude();
+        if(empty($lng)) {
+            $lng = 0;
         }
         
         $last_hunt_location = $vos->getLastHuntLocation();
@@ -45,11 +56,12 @@ function showStatusByTeamLetter($deelgebiedName) {
             $lastHuntTime = date('Y-m-d H:i:s', strtotime($last_hunt_location->getDate()));
         }
         
-        echo $date . "|||" . $address . "|||" . $lat . "|||" . $long . "|||" . $lastHuntTime;
-    } else {
-        echo "0|||0|||0|||0|||0";
+        $result['vossen'][$vos->getDeelgebied()]['date'] = $date;
+        $result['vossen'][$vos->getDeelgebied()]['address'] = $address;
+        $result['vossen'][$vos->getDeelgebied()]['lat'] = floatval($lat);
+        $result['vossen'][$vos->getDeelgebied()]['lng'] = floatval($lng);
+        $result['vossen'][$vos->getDeelgebied()]['lastHuntTime'] = $lastHuntTime;
     }
-    echo "||||||";
 }
 
 foreach ($driver->getAllDeelgebieden() as $deelgebied) {
@@ -57,34 +69,33 @@ foreach ($driver->getAllDeelgebieden() as $deelgebied) {
 }
 
 // Scorelijst
-$orgId = $authMgr->getMyOrganisationId();
-$org = $driver->getOrganisationById($orgId);
-$orgScore = $driver->getScoreByGroep($org->getName());
+$result['plaats'] = 0;
+$orgScore = $driver->getScore();
 
 if($orgScore){
-    echo $orgScore->getPlaats() . "||||||";
-}else{
-    echo "0||||||";
+    $result['plaats'] = intval($orgScore->getPlaats());
 }
 
 // Laatste bericht
 $lastbericht = $driver->getLastBericht();
 
+$result['lastbericht'] = 'Geen berichten bekend';
 if ($lastbericht) {
-    echo $lastbericht->getType().": ".$lastbericht->getTitel();
-} else {
-    echo 'Geen berichten bekend';
+    $result['lastbericht'] = $lastbericht->getType().": ".$lastbericht->getTitel();
 }
 
 // Laatste hunt
 $lasthunt = $driver->getLastHunt();
+$result['lasthunt'] = 'Er zijn nog geen hunts, nog niet... :P';
 if(!empty($lasthunt) && !empty($lasthunt['hunter_id'])) {
     $huntrider = $driver->getRider($lasthunt['hunter_id']);
     $user = $driver->getUserById($huntrider->getUserId());
     
     $location = $driver->getLocation($lasthunt['vossentracker_id']);
     $vos = $driver->getTeamById($location->getVossenId());
-    echo "||||||".$vos->getName()." - ".$user->getDisplayName()." (".strftime("%a %H:%M",strtotime($lasthunt['time'])).")";
-} else {
-    echo "||||||Er zijn nog geen hunts, nog niet... :P";
+    $result['lasthunt'] = $vos->getName()." - ".$user->getDisplayName()." (".strftime("%a %H:%M",strtotime($lasthunt['time'])).")";
 }
+
+header('Content-type: application/json');
+echo json_encode($result);
+?>

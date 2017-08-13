@@ -26,12 +26,13 @@ if (sizeof($events) === 0) {?>
     <?php
 }
 
+echo '<h1>Evenementen</h1>';
 foreach ($events as $event) {
-    echo '<h1>Event: ' . $event->getId() . '</h1>';
+    echo '<p><h2>' .  $event->getName() . ' [' . $event->getId() . ']</h2><hr /></p>';
     $allDeelgebieden = $driver->getAllDeelgebiedenForEvent($event->getId());
     if (sizeof($allDeelgebieden) === 0 ) {
         ?>
-        <h2>Geen deelgebieden!</h2>
+        <h3>Geen deelgebieden!</h3>
         <p>Maak een KML met 2 (!) lagen, :<strong>Deelgebieden</strong> en <strong>Groepen</strong>.</p>
         <form action="/2013/admin/deelgebieden.php" method="POST" enctype="multipart/form-data">
             KML File: <input type="file" name="kml_file"><br />
@@ -42,16 +43,17 @@ foreach ($events as $event) {
         
         <?php
     } else {
-        echo '<ul>';
 		foreach ($allDeelgebieden as $deelgebied) {
-		    echo '<li>' . $deelgebied->getName() . ' ['.$deelgebied->getId().'] <a href="/2013/admin/deelgebieden.php?action=remove&deelgebied_id='.$deelgebied->getId().'">verwijder</a></li>';
+		    echo '<p><h3>' . $deelgebied->getName() . ' ['.$deelgebied->getId().'] <a href="/2013/admin/deelgebieden.php?action=remove&deelgebied_id='.$deelgebied->getId().'">verwijder</a></h3>';
 		    
 		    $coordinate_counter = 0;
 		    $allCoordinates = $driver->getAllCoordinatesForDeelgebied($deelgebied->getId());
             if (sizeof($allCoordinates) === 0 ) {
-                echo 'Geen coordinaten!';
+                echo '<p>Geen coordinaten voor dit deelgebieden gevonden!</p>';
             } else {
-    		    echo '<ul>';
+                echo "<p><strong>" . count($allCoordinates) . "</strong> coordinaten gevonden. ";
+                echo "<a onclick=\"$( '.coords_" . $deelgebied->getId() . "').toggle();return false;\" href=\"#\">Show/hide coordinates</a> </p>";
+                echo "<ul class=\"coords_" . $deelgebied->getId() . "\" style=\"display:none;\">";
     		    foreach ($allCoordinates as $coordinate) {
     		        echo '<li>' . 
     		            'ID: ' . $coordinate->getId() . 
@@ -66,17 +68,16 @@ foreach ($events as $event) {
     		    echo '</ul>';
             }
             ?>
-            Voeg coordinate toe:
+            Voeg coordinate toe aan <strong><?= $deelgebied->getName() ?></strong>:
             <form action="/2013/admin/deelgebieden.php" method="POST">
                 Longitude:  <input type="text" name="longitude" />
                 Latitude:  <input type="text" name="latitude" />
                 Order ID:  <input type="text" name="order_id" value="<?= ++$coordinate_counter ?>" />
                 <input type="hidden" name="deelgebied_id" value="<?= $deelgebied->getId() ?>"/>
                 <input type="submit" name="Voeg coordinate toe"/>
-            </form>
+            </form></p>
             <?php
-		}
-		echo '</ul>'; ?>
+		} ?>
 		Voeg deelgebied toe:
             <form action="/2013/admin/deelgebieden.php" method="POST">
                 Naam:  <input type="text" name="name" />

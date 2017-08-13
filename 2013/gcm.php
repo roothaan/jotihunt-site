@@ -34,9 +34,9 @@ $(document).ready(function() {
         ]
     })
     .makeEditable({
-	    sAddURL:    "ajax/gcm.ajax.php",
-        sUpdateURL: "ajax/gcm.ajax.php",
-        sDeleteURL: "ajax/gcm.ajax.php"
+	    sAddURL:    "2013/ajax/gcm.ajax.php",
+        sUpdateURL: "2013/ajax/gcm.ajax.php",
+        sDeleteURL: "2013/ajax/gcm.ajax.php"
     });
 });
 </script>
@@ -91,7 +91,18 @@ foreach ( $allGcms as $gcm ) {
 </table>
 
 <form id="formAddNewRow" action="#" title="Add new record">
-    <input type="hidden" name="id" id="id" rel="0" /> <label for="name">GCM ID</label> <input type="text" name="gcmid" id="gcmid" class="required" rel="1" /><br /> <label for="name">Rider ID</label><input type="text" name="riderid" id="riderid" rel="2" /><br /> <input type="hidden" name="ridername" id="ridername" rel="3" /> <input type="hidden" name="locations" id="locations" rel="4" /> <label for="name">Enabled</label><input type="text" name="enabled" id="enabled" rel="5" value="t" /> <input type="hidden" name="time" id="time" rel="6" />
+    <input type="hidden" name="id" id="id" rel="0" />
+    <label for="name">GCM ID</label>
+    <input type="text" name="gcmid" id="gcmid" class="required" rel="1" /><br />
+    
+    <label for="name">Rider ID</label>
+    <input type="text" name="riderid" id="riderid" rel="2" /><br />
+    
+    <input type="hidden" name="ridername" id="ridername" rel="3" />
+    <input type="hidden" name="locations" id="locations" rel="4" />
+    
+    <label for="name">Enabled</label><input type="text" name="enabled" id="enabled" rel="5" value="t" />
+    <input type="hidden" name="time" id="time" rel="6" />
 </form>
 
 <div>

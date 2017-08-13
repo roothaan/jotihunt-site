@@ -134,7 +134,12 @@ class PostgresqlQueries {
         $sqlQuery .= 'LEFT OUTER JOIN vossentracker ON (hunts.vossentracker_id = vossentracker.id) ';
         $sqlQuery .= 'JOIN vossen ON (vossentracker.vossen_id = vossen.id) ';
         $sqlQuery .= 'JOIN deelgebied ON (vossen.deelgebied_id = deelgebied.id) ';
-        $sqlQuery .= 'WHERE vossentracker.organisation_id = $1';
+        $sqlQuery .= 'JOIN user_organisation ON (user_organisation.user_id = hunter.user_id) ';
+        $sqlQuery .= 'JOIN events_has_organisation ON (user_organisation.organisation_id = events_has_organisation.organisation_id) ';
+        
+        $sqlQuery .= 'WHERE vossentracker.organisation_id = $1 ';
+        $sqlQuery .= 'AND events_has_organisation.events_id = $2 ';
+        $sqlQuery .= 'AND deelgebied.event_id = $2 ';
         $sqlQuery .= 'ORDER BY time DESC';
         $this->prepareInternal($sqlName, $sqlQuery);
         
@@ -176,9 +181,12 @@ class PostgresqlQueries {
         
         $sqlName = 'getAllOpzieners';
         $sqlQuery = 'SELECT opzieners.id, _user.id AS user_id, displayname, deelgebied_id, type 
-                    FROM opzieners, _user 
+                    FROM opzieners
+                    JOIN _user ON opzieners.user_id = _user.id
                     JOIN user_organisation ON (_user.id = user_organisation.user_id)
+                    JOIN deelgebied ON opzieners.deelgebied_id = deelgebied.id
                     WHERE user_organisation.organisation_id = $1
+                    AND deelgebied.event_id = $2
                     AND opzieners.user_id = _user.id 
                     ORDER BY deelgebied_id ASC';
         $this->prepareInternal($sqlName, $sqlQuery);
@@ -211,8 +219,10 @@ class PostgresqlQueries {
                     JOIN _user ON (hunter.user_id = _user.id)
                     JOIN user_organisation ON (_user.id = user_organisation.user_id)
                     JOIN events_has_organisation ON (user_organisation.organisation_id = events_has_organisation.organisation_id)
+                    JOIN deelgebied ON hunter.deelgebied_id = deelgebied.id
                     WHERE user_organisation.organisation_id = $1
-                    AND events_has_organisation.events_id = $2                        ';
+                    AND events_has_organisation.events_id = $2
+                    AND deelgebied.event_id = $2';
         $this->prepareInternal($sqlName, $sqlQuery);
         
         $sqlName = 'getLastRiderLocations';
@@ -315,8 +325,10 @@ class PostgresqlQueries {
                     JOIN _user ON (hunter.user_id = _user.id)
                     JOIN user_organisation ON (_user.id = user_organisation.user_id)
                     JOIN events_has_organisation ON (user_organisation.organisation_id = events_has_organisation.organisation_id)
+                    JOIN deelgebied ON hunter.deelgebied_id = deelgebied.id
                     WHERE user_organisation.organisation_id = $1
                     AND events_has_organisation.events_id = $2
+                    AND deelgebied.event_id = $2
                     ORDER BY deelgebied_id ASC';
         $this->prepareInternal($sqlName, $sqlQuery);
         
@@ -367,6 +379,10 @@ class PostgresqlQueries {
         $sqlQuery = 'SELECT id, deelgebied_id, speelhelft_id, name, status FROM vossen';
         $this->prepareInternal($sqlName, $sqlQuery);
 
+        $sqlName = 'getAllTeamsCount';
+        $sqlQuery = 'SELECT COUNT(id) as teamcount FROM vossen';
+        $this->prepareInternal($sqlName, $sqlQuery);
+
         $sqlName = 'getMyTeams';
         $sqlQuery = 'SELECT 
                         vossen.id, vossen.deelgebied_id, vossen.speelhelft_id, vossen.name, vossen.status 
@@ -409,10 +425,10 @@ class PostgresqlQueries {
         
         $sqlName = 'getLocations';
         $sqlQuery = 'SELECT vossentracker.id, vossen_id, longitude, latitude, x, y, time, hunts.hunter_id, type, adres, counterhuntrondje_id
-        
                         FROM vossentracker 
-                        LEFT OUTER JOIN hunts ON (vossentracker.id = hunts.vossentracker_id), vossen 
-                        WHERE vossen_id = $1 AND vossentracker.vossen_id = vossen.id 
+                        JOIN vossen ON vossentracker.vossen_id = vossen.id
+                        LEFT OUTER JOIN hunts ON (vossentracker.id = hunts.vossentracker_id)
+                        WHERE vossen_id = $1
                         AND organisation_id = $2
                         ORDER BY time DESC';
         $this->prepareInternal($sqlName, $sqlQuery);
@@ -515,6 +531,10 @@ class PostgresqlQueries {
         $sqlQuery = 'DELETE FROM user_organisation WHERE user_id = $1';
         $this->prepareInternal($sqlName, $sqlQuery);
 
+        $sqlName = 'getAllOrganisationsCount';
+        $sqlQuery = 'SELECT COUNT(id) AS organisationscount FROM organisation';
+        $this->prepareInternal($sqlName, $sqlQuery);
+        
         $sqlName = 'getAllOrganisations';
         $sqlQuery = 'SELECT id, name FROM organisation';
         $this->prepareInternal($sqlName, $sqlQuery);
@@ -545,7 +565,10 @@ class PostgresqlQueries {
         $this->prepareInternal($sqlName, $sqlQuery);
 
         $sqlName = 'getDeelgebiedByName';
-        $sqlQuery = 'SELECT deelgebied.id, event_id, deelgebied.name, deelgebied.linecolor, deelgebied.polycolor FROM deelgebied, events WHERE deelgebied.event_id = events.id AND deelgebied.name = $1 AND events.id = $2';
+        $sqlQuery = 'SELECT deelgebied.id, event_id, deelgebied.name, deelgebied.linecolor, deelgebied.polycolor FROM deelgebied, events 
+                WHERE deelgebied.event_id = events.id 
+                AND deelgebied.name = $1 
+                AND events.id = $2';
         $this->prepareInternal($sqlName, $sqlQuery);
         
         $sqlName = 'getDeelgebiedById';
@@ -558,6 +581,10 @@ class PostgresqlQueries {
                     WHERE deelgebied.id = $1';
         $this->prepareInternal($sqlName, $sqlQuery);
         
+        $sqlName = 'getAllDeelgebiedenCount';
+        $sqlQuery = 'SELECT COUNT(id) AS deelgebiedcount FROM deelgebied';
+        $this->prepareInternal($sqlName, $sqlQuery);
+
         $sqlName = 'getAllDeelgebieden';
         $sqlQuery = 'SELECT deelgebied.id, event_id, deelgebied.name, deelgebied.linecolor, deelgebied.polycolor 
                     FROM deelgebied, events 
@@ -582,12 +609,19 @@ class PostgresqlQueries {
                         ORDER BY order_id';
         $this->prepareInternal($sqlName, $sqlQuery);
         
+        $sqlName = 'getAllEventsCount';
+        $sqlQuery = 'SELECT COUNT(id) AS eventcount FROM events';
+        $this->prepareInternal($sqlName, $sqlQuery);
+        
         $sqlName = 'getAllEvents';
         $sqlQuery = 'SELECT id, name, public, starttime, endtime FROM events';
         $this->prepareInternal($sqlName, $sqlQuery);
 
         $sqlName = 'getMyEvents';
-        $sqlQuery = 'SELECT id, name, public, starttime, endtime FROM events JOIN events_has_organisation ON id = events_id WHERE organisation_id = $1';
+        $sqlQuery = 'SELECT id, name, public, starttime, endtime 
+                        FROM events
+                        JOIN events_has_organisation ON id = events_id 
+                        WHERE organisation_id = $1';
         $this->prepareInternal($sqlName, $sqlQuery);
 
         $sqlName = 'getEventById';
@@ -616,6 +650,10 @@ class PostgresqlQueries {
         
         $sqlName = 'getAllSpeelhelften';
         $sqlQuery = 'SELECT id, event_id, starttime, endtime FROM speelhelft';
+        $this->prepareInternal($sqlName, $sqlQuery);
+
+        $sqlName = 'getAllSpeelhelftenCount';
+        $sqlQuery = 'SELECT COUNT(id) AS speelhelftcount FROM speelhelft';
         $this->prepareInternal($sqlName, $sqlQuery);
 
         $sqlName = 'getAllSpeelhelftenForEvent';
@@ -705,18 +743,49 @@ class PostgresqlQueries {
                     WHERE id = $1';
         $this->prepareInternal($sqlName, $sqlQuery);
 
+        $sqlName = 'getAllCounterhuntrondjesCount';
+        $sqlQuery = 'SELECT COUNT(id) AS count FROM counterhunt_rondjes';
+        $this->prepareInternal($sqlName, $sqlQuery);
+        
+        $sqlName = 'getAllCounterhuntrondjesSu';
+        $sqlQuery = 'SELECT id, deelgebied_id, organisation_id, name, active
+                    FROM counterhunt_rondjes
+                    ORDER BY organisation_id, deelgebied_id';
+        $this->prepareInternal($sqlName, $sqlQuery);
+        
+        $sqlName = 'getCounterhuntrondjeByIdSu';
+        $sqlQuery = 'SELECT c.id, c.deelgebied_id, c.organisation_id, c.name, c.active
+                    FROM counterhunt_rondjes AS c
+                    WHERE c.id = $1';
+        $this->prepareInternal($sqlName, $sqlQuery);
+        
         $sqlName = 'addCounterhuntrondje';
         $sqlQuery = 'INSERT INTO counterhunt_rondjes(deelgebied_id, organisation_id, name, active)
                         VALUES($1, $2, $3, $4)
                         RETURNING id';
-
+        $this->prepareInternal($sqlName, $sqlQuery);
+        
+        $sqlName = 'updateCounterhuntrondje';
+        $sqlQuery = 'UPDATE counterhunt_rondjes SET 
+                    deelgebied_id=$2,
+                    organisation_id=$3,
+                    name=$4,
+                    active=$5
+                    WHERE id=$1';
+        $this->prepareInternal($sqlName, $sqlQuery);
+        
+        $sqlName = 'removeCounterhuntrondje';
+        $sqlQuery = 'DELETE FROM counterhunt_rondjes WHERE id = $1';
         $this->prepareInternal($sqlName, $sqlQuery);
         
         $sqlName = 'getActiveCounterhuntRondjeByDeelgebiedName';
         $sqlQuery = 'SELECT c.id, c.deelgebied_id, c.organisation_id, c.name, c.active
                     FROM counterhunt_rondjes AS c
                     JOIN deelgebied AS d ON (c.deelgebied_id = d.id)
+                    JOIN events ON (d.event_id = events.id)
                     WHERE d.name = $1
+                    AND c.organisation_id = $2
+                    AND events.id = $3
                     AND c.active = True';
         $this->prepareInternal($sqlName, $sqlQuery);
 
@@ -724,7 +793,10 @@ class PostgresqlQueries {
         $sqlQuery = 'SELECT c.id, c.deelgebied_id, c.organisation_id, c.name, c.active
                     FROM counterhunt_rondjes AS c
                     JOIN deelgebied AS d ON (c.deelgebied_id = d.id)
+                    JOIN events ON (d.event_id = events.id)
                     WHERE d.name = $1
+                    AND c.organisation_id = $2
+                    AND events.id = $3
                     ORDER BY c.name';
         $this->prepareInternal($sqlName, $sqlQuery);
 
@@ -732,7 +804,10 @@ class PostgresqlQueries {
         $sqlQuery = 'UPDATE counterhunt_rondjes AS c
                     SET active=False
                     FROM deelgebied d
+                    JOIN events ON (d.event_id = events.id)
                     WHERE c.deelgebied_id = d.id
+                    AND c.organisation_id = $2
+                    AND events.id = $3
                     AND d.name = $1';
         $this->prepareInternal($sqlName, $sqlQuery);
 
@@ -740,21 +815,13 @@ class PostgresqlQueries {
         $sqlQuery = 'UPDATE counterhunt_rondjes AS c
                     SET active=True
                     FROM deelgebied d
+                    JOIN events ON (d.event_id = events.id)
                     WHERE c.deelgebied_id = d.id
                     AND c.id=$1
-                    AND d.name = $2';
+                    AND d.name = $2
+                    AND c.organisation_id = $3
+                    AND events.id = $4';
         $this->prepareInternal($sqlName, $sqlQuery);
-        
-        // $sqlName = 'updateWebcam';
-        // $sqlQuery = "UPDATE webcam
-        //             SET data=$1
-        //             WHERE id = 1";
-        // $this->prepareInternal($sqlName, $sqlQuery);
-        
-        // $sqlName = 'getWebcam';
-        // $sqlQuery = "SELECT data FROM webcam
-        //             WHERE id = 1";
-        // $this->prepareInternal($sqlName, $sqlQuery);
     }
 
     private function prepareInternal($sqlName, $sqlQuery) {

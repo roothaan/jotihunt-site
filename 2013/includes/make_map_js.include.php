@@ -64,7 +64,7 @@ function make_map($mapOptions) {
     		<?php if ($mapOptions->showHuntersLastLocation) { ?>
     	    
     	    $.ajax({
-                url: "<?php echo BASE_URL;?>getHunter.ajax.php",
+                url: "<?= BASE_URL;?>getHunter.ajax.php",
                 type: "POST",
                 data: {},
                 success: function(response) {
@@ -160,8 +160,8 @@ function make_map($mapOptions) {
     	function initialize() {
     		var myOptions = {
     			zoom: mapzoom,
-    			center: new google.maps.LatLng(<?php echo JotihuntUtils::convert($mapOptions->x,$mapOptions->y); ?>),
-    			mapTypeId: google.maps.MapTypeId.<?php echo $mapOptions->type; ?>,
+    			center: new google.maps.LatLng(<?= JotihuntUtils::convert($mapOptions->x,$mapOptions->y); ?>),
+    			mapTypeId: google.maps.MapTypeId.<?= $mapOptions->type; ?>,
     			scaleControl: true,
     		    mapTypeControl: true,
     		    mapTypeControlOptions: {
@@ -215,14 +215,14 @@ function make_map($mapOptions) {
     	
     	<?php if ($mapOptions->showHuntersLastLocation) { ?>
 	    function addHunter(map, latitude, longitude, naam, bijrijder, formatted_time, tel_nr, stale, auto) {
-	        var img = "<?php echo BASE_URL;?>images/hunter_small.png";
+	        var img = "<?= BASE_URL;?>images/hunter_small.png";
 	        
 	        if(auto !== "" && auto != undefined) {
-	            var img = "<?php echo BASE_URL."images/cars/small/";?>"+auto;
+	            var img = "<?= BASE_URL."images/cars/small/";?>"+auto;
 	        }
 	        
 	        if (stale == 'true') {
-	            img = "<?php echo BASE_URL;?>images/hunter_small_stale.png";
+	            img = "<?= BASE_URL;?>images/hunter_small_stale.png";
 	        }
 			
 			/*
@@ -293,14 +293,14 @@ function make_map($mapOptions) {
             ?>
 			    addHunter(
 			        map, 
-			        <?php echo $riderlocation->getLatitude(); ?>, 
-			        <?php echo $riderlocation->getLongitude(); ?>, 
-			        "<?php echo $hunter->getUser()->getDisplayName(); ?>", 
-			        "<?php echo $hunter->getBijrijder(); ?>", 
-			        "<?php echo strftime('%R, %a, %d %b',strtotime($riderlocation->getTime())); ?>", 
-			        "<?php echo $hunter->getTel(); ?>",
-			        "<?php echo ($diff > $staleHunterAfter ? 'true' : 'false'); ?>",
-			        "<?php echo $hunter->getAuto(); ?>");
+			        <?= $riderlocation->getLatitude(); ?>, 
+			        <?= $riderlocation->getLongitude(); ?>, 
+			        "<?= $hunter->getUser()->getDisplayName(); ?>", 
+			        "<?= $hunter->getBijrijder(); ?>", 
+			        "<?= strftime('%R, %a, %d %b',strtotime($riderlocation->getTime())); ?>", 
+			        "<?= $hunter->getTel(); ?>",
+			        "<?= ($diff > $staleHunterAfter ? 'true' : 'false'); ?>",
+			        "<?= $hunter->getAuto(); ?>");
 			    <?php
             $i++;
         }
@@ -325,7 +325,7 @@ function make_map($mapOptions) {
         ?>
             // By KML
             var ctaLayer = new google.maps.KmlLayer({
-                url: '<?php echo $baseUrl; ?>',
+                url: '<?= $baseUrl; ?>',
                 map: map
             });
             google.maps.event.addListener(ctaLayer, 'status_changed', function () {
@@ -345,7 +345,7 @@ function make_map($mapOptions) {
         	for (var areaName in areaCenters) {
         	    var point = areaCenters[areaName];
         	    var firstLetter = areaName.charAt(0).toLowerCase();
-        	    var markerImage = "<?php echo BASE_URL; ?>images/maps-vossen-"+firstLetter+".png";
+        	    var markerImage = "<?= BASE_URL; ?>images/maps-vossen-"+firstLetter+".png";
         	    var cm = new google.maps.Marker({
         			position: new google.maps.LatLng(point.y,point.x),
         			map: map,
@@ -381,13 +381,13 @@ function make_map($mapOptions) {
     	    }
     	    switch(type) {
                 case 'hunt':
-                    var img = "<?php echo BASE_URL; ?>images/crosshair"+img_extra+".png";
+                    var img = "<?= BASE_URL; ?>images/crosshair"+img_extra+".png";
                     break;
                 case 'spot':
-                    var img = "<?php echo BASE_URL; ?>images/eye"+img_extra+".png";
+                    var img = "<?= BASE_URL; ?>images/eye"+img_extra+".png";
                     break;
                 default:
-                    var img = "<?php echo BASE_URL; ?>images/vos"+img_extra+".png";
+                    var img = "<?= BASE_URL; ?>images/vos"+img_extra+".png";
                     break;
             }
     	    
@@ -475,19 +475,24 @@ function make_map($mapOptions) {
                     
                     $new_coord = JotihuntUtils::convert($location->getX(), $location->getY());
                     $formatted_datetime = strftime('%a, %d %b %R', strtotime($location->getDate()));
+                    $counterhuntrondjeId = 0;
+                    $counterhuntrondje = $driver->getActiveCounterhuntRondje($deelgebiedName);
+                    if ($counterhuntrondje) {
+                        $counterhuntrondjeId = $counterhuntrondje->getId();
+                    }
                     ?>
         			    
         			    addVosLocatie(
         			        map,
-        			        "<?php echo $type;?>", 
-        			        "<?php echo $new_coord;?>", 
-        			        "<?php echo $location->getAddress(); ?>", 
-        			        <?php echo $last_in_line;?>, 
-        			        "<?php echo $old_coord;?>", 
-        			        "<?php echo $vos->getName(); ?>", 
-        			        "<?php echo $formatted_datetime; ?>", 
-        			        <?=$driver->getActiveCounterhuntRondje($deelgebiedName)->getId()?>, 
-        			        <?=$location->getCounterhuntrondjeId()?>);
+        			        "<?= $type; ?>", 
+        			        "<?= $new_coord; ?>", 
+        			        "<?= $location->getAddress(); ?>", 
+        			        <?= $last_in_line; ?>, 
+        			        "<?= $old_coord; ?>", 
+        			        "<?= $vos->getName(); ?>", 
+        			        "<?= $formatted_datetime; ?>", 
+        			        <?= $counterhuntrondjeId ?>, 
+        			        <?= $location->getCounterhuntrondjeId() ?>);
         				
         				<?php
                     $old_coord = $new_coord;
@@ -496,10 +501,10 @@ function make_map($mapOptions) {
                 
                 if (isset($mapOptions->team) && ! empty($mapOptions->team)) {
                     ?>
-                    if(vossenLocatiesDeelgebieden['<?php echo strtolower($mapOptions->team);?>'] && vossenLocatiesDeelgebieden['<?php echo strtolower($mapOptions->team);?>'][0]) {
-                        coord_array = vossenLocatiesDeelgebieden['<?php echo strtolower($mapOptions->team);?>'][0].new_coord.split(',');
+                    if(vossenLocatiesDeelgebieden['<?= strtolower($mapOptions->team);?>'] && vossenLocatiesDeelgebieden['<?= strtolower($mapOptions->team);?>'][0]) {
+                        coord_array = vossenLocatiesDeelgebieden['<?= strtolower($mapOptions->team);?>'][0].new_coord.split(',');
                         map.setZoom(15);
-                        map.panTo(new google.maps.LatLng(<?php echo $vos_locations[0];?>));
+                        map.panTo(new google.maps.LatLng(<?= $vos_locations[0];?>));
                     }
                         <?php
                 }
@@ -528,10 +533,10 @@ function make_map($mapOptions) {
     		        continue;
     		    }
     		    var isHomeBase = false;
-    		    var img = "<?php echo BASE_URL; ?>images/maps-scoutinggroep.png";
+    		    var img = "<?= BASE_URL; ?>images/maps-scoutinggroep.png";
 
     			if(groepnaam.search(<?= json_encode($organisation->getName()) ?>) != -1) {
-    			    var img = "<?php echo BASE_URL; ?>images/maps-scoutinggroep-home.png";
+    			    var img = "<?= BASE_URL; ?>images/maps-scoutinggroep-home.png";
     			    isHomeBase = true;
     			}
 			    a[i] = new google.maps.Marker({
@@ -555,6 +560,9 @@ function make_map($mapOptions) {
     		}
     	}
     </script>
-<?php } ?>
-
-<?php } ?>
+<?php } else { ?>
+<script type="text/javascript">
+$('#map').html('<em>Configureer <strong><code>google-js-api-key</code></strong> om Google Maps te gebruiken</em>');
+</script>
+<?php } //end of if GOOGLE_MAPS_ENABLED ?>
+<?php } // end of function make_map ?>

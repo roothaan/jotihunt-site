@@ -48,17 +48,22 @@ $('#events').dataTable( {
         </tr>
     </thead>
  	<tfoot>
-            <tr id="addEvent">
-                <td></td>
-                <td><input type="text" name="name" /></td>
-                <td><input type="text" name="public" /></td>
-                <td><input type="text" name="starttime" /></td>
-                <td><input type="text" name="endtime" /></td>
-                <td>
-                    <input type="submit" value="Voeg toe" class="button" />
-                </td>
-            </tr>
-        </tfoot>
+        <tr id="addEvent">
+            <td></td>
+            <td><input type="text" name="name" /></td>
+            <td>
+                <select name="public">
+                  <option value="t">Yes</option>
+                  <option value="f">No</option>
+                </select>
+            </td>
+            <td><input type="text" name="starttime" /></td>
+            <td><input type="text" name="endtime" /></td>
+            <td>
+                <input type="submit" value="Voeg toe" class="button" />
+            </td>
+        </tr>
+    </tfoot>
     <tbody>
         <?php foreach ($events as $event) { ?>
         <tr id="<?= $event->getId() ?>">

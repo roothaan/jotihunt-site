@@ -3,12 +3,23 @@ require_once CLASS_DIR . 'jotihunt/Gcm.class.php';
 
 class GcmSender {
     private $googleUri = 'https://android.googleapis.com/gcm/send';
-    private $googleApiKey = GOOGLE_GCM_API_KEY;
-    private $proximoUser = PROXIMO_USER;
-    private $proximoPass = PROXIMO_PASS;
-    private $proximoHost = PROXIMO_HOST;
+    private $googleApiKey;
+    private $proximoUser;
+    private $proximoPass;
+    private $proximoHost;
     private $receiverIds = array ();
     private $payload = array ();
+    
+    function __construct() {
+        if (GOOGLE_GCM_ENABLED) {
+            $this->googleApiKey = GOOGLE_GCM_API_KEY;
+        }
+        if ($this->useProxy()) {
+            $this->proximoUser = PROXIMO_USER;
+            $this->proximoPass = PROXIMO_PASS;
+            $this->proximoHost = PROXIMO_HOST;
+        }
+    }
 
     public function setReceiverIds($receiverIds) {
         $this->receiverIds = array ();
@@ -24,6 +35,9 @@ class GcmSender {
     public function send() {
         if (sizeof($this->receiverIds) == 0) {
             return 'No receiverIds, nothing to send, cancelling GCM request';
+        }
+        if (strlen($this->googleApiKey) === 0) {
+            return 'No GCM API key set';
         }
         $data = array (
                 'registration_ids' => $this->receiverIds 
@@ -70,6 +84,6 @@ class GcmSender {
     }
 
     private function useProxy() {
-        return defined('PROXIMO_ENABLED');
+        return PROXIMO_ENABLED;
     }
 }

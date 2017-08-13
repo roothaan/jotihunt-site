@@ -62,7 +62,13 @@ $('#vossen').dataTable( {
                     } ?>
                 </select></td>
                 <td><input type="text" name="name" /></td>
-                <td><input type="text" name="status" value="rood" /></td>
+                <td>
+                    <select name="status">
+                      <option value="rood">Rood</option>
+                      <option value="oranje">Oranje</option>
+                      <option value="groen">Groen</option>
+                    </select>
+                </td>
                 <td><select name="speelhelft_id">
                     <?php 
                     foreach ($driver->getAllEvents() as $event) {

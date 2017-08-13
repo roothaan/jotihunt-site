@@ -20,6 +20,7 @@ if(isset($urlArray[1]) && !empty($urlArray[1])) {
 }
 
 $currentVos = $driver->getVosIncludingLocations($deelgebiedName);
+$huidigRondje = $driver->getActiveCounterhuntRondje($deelgebiedName);
 
 if($currentVos && isset($_GET['counterhuntrondjeId']) 
 	&& !empty($_GET['counterhuntrondjeId']) && is_numeric($_GET['counterhuntrondjeId'])
@@ -80,7 +81,8 @@ if (isset($_POST ["x"]) && isset($_POST ["y"])) {
     		&& is_numeric($_POST['counterhuntrondjeId']) && $_POST['counterhuntrondjeId'] > 0) {
     		$counterhuntrondjeId = $_POST['counterhuntrondjeId'];
     	} else {
-    		$counterhuntrondjeId =$driver->getActiveCounterhuntRondje($deelgebiedName)->getId();
+    		$counterhuntrondje = $driver->getActiveCounterhuntRondje($deelgebiedName);
+    		$counterhuntrondjeId = $counterhuntrondje ? $counterhuntrondje->getId() : 0;
     	}
     
         $newLocation = $driver->addVosLocation($deelgebiedName, $savex, $savey, $latitude, $longitude, $adres, $counterhuntrondjeId, $time, $type);
@@ -269,7 +271,9 @@ $(document).ready(function() {
 		} ?>
 		
 		<div class="voegLocatieToe">Voeg locatie toe</div>
+		<?php if ($huidigRondje) { ?>
 		<div class="wijzigRondeBtn">Wijzig ronde</div>
+		<?php } ?>
 		<div class="clear"></div>
 		<a href="<?=WEBSITE_URL?>invoer" class="invoerlink">Alle deelgebieden tegelijk invoeren</a>
 		
@@ -358,7 +362,6 @@ $(document).ready(function() {
 		</div>
 		
 		<div id="rondeForm">
-			<?php $huidigRondje = $driver->getActiveCounterhuntRondje($deelgebiedName); ?>
 			<?php if ($huidigRondje) { ?>
 			<div class="huidigeRonde">De huidige ronde van gebied <?=$deelgebiedName?> is: <?=$huidigRondje->getName()?></div>
 			<?php } else { ?>

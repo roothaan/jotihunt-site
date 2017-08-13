@@ -9,7 +9,7 @@ require_once CLASS_DIR . 'jotihunt/MapOptions.class.php';
 
 $amountOfLocations = $driver->getTotalAmountOfRiderLocations();
 echo '<h1>Totaal aantal locaties geregistreerd: <strong>' . $amountOfLocations . '</strong></h1><hr />';
-
+if ($amountOfLocations > 0) {
 
 $ridercollection = $driver->getAllRiders();
 if ($authMgr->isSuperAdmin()) {
@@ -24,6 +24,7 @@ if (isset($_GET ['hunterId'])) {
         }
     }
 }
+if (count($ridercollection) > 0) {
 ?>
 <form action="<?php echo BASE_URL; ?>hunter_map.php" method="GET">
     Kies een hunter: <input type="hidden" name="from" id="from" value="<?php if (isset($_GET['from'])) { echo intval($_GET['from']); } ?>" /> <input type="hidden" name="to" id="to" value="<?php if (isset($_GET['to'])) { echo intval($_GET['to']); } ?>" />
@@ -170,6 +171,11 @@ if (null != $riderId) {
         echo '<div><strong>Geen locaties bekend</strong></div>';
     }
 }
-
+} else { // count($ridercollection) > 0
+    echo 'No riders to query';
+}
+} else { // $amountOfLocations > 0
+    echo 'No locations captured yet';
+}
 require_once BASE_DIR . 'footer.php';
 ?>

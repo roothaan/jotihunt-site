@@ -67,7 +67,13 @@ $('#users').dataTable( {
                 </td>
                 <?php if($authMgr->isSuperAdmin()) { ?>
                 <td>
-                    <input type="text" name="organisation">
+                    <select name="organisation">
+                    <?php
+                    $orgs = $driver->getAllOrganisations();
+                    foreach ($orgs as $org) { ?>
+                        <option value="<?= $org->getId() ?>"><?= $org->getName() ?></option>
+                    <?php } ?>
+                    </select>
                 </td>
                 <?php } else { ?>
                 <td>

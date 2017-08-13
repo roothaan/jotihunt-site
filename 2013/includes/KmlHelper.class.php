@@ -4,7 +4,7 @@ class KmlHelper {
 
     public function parseDeelgebiedenKml() {
         global $driver;
-        if (isset($_FILES['kml_file'])) {
+        if (isset($_FILES['kml_file']) && is_file($_FILES['kml_file']['tmp_name'])) {
             $kml_file = file_get_contents($_FILES['kml_file']['tmp_name']);
             $kml_file_parsed = simplexml_load_string($kml_file, "SimpleXMLElement", LIBXML_NOCDATA);
             $kml_file_parsed_encoded = json_encode($kml_file_parsed);
@@ -120,7 +120,7 @@ class KmlHelper {
         global $driver;
         global $authMgr;
         
-        if (isset($_FILES['kml_file'])) {
+        if (isset($_FILES['kml_file']) && is_file($_FILES['kml_file']['tmp_name'])) {
             $kml_file = file_get_contents($_FILES['kml_file']['tmp_name']);
             $kml_file_parsed = simplexml_load_string($kml_file, "SimpleXMLElement", LIBXML_NOCDATA);
             $kml_file_parsed_encoded = json_encode($kml_file_parsed);
@@ -143,10 +143,13 @@ class KmlHelper {
     
     private function importPoisTestFolder($folder) {
         $folderLayer = $_POST['poi_folder_name'];
-        if (isset ($folder['name']) && $folder['name'] == $folderLayer) {
-            echo 'Found <strong>'.$folderLayer.'</strong> with ' . count($folder['Placemark']) .' entries!<br />';
+        $import = isset ($folder['name']) && $folder['name'] == $folderLayer;
+        if ($import) {
+            echo 'Importing layer <strong>'.$folderLayer.'</strong> with ' . count($folder['Placemark']) .' entries!<br />';
             $pois = $this->parsePoiKmlPlaceMarks($folder);
             $this->importPois($pois);
+        } else {
+            echo 'Skipping layer <strong>' . $folderLayer . '</strong>';
         }
     }
     

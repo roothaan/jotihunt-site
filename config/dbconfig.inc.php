@@ -8,7 +8,7 @@ function parseDbUrl($dbUrl) {
     define('DB_SERVER', $dbopts['host']);
     define('DB_DATABASE', ltrim($dbopts['path'],'/'));
     define('DB_USERNAME', $dbopts['user']);
-    define('DB_PASSWORD', urldecode($dbopts['pass']));
+    define('DB_PASSWORD', $dbopts['pass']);
     define('DB_PORT', $dbopts['port']);
     define('DB_OPTS', getenv('DATABASE_OPTIONS') ? getenv('DATABASE_OPTIONS') : '');
 }

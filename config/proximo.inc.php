@@ -7,5 +7,7 @@
     define('PROXIMO_USER', getenv('PROXIMO_USER'));
     define('PROXIMO_PASS', getenv('PROXIMO_PASS'));
     define('PROXIMO_HOST', getenv('PROXIMO_HOST'));
+} else {
+    define('PROXIMO_ENABLED', false);
 }
 ?>

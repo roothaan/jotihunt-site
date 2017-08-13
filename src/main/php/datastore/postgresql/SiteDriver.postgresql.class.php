@@ -188,7 +188,7 @@ class SiteDriverPostgresql {
         // Find Rider to ensure it's safe
         $rider = $this->getRider($gcm->getRiderId());
         if ($rider === null || !$rider) {
-            throw new DatastoreException('Invalid Rider ID for this Org.');
+            throw new DatastoreException('Invalid Rider ID ['.$gcm->getRiderId().'] for this Org.');
         }
         
         $_time = self::psqlDateFromTime($gcm->getTime());
@@ -386,7 +386,8 @@ class SiteDriverPostgresql {
         global $authMgr;
         $sqlName = 'getAllHunts';
         $values = array (
-            $authMgr->getMyOrganisationId()
+            $authMgr->getMyOrganisationId(),
+            $authMgr->getMyEventId()
         );
         
         $result = pg_execute($this->conn, $sqlName, $values);
@@ -436,6 +437,13 @@ class SiteDriverPostgresql {
         return $_result;
     }
 
+    public function getScore() {
+        global $authMgr;
+        $orgId = $authMgr->getMyOrganisationId();
+        $org = $this->getOrganisationById($orgId);
+        return $this->getScoreByGroep($org->getName());
+    }
+    
     public function getScoreByGroep($groepnaam) {
         $sqlName = 'getScoreByGroep';
         $values = array (
@@ -563,7 +571,8 @@ class SiteDriverPostgresql {
         global $authMgr;
         $sqlName = 'getAllOpzieners';
         $values = array (
-            $authMgr->getMyOrganisationId()
+            $authMgr->getMyOrganisationId(),
+            $authMgr->getMyEventId()
         );
         
         $result = pg_execute($this->conn, $sqlName, $values);
@@ -1329,7 +1338,25 @@ class SiteDriverPostgresql {
         }
         return $_result;
     }
-
+    
+    
+    public function getAllTeamsCount() {
+        $sqlName = 'getAllTeamsCount';
+        $values = array ();
+        
+        $result = pg_execute($this->conn, $sqlName, $values);
+        if (! $result) {
+            return false;
+        }
+        
+        if (! $result) {
+            throw new DatastoreException('Could not get total amount of ALL teams');
+        }
+        while ( $row = pg_fetch_assoc($result) ) {
+            return intval($row ['teamcount']);
+        }
+        return 0;
+    }
     public function getTeam($name) {
         return $this->getTeamByName($name);
     }
@@ -1464,7 +1491,12 @@ class SiteDriverPostgresql {
         
         if (pg_num_rows($result) == 1) {
             $row = pg_fetch_assoc($result);
-            return new Deelgebied($row ['id'], $row ['event_id'], $row ['name'], $row ['linecolor'], $row['polycolor']);
+            return new Deelgebied(
+                $row ['id'], 
+                $row ['event_id'], 
+                $row ['name'], 
+                $row ['linecolor'], 
+                $row['polycolor']);
         }
         return false;
     }
@@ -1490,6 +1522,24 @@ class SiteDriverPostgresql {
         return false;
     }
     
+    public function getAllDeelgebiedenCount() {
+        $sqlName = 'getAllDeelgebiedenCount';
+        $values = array ();
+        
+        $result = pg_execute($this->conn, $sqlName, $values);
+        if (! $result) {
+            return false;
+        }
+        
+        if (! $result) {
+            throw new DatastoreException('Could not get total amount of ALL deelgebieden');
+        }
+        while ( $row = pg_fetch_assoc($result) ) {
+            return intval($row ['deelgebiedcount']);
+        }
+        return 0;
+    }
+
     public function getAllDeelgebieden() {
         global $authMgr;
         return $this->getAllDeelgebiedenForEvent($authMgr->getMyEventId());
@@ -2126,7 +2176,8 @@ class SiteDriverPostgresql {
     public function getOrganisationById($organisationId) {
         $sqlName = 'getOrganisationById';
         $values = array (
-            $organisationId);
+            $organisationId
+        );
         
         $result = pg_execute($this->conn, $sqlName, $values);
         if (! $result) {
@@ -2138,6 +2189,25 @@ class SiteDriverPostgresql {
         }
         return false;
     }
+
+    public function getAllOrganisationsCount() {
+        $sqlName = 'getAllOrganisationsCount';
+        $values = array ();
+        
+        $result = pg_execute($this->conn, $sqlName, $values);
+        if (! $result) {
+            return false;
+        }
+        
+        if (! $result) {
+            throw new DatastoreException('Could not get total amount of ALL organisations');
+        }
+        while ( $row = pg_fetch_assoc($result) ) {
+            return intval($row ['organisationscount']);
+        }
+        return 0;
+    }
+    
     public function getAllOrganisations() {
         $sqlName = 'getAllOrganisations';
         $values = array ();
@@ -2265,6 +2335,25 @@ class SiteDriverPostgresql {
         return false;
     }
 
+    public function getAllEventsCount() {
+        $sqlName = 'getAllEventsCount';
+        $values = array (
+        );
+
+        $result = pg_execute($this->conn, $sqlName, $values);
+        if (! $result) {
+            return false;
+        }
+
+        if (! $result) {
+            throw new DatastoreException('Could not get total amount of ALL events');
+        }
+        while ( $row = pg_fetch_assoc($result) ) {
+            return intval($row ['eventcount']);
+        }
+        return 0;
+    }
+    
     public function getAllEvents() {
         $sqlName = 'getAllEvents';
         $values = array (
@@ -2381,6 +2470,24 @@ class SiteDriverPostgresql {
             $_result [] = new Speelhelft($row['id'], $row['event_id'], $row['starttime'], $row['endtime']);
         }
         return $_result;
+    }
+    
+    public function getAllSpeelhelftenCount() {
+    $sqlName = 'getAllSpeelhelftenCount';
+        $values = array ();
+        
+        $result = pg_execute($this->conn, $sqlName, $values);
+        if (! $result) {
+            return false;
+        }
+        
+        if (! $result) {
+            throw new DatastoreException('Could not get total amount of ALL speelhelften');
+        }
+        while ( $row = pg_fetch_assoc($result) ) {
+            return intval($row ['speelhelftcount']);
+        }
+        return 0;
     }
     
     public function getAllSpeelhelftenForEvent($eventId) {
@@ -2615,6 +2722,100 @@ class SiteDriverPostgresql {
         return null;
     }
     
+    public function getAllCounterhuntrondjesCount() {
+        $sqlName = 'getAllCounterhuntrondjesCount';
+        $values = array ();
+        
+        $result = pg_execute($this->conn, $sqlName, $values);
+        if (! $result) {
+            return false;
+        }
+        
+        if (! $result) {
+            throw new DatastoreException('Could not get total amount of ALL counterhuntrondjes');
+        }
+        while ( $row = pg_fetch_assoc($result) ) {
+            return intval($row ['count']);
+        }
+        return 0;
+    }
+    
+    public function getAllCounterhuntrondjesSu() {
+        global $authMgr;
+        $sqlName = 'getAllCounterhuntrondjesSu';
+        $values = array (
+        );
+        
+        $result = pg_execute($this->conn, $sqlName, $values);
+        
+        if (! $result) {
+            throw new DatastoreException('Could not get all pois');
+        }
+        
+        $_result = array ();
+        while ( $row = pg_fetch_assoc($result) ) {
+            $counterhuntrondje = new CounterhuntRondje(
+                        $row ['id'],
+                        $row ['deelgebied_id'],
+                        $row ['organisation_id'],
+                        $row ['name'],
+                        $row ['active']
+                        );
+            
+            $_result [] = $counterhuntrondje;
+        }
+        return $_result;
+    }
+    
+    public function getCounterhuntrondjeByIdSu($counterhuntrondje_id) {
+        global $authMgr;
+        $sqlName = 'getCounterhuntrondjeByIdSu';
+
+        $values = array (
+            $counterhuntrondje_id
+        );
+
+        $result = pg_execute($this->conn, $sqlName, $values);
+        
+        if (! $result) {
+            throw new DatastoreException('Could not get CounterhuntRondje by DeelgebiedName:' . $deelgebiedName);
+        }
+        
+        $_result = array();
+        while ( $row = pg_fetch_assoc($result) ) {
+            $counterhuntrondje = new CounterhuntRondje(
+                        $row ['id'],
+                        $row ['deelgebied_id'],
+                        $row ['organisation_id'],
+                        $row ['name'],
+                        $row ['active']
+                        );
+            return $counterhuntrondje;
+        }
+        return null;
+    }
+    
+    public function updateCounterhuntrondje($counterhuntRondje) {
+        $sqlName = 'updateCounterhuntrondje';
+        
+        $values = array (
+                $counterhuntRondje->getId(),
+                $counterhuntRondje->getDeelgebiedId(),
+                $counterhuntRondje->getOrganisationId(),
+                $counterhuntRondje->getName(),
+                $counterhuntRondje->getActive()
+        );
+        
+        $result = pg_execute($this->conn, $sqlName, $values);
+        
+        if (! $result) {
+            if (null !== $image) {
+                throw new DatastoreException('Could not update counterhuntrondje ' . $counterhuntRondje->toArray());
+            }
+            throw new DatastoreException('Could not update counterhuntrondje ($counterhuntRondje === null)');
+        }
+    }
+    
     public function addCounterhuntrondje($counterhuntrondje) {
         global $authMgr;
         $sqlName = 'addCounterhuntrondje';
@@ -2638,12 +2839,27 @@ class SiteDriverPostgresql {
         return false;
     }
     
+    public function removeCounterhuntrondje($counterhuntrondjeId) {
+        $sqlName = 'removeCounterhuntrondje';
+        $values = array (
+                $counterhuntrondjeId 
+        );
+        
+        $result = pg_execute($this->conn, $sqlName, $values);
+        if (! $result) {
+            return false;
+        }
+        return true;
+    }
+    
     public function getActiveCounterhuntRondje($deelgebiedName) {
         global $authMgr;
         $sqlName = 'getActiveCounterhuntRondjeByDeelgebiedName';
 
         $values = array (
-            $deelgebiedName
+            $deelgebiedName,
+            $authMgr->getMyOrganisationId(),
+            $authMgr->getMyEventId()
         );
         
         $result = pg_execute($this->conn, $sqlName, $values);
@@ -2669,7 +2885,9 @@ class SiteDriverPostgresql {
         $sqlName = 'getCounterhuntrondjeForDeelgebiedByName';
 
         $values = array (
-            $deelgebiedName
+            $deelgebiedName,
+            $authMgr->getMyOrganisationId(),
+            $authMgr->getMyEventId()
         );
 
         $result = pg_execute($this->conn, $sqlName, $values);
@@ -2690,13 +2908,16 @@ class SiteDriverPostgresql {
         }
         return $_result;
     }
+
     public function setActiveCounterhuntrondjeId($deelgebiedName, $counterhuntrondjeId) {
         global $authMgr;
         $sqlName = 'setActiveCounterhuntrondjeId';
         
         $values = array (
-                $counterhuntrondjeId,
-                $deelgebiedName
+            $counterhuntrondjeId,
+            $deelgebiedName,
+            $authMgr->getMyOrganisationId(),
+            $authMgr->getMyEventId()
         );
 
         $this->setAllCounterhuntrondjesAsInactive($deelgebiedName);
@@ -2715,7 +2936,9 @@ class SiteDriverPostgresql {
         $sqlName = 'setAllCounterhuntrondjesAsInactive';
         
         $values = array (
-                $deelgebiedName
+            $deelgebiedName,
+            $authMgr->getMyOrganisationId(),
+            $authMgr->getMyEventId()
         );
         
         $result = pg_execute($this->conn, $sqlName, $values);

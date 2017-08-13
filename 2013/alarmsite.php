@@ -4,121 +4,135 @@ if(!defined("opoiLoaded")) die("Scouting Putten, het lukt jullie niet om ons te 
 JotihuntUtils::requireLogin(); ?>
 
 <script type="text/javascript">
-var custom = 0;
 var me;
 var me2;
 var me3;
 var me4;
+</script>
 
+<script type="text/javascript">
 <?php foreach ($driver->getAllDeelgebieden() as $deelgebied) { ?>
-	var team<?= $deelgebied->getId() ?> = '';
-	var team<?= $deelgebied->getId() ?>_old = '';
-	var team<?= $deelgebied->getId() ?>_location = '';
-	var team<?= $deelgebied->getId() ?>_location_old = '';
-	var team<?= $deelgebied->getId() ?>_time = '';
+	var team<?= $deelgebied->getId() ?> = {
+		id: 0,
+		name: '',
+		date: '',
+		address : '',
+		lat: 0,
+		lng: 0,
+		lastHuntTime: 0,
+		status: ''
+	};
+
+var team<?= $deelgebied->getId() ?>_old = {
+		id: 0,
+		name: '',
+		date: '',
+		address : '',
+		lat: 0,
+		lng: 0,
+		lastHuntTime: 0,
+		status: ''
+	};
 <?php }?>
-	
-var rank = '';
-var rank_old = '';
-var msg = '';
-var msg_old = '';
-var hunt = '';
-var hunt_old = '';
+	var rank = 0;
+	var rank_old = 0;
+	var msg = '';
+	var msg_old = '';
+	var hunt = '';
+	var hunt_old = '';
+	var first = 1;
 
-var first = 1;
-
-
-function getJotihuntData(){
-	//Set a timeout for 15 seconds
-	setTimeout("getJotihuntData()",15000);
-		
-	var randomnumber=Math.floor(Math.random()*10001);
+function beforeParsing() {
 	$('#refreshicon').show();
-	$.get('<?=BASE_URL?>spy.php?i='+randomnumber, function(data) {
-		
-		//Hide current indicators
-		$('#arrow_rank').css('visibility','hidden');
-		$('#arrow_msg').css('visibility','hidden');
-		$('#arrow_hunt').css('visibility','hidden');
 
-		<?php foreach ($driver->getAllDeelgebieden() as $deelgebied) { ?>
-			$('#arrow_<?= $deelgebied->getId() ?>').css('visibility','hidden');
-			//Save current data to old
-			team<?= $deelgebied->getId() ?>_old = team<?= $deelgebied->getId() ?>;
-			team<?= $deelgebied->getId() ?>_location_old = team<?= $deelgebied->getId() ?>_location;
-		<?php }?>
-		
-		rank_old = rank;
-		msg_old = msg;
-		hunt_old = hunt;
-		
-		//Set latest update-timestamp
-		var currentDate = new Date();
-		var hours = currentDate.getHours();
-		var minutes = currentDate.getMinutes();
-		if(hours < 10) hours = '0'+hours;
-		if(minutes < 10) minutes = '0'+minutes;
-		$('#timestamp').html('Laatste update: ' +hours+':'+minutes);
-		
-		//Save new data
-		var items = data.split("||||||");
+	//Hide current indicators
+	$('#arrow_rank').css('visibility','hidden');
+	$('#arrow_msg').css('visibility','hidden');
+	$('#arrow_hunt').css('visibility','hidden');
 
-		<?php
-		$counter = 0;
-		foreach ($driver->getAllDeelgebieden() as $deelgebied) { ?>
-			team_tmp = items[<?= $counter++ ?>];
-			team_arr = team_tmp.split("|||");
-			team<?= $deelgebied->getId() ?> = team_arr[0];
-			team<?= $deelgebied->getId() ?>_time = team_arr[1];
-			team<?= $deelgebied->getId() ?>_location = team_arr[2];
-		<?php }?>
+	<?php foreach ($driver->getAllDeelgebieden() as $deelgebied) { ?>
+		$('#arrow_<?= $deelgebied->getId() ?>').css('visibility','hidden');
+		//Save current data to old
+		team<?= $deelgebied->getId() ?>_old = team<?= $deelgebied->getId() ?>;
+	<?php }?>
+	
+	rank_old = rank;
+	msg_old = msg;
+	hunt_old = hunt;
+}
 
-		rank = items[6];
-		msg = items[7];
-		hunt = items[8];
-		
-		//Fix old data if first
-		if(first == 1){
-		<?php foreach ($driver->getAllDeelgebieden() as $deelgebied) { ?>
-			team<?= $deelgebied->getId() ?>_old = team<?= $deelgebied->getId() ?>;
-		<?php }?>
-			rank_old = rank;
-			msg_old = msg;
-			hunt_old = hunt;
-			first = 0;
+function afterParsing() {
+	rank_old = rank;
+	msg_old = msg;
+	hunt_old = hunt;
+	first = 0;
+	
+	//Hide preloader animation
+	$('#refreshicon').hide();
+
+	//Compare and visualize data
+	compareData();
+	hideAudio();
+}
+
+	function showRank(rank) {
+		$('#rank').html('#' + (rank == 0 ? '?' : rank ));
+	}
+	
+	function showMessage(msg, lastHunt) {
+		if (typeof msg !== 'undefined') {
+		    $('#msgcontainer').html(msg);
 		}
-		
-		//Display new data
-		//Rank
-		if (!rank) {
-			rank = '?';
+		if (typeof lastHunt !== 'undefined') {
+		    $('#huntcontainer').html(lastHunt);
 		}
-		$('#rank').html('#'+rank);
-		
-		//Message
-		$('#msgcontainer').html(msg);
-		
-		// Hunt
-		$('#huntcontainer').html(hunt);
-		
-		//Vossenteams
+	}
+	function getJotihuntData() {
+		//Set a timeout for 15 seconds
+		setTimeout('getJotihuntData()',15000);
 
-		<?php foreach ($driver->getAllDeelgebieden() as $deelgebied) { ?>
-			$('#status_<?= $deelgebied->getId() ?>').attr('class',team<?= $deelgebied->getId() ?>_old);
-			$('#link_<?= $deelgebied->getId() ?>').attr('class',team<?= $deelgebied->getId() ?>);
-			if(team<?= $deelgebied->getId() ?>_location == '0'){
-				$('#loc_<?= $deelgebied->getId() ?>').html('Geen locaties bekend');
-			}else{
-				$('#loc_<?= $deelgebied->getId() ?>').html('<strong>'+team<?= $deelgebied->getId() ?>_location+'</strong> ('+team<?= $deelgebied->getId() ?>_time+')');
-			}
-		<?php }?>
+		$.getJSON('<?=BASE_URL?>spyJson.php', function( data ) {
+			beforeParsing();
+			showRank(data['plaats']);
+			showMessage(data['lastbericht'], data['lasthunt']);
+			showVossen(data['vossen']);
+			afterParsing();
+		});
+	}
 
-		//Hide preloader animation
-		$('#refreshicon').hide();
+function showVossen(vossen){
+	//Set latest update-timestamp
+	var currentDate = new Date();
+	var hours = currentDate.getHours();
+	var minutes = currentDate.getMinutes();
+	if(hours < 10) hours = '0'+hours;
+	if(minutes < 10) minutes = '0'+minutes;
+	$('#timestamp').html('Laatste update: ' +hours+':'+minutes);
+	
+	<?php
+	$counter = 0;
+	foreach ($driver->getAllDeelgebieden() as $deelgebied) { ?>
+	if (vossen['<?= $deelgebied->getId() ?>']) {
+		team<?= $deelgebied->getId() ?> = vossen['<?= $deelgebied->getId() ?>'];
+	}
+	<?php }?>
+	
+	//Fix old data if first
+	if(first == 1){
+	<?php foreach ($driver->getAllDeelgebieden() as $deelgebied) { ?>
+		team<?= $deelgebied->getId() ?>_old = team<?= $deelgebied->getId() ?>;
+	<?php }?>
+	}
 		
-		//Compare and visualize data
-		compareData();
-	});
+	<?php foreach ($driver->getAllDeelgebieden() as $deelgebied) { ?>
+		$('#status_<?= $deelgebied->getId() ?>').attr('class',team<?= $deelgebied->getId() ?>_old.status);
+		$('#link_<?= $deelgebied->getId() ?>').attr('class',team<?= $deelgebied->getId() ?>.status);
+		if(team<?= $deelgebied->getId() ?>.address == '0' || team<?= $deelgebied->getId() ?>.address == '') {
+			$('#loc_<?= $deelgebied->getId() ?>').html('Geen locaties bekend');
+		}else{
+			$('#loc_<?= $deelgebied->getId() ?>').html('<strong>'+team<?= $deelgebied->getId() ?>.address+'</strong> ('+team<?= $deelgebied->getId() ?>.date+')');
+		}
+	<?php }?>
 }
 
 function compareData(){		
@@ -137,7 +151,7 @@ function compareData(){
 	
 	var voschange = 0;
 		<?php foreach ($driver->getAllDeelgebieden() as $deelgebied) { ?>
-			if(team<?= $deelgebied->getId() ?>_old != team<?= $deelgebied->getId() ?>){
+			if(team<?= $deelgebied->getId() ?>_old.status != team<?= $deelgebied->getId() ?>.status){
 				voschange = 1;
 				$('#arrow_<?= $deelgebied->getId() ?>').css('visibility','visible');
 			}
@@ -152,9 +166,14 @@ function compareData(){
 		jwplayer('player5').play();
 	}
 }
+function showAudio() {
+	$('#audiocover').show();
+	$('#audioplayers').show();
+}
 
-function hidePlayers(){
-	if(custom == 0) $('#audiocover').css('background','#FFFFFF');
+function hideAudio() {
+	$('#audiocover').hide();
+	$('#audioplayers').hide();
 }
 </script>
 <div id="voscontainer" class="alarmPaginaVossenContainer" style="float: left; display: inline-block; width: 450px;">
@@ -162,7 +181,7 @@ function hidePlayers(){
 		<?php foreach ($driver->getAllDeelgebieden() as $deelgebied) { ?>
         <tr>
             <td style="width: 50px;"><img src="<?=BASE_URL?>images/arrow-bouncing-left.gif" style="visibility: hidden; height: 40px;" id="arrow_<?= $deelgebied->getId() ?>" /></td>
-            <td id="status_<?= $deelgebied->getId() ?>" class="wit" style="width: 150px; text-align: center; color: #000000; font-size: 10px;"><a href="<?=WEBSITE_URL?>vossen/<?= $deelgebied->getName() ?>" id="link_<?= $deelgebied->getId() ?>" class="wit" style="display: block; width: 100%; height: 100%; text-decoration: none; text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);"> Team <br />
+            <td id="status_<?= $deelgebied->getId() ?>" class="wit" style="width: 150px; text-align: center; color: #000000; font-size: 10px; background-color: gray;"><a href="<?=WEBSITE_URL?>vossen/<?= $deelgebied->getName() ?>" id="link_<?= $deelgebied->getId() ?>" class="wit" style="display: block; width: 100%; height: 100%; text-decoration: none; text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);"> Team <br />
                 <span class="header headerh1"><?= $deelgebied->getName() ?></span>
             </a></td>
             <td id="loc_<?= $deelgebied->getId() ?>" style="width: 250px; font-size: 11px; color: #000000; margin-left: 10px; overflow: hidden; height: 40px;"></td>
@@ -200,7 +219,17 @@ function hidePlayers(){
 </div>
 <img src="<?=BASE_URL?>images/preloader.gif" style="position: absolute; margin: auto; z-index: 100; top: 190px; left: 50%;" id="refreshicon" />
 <div id="centerheader" style="position: relative; clear: both; margin: 0px auto; width: 300px;">
-    <small><span id="timestamp">Nog geen updates.</span> - Test geluid: <a href="javascript:void(0);" onclick="jwplayer('player1').play();" style="text-decoration: none;">1</a> <a href="javascript:void(0);" onclick="jwplayer('player2').play();" style="text-decoration: none;">2</a> <a href="javascript:void(0);" onclick="jwplayer('player3').play();" style="text-decoration: none;">3</a> <a href="javascript:void(0);" onclick="jwplayer('player4').play();" style="text-decoration: none;">4</a> <a href="javascript:void(0);" onclick="jwplayer('player5').play();" style="text-decoration: none;">5</a> - <a href="javascript:void(0);" onclick="$('#audiocover').css('background','none');custom = 1;" style="text-decoration: none;">show</a> - <a href="javascript:void(0);" onclick="$('#audiocover').css('background','#FFFFFF');custom = 1;" style="text-decoration: none;">hide</a></small>
+    <small>
+    	<span id="timestamp">Nog geen updates.</span><br />
+    	Test geluid:
+    	<a href="javascript:void(0);" onclick="jwplayer('player1').play();" style="text-decoration: none;">1</a>
+    	<a href="javascript:void(0);" onclick="jwplayer('player2').play();" style="text-decoration: none;">2</a>
+    	<a href="javascript:void(0);" onclick="jwplayer('player3').play();" style="text-decoration: none;">3</a>
+    	<a href="javascript:void(0);" onclick="jwplayer('player4').play();" style="text-decoration: none;">4</a>
+    	<a href="javascript:void(0);" onclick="jwplayer('player5').play();" style="text-decoration: none;">5</a>
+    	<a href="javascript:void(0);" onclick="return showAudio();" style="text-decoration: none;">show</a>
+    	<a href="javascript:void(0);" onclick="return hideAudio();" style="text-decoration: none;">hide</a>
+    </small>
 </div>
 <div id="audioplayers" style="position: absolute; left: 0px; top: 40%; width: 50px; height: 250px; padding: 10px;">
     <span id="audiocover" style="float: left; position: absolute; width: 50px; height: 250px; z-index: 100; background: none;"> </span>
@@ -218,12 +247,12 @@ function hidePlayers(){
 
 <script type="text/javascript">
 $(document).ready(function(){
+	/* global jwplayer */
 	jwplayer("player1").setup({ width: '24', height: '24', flashplayer: "<?=BASE_URL?>/jwplayer/player.swf" });
 	jwplayer("player2").setup({ width: '24', height: '24', flashplayer: "<?=BASE_URL?>/jwplayer/player.swf" });
 	jwplayer("player3").setup({ width: '24', height: '24', flashplayer: "<?=BASE_URL?>/jwplayer/player.swf" });
 	jwplayer("player4").setup({ width: '24', height: '24', flashplayer: "<?=BASE_URL?>/jwplayer/player.swf" });
 	jwplayer("player5").setup({ width: '24', height: '24', flashplayer: "<?=BASE_URL?>/jwplayer/player.swf" });
-	setTimeout("hidePlayers()",3000);
 	getJotihuntData();
 });
 </script>

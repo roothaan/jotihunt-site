@@ -98,8 +98,9 @@ if (isset($headerOptions)) {
     				<li class="clear"></li>
     			</ul>
     			<div id="userInfoBox">
+    			<?php if (!$authMgr->isSuperAdmin()) { ?>
     			Event: <a href="/events" style="line-height:normal;color: #707f55;"><strong><?= $authMgr->getMyEventId() ?></strong></a><br />
-    			Organisation: <strong><?= $authMgr->getMyOrganisationId() ?></strong><br />
+    			Organisation: <strong><?= $authMgr->getMyOrganisationId() ?></strong><br /><?php } ?>
     			User: <?= $authMgr->getMe()->getDisplayName() ?>
     			<?php if ($authMgr->isSuperAdmin()) { echo ' (<strong>Super</strong>Admin)'; } 
     			  elseif ($authMgr->isAdmin()) { echo ' (Admin)'; } ?>

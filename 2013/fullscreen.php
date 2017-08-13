@@ -23,140 +23,101 @@ require_once BASE_DIR . 'header.php'; ?>
 
 <?php if(GOOGLE_MAPS_ENABLED) { ?>
 <script type="text/javascript" src="<?= GOOGLE_MAPS_URI ?>"></script>
+<?php } else { ?>
+<em>Configureer <strong><code>google-js-api-key</code></strong> om Google Maps te gebruiken</em>
 <?php } ?>
+
 <script type="text/javascript">
 <?php foreach ($driver->getAllDeelgebieden() as $deelgebied) { ?>
-	var team<?= $deelgebied->getId() ?> = '';
-	var team<?= $deelgebied->getId() ?>_old = '';
-	var team<?= $deelgebied->getId() ?>_location = '';
-	var team<?= $deelgebied->getId() ?>_location_old = '';
-	var team<?= $deelgebied->getId() ?>_time = '';
-<?php }?>
+	var team<?= $deelgebied->getId() ?> = {
+		id: 0,
+		name: '',
+		date: '',
+		address : '',
+		lat: 0,
+		lng: 0,
+		lastHuntTime: 0,
+		status: ''
+	};
 
-	var rank = '';
-	var rank_old = '';
+var team<?= $deelgebied->getId() ?>_old = {
+		id: 0,
+		name: '',
+		date: '',
+		address : '',
+		lat: 0,
+		lng: 0,
+		lastHuntTime: 0,
+		status: ''
+	};
+<?php }?>
+	var rank = 0;
+	var rank_old = 0;
 	var msg = '';
 	var msg_old = '';
-	
+	var hunt = '';
+	var hunt_old = '';
+	var first = 1;
+
 	<?php if(GOOGLE_MAPS_ENABLED) { ?>
 	var geocoder = new google.maps.Geocoder();
 	<?php } ?>
-	var first = 1;
 	
-	function getJotihuntData(){
-		//Set a timeout for 15 seconds
-		setTimeout("getJotihuntData()",15000);
-			
-		var randomnumber=Math.floor(Math.random()*10001);
+	function beforeParsing() {
+		$('#refreshicon').show();
 
-		$.get('<?=BASE_URL?>spy.php?i=randomnumber', function(data) {
-			
-			//Hide current indicators
-			$('#arrow_rank').css('visibility','hidden');
-			$('#arrow_msg').css('visibility','hidden');
+		//Hide current indicators
+		$('#arrow_rank').css('visibility','hidden');
+		$('#arrow_msg').css('visibility','hidden');
+		$('#arrow_hunt').css('visibility','hidden');
 
 		<?php foreach ($driver->getAllDeelgebieden() as $deelgebied) { ?>
 			$('#arrow_<?= $deelgebied->getId() ?>').css('visibility','hidden');
 			//Save current data to old
 			team<?= $deelgebied->getId() ?>_old = team<?= $deelgebied->getId() ?>;
-			team<?= $deelgebied->getId() ?>_location_old = team<?= $deelgebied->getId() ?>_location;
 		<?php }?>
-		
-			rank_old = rank;
-			msg_old = msg;
-			
-			//Save new data
-			var items = data.split("||||||");
-			
-			<?php
-			$counter = 0;
-			foreach ($driver->getAllDeelgebieden() as $deelgebied) { ?>
-				team_tmp = items[<?= $counter++ ?>];
-				if (team_tmp) {
-					team_arr = team_tmp.split("|||");
-					if (team_arr) {
-						team<?= $deelgebied->getId() ?> = team_arr[0];
-						team<?= $deelgebied->getId() ?>_time = team_arr[1];
-						team<?= $deelgebied->getId() ?>_location = team_arr[2];
-						team<?= $deelgebied->getId() ?>_lat = team_arr[3];
-						team<?= $deelgebied->getId() ?>_long = team_arr[4];
-						team<?= $deelgebied->getId() ?>_lastHuntTime = team_arr[5];
-					}
-				}
-			<?php }?>
-			
-			rank = items[6];
-			
-			var tmpmsg = items[7];
-			msg = items[7];
-			
-			if (8 in items) {
-				lastHunt = items[8];
-			}
-			
-			// In case we have no clue
-			if (!rank) {
-				rank = '?';
-			}
-			
-			//Fix old data if first
-			if(first == 1){
-				<?php foreach ($driver->getAllDeelgebieden() as $deelgebied) { ?>
-					team<?= $deelgebied->getId() ?>_old = team<?= $deelgebied->getId() ?>;
-				<?php }?>
-				rank_old = rank;
-				msg_old = msg;
-			}
 
-			
-			//Display new data
-			//Rank
-			$('#rank').html('#'+rank);
-			
-			//Message
-			if (typeof msg !== 'undefined') {
-			    $('#msg').html(msg);
-			}
-			if (typeof lasthunt !== 'undefined') {
-			    $('#msg').append('<br />Laatste hunt: <strong>' + lastHunt + '</strong>');
-			}
-			
-			//Vossenteams
-			
-		<?php foreach ($driver->getAllDeelgebieden() as $deelgebied) { ?>
-			$('#status_<?= $deelgebied->getId() ?>').attr('class',team<?= $deelgebied->getId() ?>_old);
-			$('#link_<?= $deelgebied->getId() ?>').attr('class',team<?= $deelgebied->getId() ?>);
-			<?php if(GOOGLE_MAPS_ENABLED) { ?>
-			if(team<?= $deelgebied->getId() ?>_location == '0' || team<?= $deelgebied->getId() ?>_location == ''){
-				if(team<?= $deelgebied->getId() ?>_lat != "0" && team<?= $deelgebied->getId() ?>_long != "0") {
-					var latlng = new google.maps.LatLng(team<?= $deelgebied->getId() ?>_lat, team<?= $deelgebied->getId() ?>_long);
-					geocoder.geocode({'latLng': latlng}, function(results, status) {
-						if (status == google.maps.GeocoderStatus.OK) {
-							if (results[0]) {
-								$('#loc_<?= $deelgebied->getId() ?>').html('<strong>'+results[0].formatted_address+'</strong> ('+team<?= $deelgebied->getId() ?>_time+')');
-							} else if (results[1]) {
-								$('#loc_<?= $deelgebied->getId() ?>').html('<strong>'+results[1].formatted_address+'</strong> ('+team<?= $deelgebied->getId() ?>_time+')');
-							}
-						}
-					});
-				} else {
-					$('#loc_<?= $deelgebied->getId() ?>').html("Geen locaties bekend");
-				}
-			}else{
-				$('#loc_<?= $deelgebied->getId() ?>').html('<strong>'+team<?= $deelgebied->getId() ?>_location+'</strong> ('+team<?= $deelgebied->getId() ?>_time+')');
-			}
-			<?php } ?>
-			
-			if(typeof team<?= $deelgebied->getId() ?>_lastHuntTime !== 'undefined' && team<?= $deelgebied->getId() ?>_lastHuntTime != 0) {
-				var newHuntTime<?= $deelgebied->getId() ?> = Date.parse(team<?= $deelgebied->getId() ?>_lastHuntTime+' GMT+0100') + (60 * 60) - (60*60); // + 1hour for hunt - 1hour for daylightsaving
-				startCountdown($(".text<?= $deelgebied->getId() ?>"),newHuntTime<?= $deelgebied->getId() ?>/1000);
-			}		
-			<?php }?>
-			
-			if(first == 1) first = 0;
-			
-			//Compare and visualize data
-			compareData();
+		rank_old = rank;
+		msg_old = msg;
+		hunt_old = hunt;
+	}
+	
+	function afterParsing() {
+		rank_old = rank;
+		msg_old = msg;
+		hunt_old = hunt;
+		first = 0;
+
+		//Hide preloader animation
+		$('#refreshicon').hide();
+
+		//Compare and visualize data
+		compareData();
+	}
+	
+	function showRank(rank) {
+		$('#rank').html('#' + (rank == 0 ? '?' : rank ));
+	}
+	
+	function showMessage(msg, lastHunt) {
+		if (typeof msg !== 'undefined') {
+		    $('#msgcontainer').html(msg);
+		}
+		if (typeof lastHunt !== 'undefined') {
+		    $('#huntcontainer').html('Laatste hunt: <strong>' + lastHunt + '</strong>');
+		}
+	}
+	
+	function getJotihuntData(){
+		//Set a timeout for 15 seconds
+		setTimeout('getJotihuntData()',15000);
+
+		$.getJSON('<?=BASE_URL?>spyJson.php', function( data ) {
+			beforeParsing();
+			showRank(data['plaats']);
+			showMessage(data['lastbericht'], data['lasthunt']);
+			showVossen(data['vossen']);
+			afterParsing();
 		});
 	}
 	
@@ -169,23 +130,68 @@ require_once BASE_DIR . 'header.php'; ?>
 			$('#arrow_rank').css('visibility','visible');
 		}
 		<?php foreach ($driver->getAllDeelgebieden() as $deelgebied) { ?>
-			if(team<?= $deelgebied->getId() ?>_location_old != team<?= $deelgebied->getId() ?>_location) {
+			if(team<?= $deelgebied->getId() ?>_old.address != team<?= $deelgebied->getId() ?>.address) {
 				if (document.getElementById("iframe_<?= $deelgebied->getId() ?>")) {
-					document.getElementById("iframe_<?= $deelgebied->getId() ?>").src = 
-						document.getElementById("iframe_<?= $deelgebied->getId() ?>").src;
+					// I think this refreshes the page?
+					document.getElementById("iframe_<?= $deelgebied->getId() ?>").src = document.getElementById("iframe_<?= $deelgebied->getId() ?>").src;
 				}
 			}
 		<?php } ?>
 		<?php foreach ($driver->getAllDeelgebieden() as $deelgebied) { ?>
-			if(team<?= $deelgebied->getId() ?>_old != team<?= $deelgebied->getId() ?>){
+			if(team<?= $deelgebied->getId() ?>_old.status != team<?= $deelgebied->getId() ?>.status){
 				$('#arrow_<?= $deelgebied->getId() ?>').css('visibility','visible');
 			}
 		<?php } ?>
 	}
 	
+	function showVossen(vossen) {
+		<?php
+		$counter = 0;
+		foreach ($driver->getAllDeelgebieden() as $deelgebied) { ?>
+		if (vossen['<?= $deelgebied->getId() ?>']) {
+			team<?= $deelgebied->getId() ?> = vossen['<?= $deelgebied->getId() ?>'];
+		}
+		<?php }?>
+		
+		//Fix old data if first
+		if(first == 1){
+			<?php foreach ($driver->getAllDeelgebieden() as $deelgebied) { ?>
+				team<?= $deelgebied->getId() ?>_old = team<?= $deelgebied->getId() ?>;
+			<?php }?>
+		}
+
+		<?php foreach ($driver->getAllDeelgebieden() as $deelgebied) { ?>
+			$('#status_<?= $deelgebied->getId() ?>').attr('class',team<?= $deelgebied->getId() ?>_old.status);
+			$('#link_<?= $deelgebied->getId() ?>').attr('class',team<?= $deelgebied->getId() ?>.status);
+			<?php if(GOOGLE_MAPS_ENABLED) { ?>
+			if(team<?= $deelgebied->getId() ?>.address == '0' || team<?= $deelgebied->getId() ?>.address == '') {
+				if(team<?= $deelgebied->getId() ?>.lat != "0" && team<?= $deelgebied->getId() ?>.lng != "0") {
+					var latlng = new google.maps.LatLng(team<?= $deelgebied->getId() ?>.lat, team<?= $deelgebied->getId() ?>.lng);
+					geocoder.geocode({'latLng': latlng}, function(results, status) {
+						if (status == google.maps.GeocoderStatus.OK) {
+							if (results[0]) {
+								$('#loc_<?= $deelgebied->getId() ?>').html('<strong>'+results[0].formatted_address+'</strong> ('+team<?= $deelgebied->getId() ?>.date+')');
+							} else if (results[1]) {
+								$('#loc_<?= $deelgebied->getId() ?>').html('<strong>'+results[1].formatted_address+'</strong> ('+team<?= $deelgebied->getId() ?>.date+')');
+							}
+						}
+					});
+				} else {
+					$('#loc_<?= $deelgebied->getId() ?>').html("Geen locaties bekend");
+				}
+			}else{
+				$('#loc_<?= $deelgebied->getId() ?>').html('<strong>'+team<?= $deelgebied->getId() ?>.address +'</strong> ('+team<?= $deelgebied->getId() ?>.date+')');
+			}
+			<?php } ?>
+			
+			if(typeof team<?= $deelgebied->getId() ?>.lastHuntTime !== 'undefined' && team<?= $deelgebied->getId() ?>.lastHuntTime != 0) {
+				var newHuntTime<?= $deelgebied->getId() ?> = Date.parse(team<?= $deelgebied->getId() ?>.lastHuntTime+' GMT+0100') + (60 * 60) - (60*60); // + 1hour for hunt - 1hour for daylightsaving
+				startCountdown($(".text<?= $deelgebied->getId() ?>"),newHuntTime<?= $deelgebied->getId() ?>/1000);
+			}		
+			<?php }?>
+	}
 	$(document).ready(function(){
 		getJotihuntData();
-		
 		startClock();
 	});
 	
@@ -241,9 +247,10 @@ require_once BASE_DIR . 'header.php'; ?>
 </script>
 </head>
 <body>
+	<img src="<?=BASE_URL?>images/preloader.gif" style="position: absolute; margin: auto; z-index: 100; top: 190px; left: 50%;" id="refreshicon" />
     <table style="width: 100%;">
         <tr>
-            <td style="text-align: right; padding-right: 30px; font-size: 24px; font-weight: bold; color: #66665E;"><img src="<?=BASE_URL?>images/arrow-bouncing-left.gif" style="visibility: hidden; height: 30px;" id="arrow_msg" /><span id="msg"></span></td>
+            <td style="text-align: right; padding-right: 30px; font-size: 24px; font-weight: bold; color: #66665E;"><img src="<?=BASE_URL?>images/arrow-bouncing-left.gif" style="visibility: hidden; height: 30px;" id="arrow_msg" /><span id="msgcontainer"></span><br /><span id="huntcontainer"></span></td>
             <td style="text-align:center; font-size: 60px; font-weight: bold; color: #66665E;"><span id="currentTime"></span></td>
             <td style="padding-left: 30px; text-align: left; font-size: 60px; color: #D19917; text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);">
             	<img src="<?=BASE_URL?>images/arrow-bouncing-left.gif" style="visibility: hidden; height: 30px;" id="arrow_rank" />
@@ -271,7 +278,7 @@ switch ($r) {
             <td
             	id="status_<?= $deelgebied->getId() ?>"
             	class="wit"
-            	style="height: 40px; text-align: left; color: #000000; font-size: 10px;">
+            	style="height: 40px; text-align: left; color: #000000; font-size: 10px; background-color: gray;">
             	<a
             		href="<?=WEBSITE_URL?>vossen/<?= $deelgebied->getName() ?>"
             		id="link_<?= $deelgebied->getId() ?>"

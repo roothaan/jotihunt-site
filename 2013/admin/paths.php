@@ -24,19 +24,17 @@ $paths = array(
     "invoer"=>"invoer.php",
     "events" => "choose_event.php",
     'admin-gcm' => 'gcm.php',
-    'privacy' => 'privacy.php'
+    'deelgebieden-kml' => 'kml/deelgebieden.php'
 );
 
 $needsNoEvent = array(
     'login',
     'logout',
-    'events',
-    'privacy'
+    'events'
 );
 
 $needsNoDb = array(
-    'admin' => 1,
-    'privacy' => 1
+    'admin' => 1
 );
 
 $noHeaderFooter = array(

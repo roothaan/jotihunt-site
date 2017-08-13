@@ -43,5 +43,5 @@ make_map($mapOptions);
 
 ?>
 <?php } else {?>
-Google Maps kan niet getoond worden.
+<em>Configureer <strong><code>google-js-api-key</code></strong> om Google Maps te gebruiken</em>
 <?php } ?>

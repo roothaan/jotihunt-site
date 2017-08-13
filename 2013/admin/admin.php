@@ -27,11 +27,12 @@ if ($driver->isReady()) {
     <ul>
         <li><a href="<?=BASE_URL?>admin/config.php">Config</a></li>
         <li><a href="<?=BASE_URL?>admin/kml-import.php">KML Import tool</a></li>
-        <li><a href="<?=BASE_URL?>admin/events.php">Events</a></li>
-        <li><a href="<?=BASE_URL?>admin/organisations.php">Organisations</a></li>
-        <li><a href="<?=BASE_URL?>admin/deelgebieden.php">Deelgebieden</a></li>
-        <li><a href="<?=BASE_URL?>admin/speelhelften.php">Speelhelften</a></li>
-        <li><a href="<?=BASE_URL?>admin/vossen.php">Vossen</a></li>
+        <li><a href="<?=BASE_URL?>admin/events.php">Events</a> (<?= $driver->getAllEventsCount() ?>)</li>
+        <li><a href="<?=BASE_URL?>admin/organisations.php">Organisations</a> (<?= $driver->getAllOrganisationsCount() ?>)</li>
+        <li><a href="<?=BASE_URL?>admin/deelgebieden.php">Deelgebieden</a> (<?= $driver->getAllDeelgebiedenCount() ?>)</li>
+        <li><a href="<?=BASE_URL?>admin/speelhelften.php">Speelhelften</a> (<?= $driver->getAllSpeelhelftenCount() ?>)</li>
+        <li><a href="<?=BASE_URL?>admin/counterhunt.php">Counterhunt rondes</a> (<?= $driver->getAllCounterhuntrondjesCount() ?>)</li>
+        <li><a href="<?=BASE_URL?>admin/vossen.php">Vossen</a>  (<?= $driver->getAllTeamsCount() ?>)</li>
         
         <li><a href="<?=BASE_URL?>admin/showdatabase.php">Show database</a></li>
         <li><a href="<?=BASE_URL?>admin/phpinfo.php">phpinfo();</a></li>
