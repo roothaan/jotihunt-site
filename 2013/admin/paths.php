@@ -31,11 +31,13 @@ $paths = array(
 $needsNoEvent = array(
     'login',
     'logout',
+    'privacy',
     'events'
 );
 
 $needsNoDb = array(
-    'admin' => 1
+    'admin' => 1,
+    'privacy' => 1
 );
 
 $noHeaderFooter = array(
