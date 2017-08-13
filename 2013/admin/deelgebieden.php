@@ -49,7 +49,7 @@ foreach ($events as $event) {
 		    $coordinate_counter = 0;
 		    $allCoordinates = $driver->getAllCoordinatesForDeelgebied($deelgebied->getId());
             if (sizeof($allCoordinates) === 0 ) {
-                echo '<p>Geen coordinaten voor dit deelgebieden gevonden!</p>';
+                echo '<p>Geen coordinaten voor dit deelgebied gevonden!</p>';
             } else {
                 echo "<p><strong>" . count($allCoordinates) . "</strong> coordinaten gevonden. ";
                 echo "<a onclick=\"$( '.coords_" . $deelgebied->getId() . "').toggle();return false;\" href=\"#\">Show/hide coordinates</a> </p>";
