@@ -24,6 +24,7 @@ $paths = array(
     "invoer"=>"invoer.php",
     "events" => "choose_event.php",
     'admin-gcm' => 'gcm.php',
+    'privacy' => 'privacy.php',
     'deelgebieden-kml' => 'kml/deelgebieden.php'
 );
 
