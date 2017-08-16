@@ -4,6 +4,8 @@ class JotihuntInformatieRest {
     
     var $debug;
     var $conn;
+    var $jhBase = 'https://www.jotihunt.net/';
+    var $apiBase = 'https://www.jotihunt.net/api/1.0/';
 
     public function __construct() {
         $conn = Datastore::getDatastore();
@@ -17,7 +19,7 @@ class JotihuntInformatieRest {
     public function updateOpdrachten() {
         global $authMgr;
         $collection = array ();
-        $nieuwitemlist = $this->getJsonFromJotihunt('http://www.jotihunt.net/api/1.0/opdracht');
+        $nieuwitemlist = $this->getJsonFromJotihunt($this->apiBase . 'opdracht');
         if (isset($nieuwitemlist->error) && ! empty($nieuwitemlist->error)) {
             if ($this->debug) {
                 echo '<br /><br /><span style="color:red;">' .
@@ -43,7 +45,7 @@ class JotihuntInformatieRest {
                     $bericht->setLastupdate(SiteDriverPostgresql::psqlDateFromTime($nieuwitemlist->last_update));
                     $bericht->setType('opdracht');
                     
-                    $itemdetails = $this->getJsonFromJotihunt('http://www.jotihunt.net/api/1.0/opdracht/' . $bericht->getBericht_id());
+                    $itemdetails = $this->getJsonFromJotihunt($this->apiBase . 'opdracht/' . $bericht->getBericht_id());
                     if (isset($itemdetails->error) && ! empty($itemdetails->error)) {
                         if ($this->debug) {
                             echo '<br /><br /><span style="color:red;">' .
@@ -53,7 +55,7 @@ class JotihuntInformatieRest {
                     } else {
                         if (! empty($itemdetails) && isset($itemdetails->data) && count($itemdetails->data) > 0) {
                             foreach ( $itemdetails->data as $itemdetail ) {
-                                $inhoud = str_replace("src=\"/","src=\"http://www.jotihunt.net/",$itemdetail->inhoud);
+                                $inhoud = str_replace("src=\"/","src=\"".$this->jhBase,$itemdetail->inhoud);
                                 $bericht->setInhoud($inhoud);
                             }
                         }
@@ -70,7 +72,7 @@ class JotihuntInformatieRest {
     public function updateNieuws() {
         global $authMgr;
         $collection = array ();
-        $nieuwitemlist = $this->getJsonFromJotihunt('http://www.jotihunt.net/api/1.0/nieuws');
+        $nieuwitemlist = $this->getJsonFromJotihunt($this->apiBase . 'nieuws');
         if (isset($nieuwitemlist->error) && ! empty($nieuwitemlist->error)) {
             if ($this->debug) {
                 echo '<br /><br /><span style="color:red;">' . 
@@ -94,7 +96,7 @@ class JotihuntInformatieRest {
                     $bericht->setLastupdate(SiteDriverPostgresql::psqlDateFromTime($nieuwitemlist->last_update));
                     $bericht->setType('nieuws');
                     
-                    $itemdetails = $this->getJsonFromJotihunt('http://www.jotihunt.net/api/1.0/nieuws/' . $bericht->getBericht_id());
+                    $itemdetails = $this->getJsonFromJotihunt($this->apiBase . 'nieuws/' . $bericht->getBericht_id());
                     if (isset($itemdetails->error) && ! empty($itemdetails->error)) {
                         if ($this->debug) {
                             echo "<br /><br /><span style='color:red;'>" . 
@@ -104,7 +106,7 @@ class JotihuntInformatieRest {
                     } else {
                         if (! empty($itemdetails) && isset($itemdetails->data) && count($itemdetails->data) > 0) {
                             foreach ( $itemdetails->data as $itemdetail ) {
-                                $inhoud = str_replace("src=\"/","src=\"http://www.jotihunt.net/",$itemdetail->inhoud);
+                                $inhoud = str_replace("src=\"/","src=\"".$this->jhBase,$itemdetail->inhoud);
                                 $bericht->setInhoud($inhoud);
                             }
                         }
@@ -137,7 +139,7 @@ class JotihuntInformatieRest {
         }
         
         $collection = array ();
-        $nieuwitemlist = $this->getJsonFromJotihunt('http://www.jotihunt.net/api/1.0/hint');
+        $nieuwitemlist = $this->getJsonFromJotihunt($this->apiBase . 'hint');
         if (isset($nieuwitemlist->error) && ! empty($nieuwitemlist->error)) {
             if ($this->debug) {
                 echo "<br /><br /><span style='color:red;'>" . 
@@ -162,7 +164,7 @@ class JotihuntInformatieRest {
 
                     $bericht->setType('hint');
                     
-                    $itemdetails = $this->getJsonFromJotihunt('http://www.jotihunt.net/api/1.0/hint/' . $bericht->getBericht_id());
+                    $itemdetails = $this->getJsonFromJotihunt($this->apiBase . 'hint/' . $bericht->getBericht_id());
                     if (isset($itemdetails->error) && ! empty($itemdetails->error)) {
                         if ($this->debug) {
                             echo "<br /><br /><span style='color:red;'>" . 
@@ -172,7 +174,7 @@ class JotihuntInformatieRest {
                     } else {
                         if (! empty($itemdetails) && isset($itemdetails->data) && count($itemdetails->data) > 0) {
                             foreach ( $itemdetails->data as $itemdetail ) {
-                                $inhoud = str_replace("src=\"/","src=\"http://www.jotihunt.net/",$itemdetail->inhoud);
+                                $inhoud = str_replace("src=\"/","src=\"".$this->jhBase,$itemdetail->inhoud);
                                 $inhoud = "<div class='inhoud'>".$inhoud."</div>";
                                 
                                 if(isset($nieuwsitem->Alpha)) {
@@ -208,7 +210,7 @@ class JotihuntInformatieRest {
     }
 
     public function getVossenStatusen() {
-        $vossenstatuslijst = $this->getJsonFromJotihunt('http://www.jotihunt.net/api/1.0/vossen');
+        $vossenstatuslijst = $this->getJsonFromJotihunt($this->apiBase . 'vossen');
         if (isset($vossenstatuslijst->error) && ! empty($vossenstatuslijst->error)) {
             if ($this->debug) {
                 echo "<br /><br /><span style='color:red;'>" . 
@@ -233,7 +235,7 @@ class JotihuntInformatieRest {
     }
 
     public function getScorelijst() {
-        $scorelijst = $this->getJsonFromJotihunt('http://www.jotihunt.net/api/1.0/scorelijst');
+        $scorelijst = $this->getJsonFromJotihunt($this->apiBase . 'scorelijst');
         if (isset($scorelijst->error) && ! empty($scorelijst->error)) {
             if ($this->debug) {
             echo "<br /><br /><span style='color:red;'>" . 

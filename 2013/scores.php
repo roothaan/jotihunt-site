@@ -17,8 +17,8 @@ if (null == $firstGroep) {
     }
     ?>
 
-<script src="http://code.highcharts.com/highcharts.js"></script>
-<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
 
 <div id="container" style="min-width: 400px; height: 800px; margin: 0 auto"></div>
 

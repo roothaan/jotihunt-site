@@ -35,10 +35,10 @@ function getColor($accuracy = 0.0) {
 
 function getStyles() {
     $styles = '';
-    $styles .= '<Style id="greenIcon"><IconStyle><scale>1.0</scale><Icon><href>http://www.google.com/mapfiles/ms/micons/green.png</href></Icon></IconStyle></Style>';
-    $styles .= '<Style id="blueIcon"><IconStyle><scale>1.0</scale><Icon><href>http://www.google.com/mapfiles/ms/micons/blue.png</href></Icon></IconStyle></Style>';
-    $styles .= '<Style id="yellowIcon"><IconStyle><scale>1.0</scale><Icon><href>http://www.google.com/mapfiles/ms/micons/yellow.png</href></Icon></IconStyle></Style>';
-    $styles .= '<Style id="redIcon"><IconStyle><scale>1.0</scale><Icon><href>http://www.google.com/mapfiles/ms/micons/red.png</href></Icon></IconStyle></Style>';
+    $styles .= '<Style id="greenIcon"><IconStyle><scale>1.0</scale><Icon><href>https://www.google.com/mapfiles/ms/micons/green.png</href></Icon></IconStyle></Style>';
+    $styles .= '<Style id="blueIcon"><IconStyle><scale>1.0</scale><Icon><href>https://www.google.com/mapfiles/ms/micons/blue.png</href></Icon></IconStyle></Style>';
+    $styles .= '<Style id="yellowIcon"><IconStyle><scale>1.0</scale><Icon><href>https://www.google.com/mapfiles/ms/micons/yellow.png</href></Icon></IconStyle></Style>';
+    $styles .= '<Style id="redIcon"><IconStyle><scale>1.0</scale><Icon><href>https://www.google.com/mapfiles/ms/micons/red.png</href></Icon></IconStyle></Style>';
     return $styles;
 }
 
