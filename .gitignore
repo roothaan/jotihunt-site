@@ -10,3 +10,7 @@ vendor/
 
 # User settings
 config/user.ini
+
+# Eclipse files
+.buildpath
+.settings
