@@ -24,14 +24,20 @@ html, body {
 }
 
 .headerContainer {
-	/*background: #cc3300;*/
-        background: url('../images/header/asian_header.jpg') no-repeat #cc3300;
-        background-size: cover;
+    background: #cc3300;
+    background-size: cover;
 	/*position: fixed;*/ /*Removed by Jasper, to fix layout */
 	top: 0;
 	width: 100%;
 	height: 70px;
 	z-index: 1;
+}
+
+.theme-2016 .headerContainer {
+	background: url('../images/themes/2016/header.jpg') no-repeat;
+}
+.theme-2016 #footer {
+	background: url("../images/themes/2016/footer.png") no-repeat;
 }
 
 h1, h2, h3, .header {
@@ -43,10 +49,6 @@ h1, h2, h3, .header {
 
 h1, .headerh1 {
 	font-size: 32px;
-}
-
-h2, .headerh2 {
-	font-size: 18px;
 }
 
 a {
@@ -313,9 +315,9 @@ img.right {
 }
 
 #footer {
-	background: #cc3300 url("../images/footer/asiansun.png") no-repeat;
-        background-position-y: -265px;
-        background-size: cover;
+	background: #cc3300;
+    background-position-y: -265px;
+    background-size: cover;
 	height: 25px;
 	padding-top: 20px;
 }

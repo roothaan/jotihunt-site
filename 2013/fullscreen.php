@@ -256,18 +256,7 @@ var team<?= $deelgebied->getId() ?>_old = {
             	<img src="<?=BASE_URL?>images/arrow-bouncing-left.gif" style="visibility: hidden; height: 30px;" id="arrow_rank" />
             	<span id="rank"></span>
             	<a href="./">
-	<?php
-$r = rand(1, 1);
-switch ($r) {
-    case 1 :
-        echo '<img src="' . BASE_URL . 'images/logos/jotihunt-asianfox.png" alt="Jotihunt Roothaan logo" 
-        		style="height:80px;" />';
-    break;
-    /*case 2 :
-        echo '<img src="' . BASE_URL . 'images/logos/2013/joti-hatter.png" alt="Jotihunt Mad Hatter logo" width="100px" style="float:left; border:0; margin: -10px 20px;position:absolute;" />';
-    break;*/
-}
-?>
+        			<img src="<?=THEME_LOGO_URL?>" alt="Jotihunt Roothaan logo" style="height:80px;" />
 				</a>
 			</td>
         </tr>
