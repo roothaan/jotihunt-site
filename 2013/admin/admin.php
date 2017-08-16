@@ -1,5 +1,5 @@
 <?php
-if(!defined("opoiLoaded")) die("Scouting Putten, het lukt jullie niet om ons te hacken!");
+if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 
 // If it's not ready at all, we can safely ignore protocol
 if ($driver->isReady()) {

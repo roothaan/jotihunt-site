@@ -1,5 +1,5 @@
 <?php
-if(!defined("opoiLoaded")) die("Scouting Putten, het lukt jullie niet om ons te hacken!");
+if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 
 JotihuntUtils::requireLogin();
 $headerOptions = array();
@@ -256,7 +256,7 @@ var team<?= $deelgebied->getId() ?>_old = {
             	<img src="<?=BASE_URL?>images/arrow-bouncing-left.gif" style="visibility: hidden; height: 30px;" id="arrow_rank" />
             	<span id="rank"></span>
             	<a href="./">
-        			<img src="<?=THEME_LOGO_URL?>" alt="Jotihunt Roothaan logo" style="height:80px;" />
+        			<img src="<?=THEME_LOGO_URL?>" alt="Jotihunt logo" style="height:80px;" />
 				</a>
 			</td>
         </tr>
