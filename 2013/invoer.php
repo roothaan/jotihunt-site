@@ -17,9 +17,9 @@ JotihuntUtils::requireLogin();
 //fetch laatste bericht
 $bericht = $driver->getLastBerichtByType("hint");
 if($bericht){
-    $iframeUrl = "http://jotihunt.net/groep/hint.php?MID=".$bericht->getBericht_id();
+    $iframeUrl = "https://jotihunt.net/groep/hint.php?MID=".$bericht->getBericht_id();
 }else{
-    $iframeUrl = "http://jotihunt.net";
+    $iframeUrl = "https://jotihunt.net";
 }
 
 //fetch vossen locaties voor placeholder
