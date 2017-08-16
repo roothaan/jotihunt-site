@@ -50,6 +50,7 @@ require_once ROOT_DIR . 'config/dbconfig.inc.php';
 require_once ROOT_DIR . 'config/google.inc.php';
 require_once ROOT_DIR . 'config/mailgun.inc.php';
 require_once ROOT_DIR . 'config/proximo.inc.php';
+require_once ROOT_DIR . 'config/theme.inc.php';
 
 // For time methods
 date_default_timezone_set('Europe/Amsterdam');

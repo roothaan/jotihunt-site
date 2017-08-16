@@ -37,8 +37,8 @@ if ($authMgr->isLoggedIn()) { ?>
     <a href="<?=WEBSITE_URL?>hunts">Bekijk overzicht</a><br />
     <?php 
     require_once BASE_DIR . 'blocks/scorePerDeelgebied.block.php';
-} 
+}
 ?>
 <div class="jotihuntBanner">
-    <a href="http://www.jotihunt.net" target="_blank"><img src="<?=BASE_URL?>images/banner2016.jpg" /></a>
+    <a href="http://www.jotihunt.net" target="_blank"><img src="<?=BASE_URL?>images/themes/<?= THEME_NAME ?>/banner.jpg" /></a>
 </div>

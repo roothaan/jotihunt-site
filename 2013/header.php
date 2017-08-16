@@ -40,23 +40,16 @@ if (isset($headerOptions)) {
 
 <?php require_once BASE_DIR . 'includes/analytics.include.php'; ?>
 </head>
-<?php if($_headerOptions['includeBody']) { ?>
-<body class="withbg">
+<?php
+if($_headerOptions['includeBody']) { ?>
+<body class="withbg theme-<?= THEME_NAME ?>">
 <?php } else { ?>
-<body>
+<body class="theme-<?= THEME_NAME ?>">
 <?php } ?>
 <?php if($_headerOptions['includeBody']) { ?>
     <div class="headerContainer">
         <div id="logo">
-		    <?php
-		    $aantalAfbeeldingen = 1;
-            $r = rand(1, $aantalAfbeeldingen);
-            switch ($r) {
-                case 1 :
-                    $title = 'asianfox';
-                break;
-            } ?>
-		    <a href="<?=WEBSITE_URL?>" title="<?=$title?>" ><img src="<?=BASE_URL?>images/logos/jotihunt-<?=$title?>.png" title="<?=$title?>" alt="Jotihunt logo" /></a>
+		    <a href="<?=WEBSITE_URL?>" title="Jotihunt logo" ><img src="<?=THEME_LOGO_URL?>" title="Jotihunt logo" alt="Jotihunt logo" /></a>
         </div>
     <!-- end #logo -->
     <div id="header">
