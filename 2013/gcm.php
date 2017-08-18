@@ -34,9 +34,9 @@ $(document).ready(function() {
         ]
     })
     .makeEditable({
-	    sAddURL:    "2013/ajax/gcm.ajax.php",
-        sUpdateURL: "2013/ajax/gcm.ajax.php",
-        sDeleteURL: "2013/ajax/gcm.ajax.php"
+	    sAddURL:    "<?= BASE_URL ?>ajax/gcm.ajax.php",
+        sUpdateURL: "<?= BASE_URL ?>ajax/gcm.ajax.php",
+        sDeleteURL: "<?= BASE_URL ?>ajax/gcm.ajax.php"
     });
 });
 </script>

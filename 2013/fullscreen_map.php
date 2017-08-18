@@ -29,7 +29,7 @@ function fetchVossen(){
 	//Set a timeout for 15 seconds
 	setTimeout("fetchVossen()",15000);
 		
-	updateVossen('<?php echo $team;?>');
+	updateVossen('<?= $team ?>');
 	updateHunters();	
 }
 $(document).ready(function(){

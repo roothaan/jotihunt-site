@@ -1,7 +1,6 @@
 <?php
-require_once '../init.php';
+if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 $authMgr->requireSuperAdmin();
-require_once BASE_DIR . 'header.php';
 
 $counterhuntrondjes = $driver->getAllCounterhuntrondjesSu();
 ?>
@@ -25,8 +24,8 @@ $('#counterhuntrondjes').dataTable( {
       ]
 	})
 	.makeEditable({
-	    sUpdateURL: "<?php echo BASE_URL . 'ajax/counterhuntrondjes.ajax.php'; ?>",
-	    sDeleteURL: "<?php echo BASE_URL . 'ajax/counterhuntrondjes.ajax.php'; ?>"
+	    sUpdateURL: "<?= BASE_URL . 'ajax/counterhuntrondjes.ajax.php' ?>",
+	    sDeleteURL: "<?= BASE_URL . 'ajax/counterhuntrondjes.ajax.php' ?>"
 	})
 });
 </script>
@@ -35,7 +34,7 @@ $('#counterhuntrondjes').dataTable( {
 
 <button id="btnDeleteRow">Verwijder ronde</button>
 
-<form action="<?php echo BASE_URL . 'ajax/counterhuntrondjes.ajax.php'; ?>" method="POST">
+<form action="<?= BASE_URL . 'ajax/counterhuntrondjes.ajax.php' ?>" method="POST">
 <table id="counterhuntrondjes">
     <thead>
         <tr>
@@ -79,7 +78,7 @@ $('#counterhuntrondjes').dataTable( {
         </tfoot>
     <tbody>
         <?php foreach ($counterhuntrondjes as $counterhuntrondje) { ?>
-        <tr id="<?php echo $counterhuntrondje->getId(); ?>">
+        <tr id="<?= $counterhuntrondje->getId() ?>">
             <td class="read_only"><?= $counterhuntrondje->getId() ?></td>
             <td class="read_only">
                 <?php
@@ -101,6 +100,3 @@ $('#counterhuntrondjes').dataTable( {
     </tbody>
 </table>
 </form>
-<?php
-require_once BASE_DIR . 'footer.php';
-?>

@@ -9,8 +9,8 @@ if (isset($headerOptions)) {
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Jotihunt <?php echo date('Y'); ?> &bull; <?php echo $_headerOptions['title']; ?></title>
-<link rel="shortcut icon" href="<?php echo BASE_URL; ?>images/favicon.png" type="image/x-icon" />
+<title>Jotihunt <?= date('Y')  ?> &bull; <?= $_headerOptions['title'] ?></title>
+<link rel="shortcut icon" href="<?= BASE_URL ?>images/favicon.png" type="image/x-icon" />
 <meta name="author" content="Ralf van den Boom, Sander Roebers, Jasper Roel" />
 <meta name="description" lang="nl" content="De Roothaan Jotihunt Website" />
 <meta name="keywords" content="Jotihunt, NUNC, Willie, Wortel, Stam, Roothaan, Roothaangroep, Doetinchem" />
@@ -22,21 +22,21 @@ if (isset($headerOptions)) {
 <link type="text/css" rel="stylesheet" href="<?=BASE_URL?>style/responsive.css?v=<?=filemtime(BASE_DIR."style/responsive.css")?>" media="screen" />
 <link type="text/css" rel="stylesheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 <link type="text/css" rel="stylesheet" href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" />
-<link type="text/css" rel="stylesheet" href="<?php echo BASE_URL; ?>js/timepicker/jquery.ui.timepicker.css" />
+<link type="text/css" rel="stylesheet" href="<?= BASE_URL ?>js/timepicker/jquery.ui.timepicker.css" />
 <script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <script type="text/javascript" src="//code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
 <script type="text/javascript" src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js"></script>
-<script type="text/javascript" src="<?php echo BASE_URL; ?>js/jquery.jeditable.min.js"></script>
-<script type="text/javascript" src="<?php echo BASE_URL; ?>js/timepicker/jquery.ui.timepicker.js"></script>
-<script type="text/javascript" src="<?php echo BASE_URL; ?>jwplayer/jwplayer.js"></script>
-<script type="text/javascript" src="<?php echo BASE_URL; ?>js/jquery.datatables-editable.js"></script>
+<script type="text/javascript" src="<?= BASE_URL ?>js/jquery.jeditable.min.js"></script>
+<script type="text/javascript" src="<?= BASE_URL ?>js/timepicker/jquery.ui.timepicker.js"></script>
+<script type="text/javascript" src="<?= BASE_URL ?>jwplayer/jwplayer.js"></script>
+<script type="text/javascript" src="<?= BASE_URL ?>js/jquery.datatables-editable.js"></script>
 
-<link rel="stylesheet" type="text/css" href="<?php echo BASE_URL; ?>external/datetimepicker/jquery.datetimepicker.css" />
-<script type="text/javascript" src="<?php echo BASE_URL; ?>external/datetimepicker/jquery.datetimepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="<?= BASE_URL ?>external/datetimepicker/jquery.datetimepicker.css" />
+<script type="text/javascript" src="<?= BASE_URL ?>external/datetimepicker/jquery.datetimepicker.js"></script>
 
-<script type="text/javascript" src="<?php echo BASE_URL; ?>external/momentjs/moment.min.js"></script>
+<script type="text/javascript" src="<?= BASE_URL ?>external/momentjs/moment.min.js"></script>
 
 <?php require_once BASE_DIR . 'includes/analytics.include.php'; ?>
 </head>

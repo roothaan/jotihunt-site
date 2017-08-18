@@ -1,7 +1,7 @@
 <?php
-require_once '../init.php';
+if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 $authMgr->requireSuperAdmin();
-require_once BASE_DIR . 'header.php';
+
 require_once BASE_DIR . 'includes/KmlHelper.class.php';
 
 if (isset($_POST['deelgebied_id'])) {
@@ -24,9 +24,9 @@ $events = $driver->getAllEvents();
 if (sizeof($events) === 0) {?>
     <h1>No Events</h1>
     <?php
+}else {
+    echo '<h1>Evenementen</h1>';
 }
-
-echo '<h1>Evenementen</h1>';
 foreach ($events as $event) {
     echo '<p><h2>' .  $event->getName() . ' [' . $event->getId() . ']</h2><hr /></p>';
     $allDeelgebieden = $driver->getAllDeelgebiedenForEvent($event->getId());
@@ -34,7 +34,7 @@ foreach ($events as $event) {
         ?>
         <h3>Geen deelgebieden!</h3>
         <p>Maak een KML met 2 (!) lagen, :<strong>Deelgebieden</strong> en <strong>Groepen</strong>.</p>
-        <form action="/2013/admin/deelgebieden.php" method="POST" enctype="multipart/form-data">
+        <form action="<?=WEBSITE_URL?>suadmin-deelgebieden" method="POST" enctype="multipart/form-data">
             KML File: <input type="file" name="kml_file"><br />
             import: <input type="checkbox" name="import"><br />
             <input type="hidden" name="event_id" value="<?= $event->getId() ?>"><br />
@@ -44,7 +44,7 @@ foreach ($events as $event) {
         <?php
     } else {
 		foreach ($allDeelgebieden as $deelgebied) {
-		    echo '<p><h3>' . $deelgebied->getName() . ' ['.$deelgebied->getId().'] <a href="/2013/admin/deelgebieden.php?action=remove&deelgebied_id='.$deelgebied->getId().'">verwijder</a></h3>';
+		    echo '<p><h3>' . $deelgebied->getName() . ' ['.$deelgebied->getId().'] <a href="'.WEBSITE_URL.'suadmin-deelgebieden?action=remove&deelgebied_id='.$deelgebied->getId().'">verwijder</a></h3>';
 		    
 		    $coordinate_counter = 0;
 		    $allCoordinates = $driver->getAllCoordinatesForDeelgebied($deelgebied->getId());
@@ -69,7 +69,7 @@ foreach ($events as $event) {
             }
             ?>
             Voeg coordinate toe aan <strong><?= $deelgebied->getName() ?></strong>:
-            <form action="/2013/admin/deelgebieden.php" method="POST">
+            <form action="<?=WEBSITE_URL?>suadmin-deelgebieden" method="POST">
                 Longitude:  <input type="text" name="longitude" />
                 Latitude:  <input type="text" name="latitude" />
                 Order ID:  <input type="text" name="order_id" value="<?= ++$coordinate_counter ?>" />
@@ -79,7 +79,7 @@ foreach ($events as $event) {
             <?php
 		} ?>
 		Voeg deelgebied toe:
-            <form action="/2013/admin/deelgebieden.php" method="POST">
+            <form action="<?=WEBSITE_URL?>suadmin-deelgebieden" method="POST">
                 Naam:  <input type="text" name="name" />
                 <input type="hidden" name="event_id" value="<?= $event->getId() ?>"/>
                 <input type="submit" name="Voeg deelgebied toe"/>
@@ -88,12 +88,10 @@ foreach ($events as $event) {
     }
 }
 ?>
-<h1>KML import</h1>
-<form action="/2013/admin/deelgebieden.php" method="POST" enctype="multipart/form-data">
+<hr />
+<h2>KML import</h2>
+<form action="<?=WEBSITE_URL?>suadmin-deelgebieden" method="POST" enctype="multipart/form-data">
     KML File: <input type="file" name="kml_file"><br />
     import: <input type="checkbox" name="import"><br />
     <input type="submit" value="Upload KML file">
 </form>
-<?php
-require_once BASE_DIR . 'footer.php';
-?>

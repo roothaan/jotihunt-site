@@ -1,8 +1,6 @@
 <?php
-require_once 'init.php';
+if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 $authMgr->requireAdmin();
-require_once BASE_DIR . 'header.php';
-define('opoiLoaded',true);
 
 require_once BASE_DIR . 'includes/make_map_js.include.php';
 require_once CLASS_DIR . 'jotihunt/MapOptions.class.php';
@@ -26,7 +24,7 @@ if (isset($_GET ['hunterId'])) {
 }
 if (count($ridercollection) > 0) {
 ?>
-<form action="<?php echo BASE_URL; ?>hunter_map.php" method="GET">
+<form action="<?= WEBSITE_URL ?>hunter-map" method="GET">
     Kies een hunter: <input type="hidden" name="from" id="from" value="<?php if (isset($_GET['from'])) { echo intval($_GET['from']); } ?>" /> <input type="hidden" name="to" id="to" value="<?php if (isset($_GET['to'])) { echo intval($_GET['to']); } ?>" />
 <?php
 $sep = '';
@@ -177,5 +175,4 @@ if (null != $riderId) {
 } else { // $amountOfLocations > 0
     echo 'No locations captured yet';
 }
-require_once BASE_DIR . 'footer.php';
 ?>

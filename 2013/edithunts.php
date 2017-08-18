@@ -42,7 +42,7 @@ $(document).ready(function() {
 $allHunts = $driver->getAllHunts();
 $huntcount = count($allHunts);
 ?>
-<h1>Hunts (<?php echo $huntcount; ?>)</h1>
+<h1>Hunts (<?= $huntcount ?>)</h1>
 <?php if($authMgr->isAdmin()) { ?><form method="post"><?php } ?>
 <table style="border: 0px" id='hunts'>
         <thead>
@@ -103,25 +103,25 @@ foreach ( $allHunts as $hunt ) {
         $adres = '<br/>' . $hunt ['adres'];
     } ?>
     <tr>
-        <td><?php echo $hunt ['deelgebied'];?></td>
-        <td><?php echo $hunt ['username'];?></td>
-        <td><strong><code><?php echo $hunt ['code'];?></code><?php echo $adres;?></strong></td>
-        <td><?php echo date('d-m-Y H:i', strtotime($hunt ["time"]));?></td>
+        <td><?= $hunt['deelgebied'] ?></td>
+        <td><?= $hunt['username'] ?></td>
+        <td><strong><code><?= $hunt ['code'] ?></code><?= $adres ?></strong></td>
+        <td><?= date('d-m-Y H:i', strtotime($hunt ['time'])) ?></td>
         <td>
             <?php
             if($hunt ['goedgekeurd'] == 2) { ?>
-                <a href="huntgoedkeuren/?id=<?php echo $hunt["id"];?>&goedkeuren=0" class="goedkeuren"><img src="<?php echo BASE_URL;?>images/goedgekeurd.png" title="Inleveren ongedaanmaken" alt="Inleveren ongedaanmaken" /></a>
+                <a href="huntgoedkeuren/?id=<?= $hunt['id'] ?>&goedkeuren=0" class="goedkeuren"><img src="<?= BASE_URL ?>images/goedgekeurd.png" title="Inleveren ongedaanmaken" alt="Inleveren ongedaanmaken" /></a>
                 <?php
             } elseif($hunt ['goedgekeurd'] == 1) { ?>
-                <a href="huntgoedkeuren/?id=<?php echo $hunt["id"];?>&goedkeuren=2" class="goedkeuren"><img src="<?php echo BASE_URL;?>images/goedgekeurd_ingeleverd.png" title="Goedkeuren" alt="Goedkeuren" /></a>
+                <a href="huntgoedkeuren/?id=<?= $hunt['id'] ?>&goedkeuren=2" class="goedkeuren"><img src="<?= BASE_URL ?>images/goedgekeurd_ingeleverd.png" title="Goedkeuren" alt="Goedkeuren" /></a>
                 <?php
             } else { ?>
-                <a href="huntgoedkeuren/?id=<?php echo $hunt["id"];?>&goedkeuren=1" class="goedkeuren"><img src="<?php echo BASE_URL;?>images/goedgekeurd_leeg.png" title="Inleveren" alt="Inleveren" /></a>
+                <a href="huntgoedkeuren/?id=<?= $hunt['id'] ?>&goedkeuren=1" class="goedkeuren"><img src="<?= BASE_URL ?>images/goedgekeurd_leeg.png" title="Inleveren" alt="Inleveren" /></a>
                 <?php
             }
             
             if ($authMgr->isAdmin()) { ?>
-                <a href="deletehunt/?id=<?php echo $hunt ["id"];?>" onclick="return confirm('Weet je zeker dat je deze hunt wilt verwijderen?');"><img src="<?php echo BASE_URL;?>images/delete.png" title="Verwijderen" alt="Verwijderen" /></a>
+                <a href="deletehunt/?id=<?= $hunt['id'] ?>" onclick="return confirm('Weet je zeker dat je deze hunt wilt verwijderen?');"><img src="<?= BASE_URL ?>images/delete.png" title="Verwijderen" alt="Verwijderen" /></a>
                 <?php
             } ?>
         </td>

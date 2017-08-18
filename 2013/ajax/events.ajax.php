@@ -16,7 +16,7 @@ if (isset($_POST ['name'])) {
         die();
     }
     
-    header('Location:' . BASE_URL . 'admin/events.php');
+    header('Location:' . WEBSITE_URL . 'suadmin-events');
     die();
 }
 

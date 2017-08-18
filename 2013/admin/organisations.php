@@ -1,7 +1,6 @@
 <?php
-require_once '../init.php';
+if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 $authMgr->requireSuperAdmin();
-require_once BASE_DIR . 'header.php';
 
 if (isset($_GET['organisationId']) && isset($_GET['eventId']) && isset($_GET['action'])) {
     $organisationId = $_GET['organisationId'];
@@ -35,8 +34,8 @@ $('#organisations').dataTable( {
       ]
 	})
 	.makeEditable({
-	    sUpdateURL: "<?php echo BASE_URL . 'ajax/organisations.ajax.php'; ?>",
-	    sDeleteURL: "<?php echo BASE_URL . 'ajax/organisations.ajax.php'; ?>"
+	    sUpdateURL: "<?= BASE_URL . 'ajax/organisations.ajax.php' ?>",
+	    sDeleteURL: "<?= BASE_URL . 'ajax/organisations.ajax.php' ?>"
 	})
 });
 </script>
@@ -45,7 +44,7 @@ $('#organisations').dataTable( {
 
 <button id="btnDeleteRow">Verwijder organisatie</button>
 
-<form action="<?php echo BASE_URL . 'ajax/organisations.ajax.php'; ?>" method="POST">
+<form action="<?= BASE_URL . 'ajax/organisations.ajax.php' ?>" method="POST">
 <table id="organisations">
     <thead>
         <tr>
@@ -65,7 +64,7 @@ $('#organisations').dataTable( {
         </tfoot>
     <tbody>
         <?php foreach ($organisations as $organisation) { ?>
-        <tr id="<?php echo $organisation->getId(); ?>">
+        <tr id="<?= $organisation->getId() ?>">
             <td class="read_only"><?= $organisation->getId() ?></td>
             <td><?= $organisation->getName() ?></td>
             <td class="read_only">
@@ -94,6 +93,3 @@ $('#organisations').dataTable( {
     </tbody>
 </table>
 </form>
-<?php
-require_once BASE_DIR . 'footer.php';
-?>

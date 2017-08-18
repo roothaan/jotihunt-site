@@ -1,7 +1,6 @@
 <?php
-require_once '../init.php';
+if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 $authMgr->requireSuperAdmin();
-require_once BASE_DIR . 'header.php';
 
 $teams = $driver->getAllTeams();
 ?>
@@ -25,8 +24,8 @@ $('#vossen').dataTable( {
       ]
 	})
 	.makeEditable({
-	    sUpdateURL: "<?php echo BASE_URL . 'ajax/vossen.ajax.php'; ?>",
-	    sDeleteURL: "<?php echo BASE_URL . 'ajax/vossen.ajax.php'; ?>"
+	    sUpdateURL: "<?= BASE_URL . 'ajax/vossen.ajax.php' ?>",
+	    sDeleteURL: "<?= BASE_URL . 'ajax/vossen.ajax.php' ?>"
 	})
 });
 </script>
@@ -35,7 +34,7 @@ $('#vossen').dataTable( {
 
 <button id="btnDeleteRow">Verwijder vos</button>
 
-<form action="<?php echo BASE_URL . 'ajax/vossen.ajax.php'; ?>" method="POST">
+<form action="<?= BASE_URL . 'ajax/vossen.ajax.php' ?>" method="POST">
 <table id="vossen">
     <thead>
         <tr>
@@ -87,7 +86,7 @@ $('#vossen').dataTable( {
         </tfoot>
     <tbody>
         <?php foreach ($teams as $team) { ?>
-        <tr id="<?php echo $team->getId(); ?>">
+        <tr id="<?= $team->getId() ?>">
             <td class="read_only"><?= $team->getId() ?></td>
             <td><?= $driver->getDeelgebiedByIdSu($team->getDeelgebied())->getName() ?> <code>(<?= $team->getDeelgebied() ?>)</code></td>
             <td><?= $team->getName() ?></td>
@@ -105,6 +104,3 @@ $('#vossen').dataTable( {
     </tbody>
 </table>
 </form>
-<?php
-require_once BASE_DIR . 'footer.php';
-?>

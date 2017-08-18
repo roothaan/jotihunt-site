@@ -16,26 +16,26 @@ if ($driver->isReady()) {
     <?php } else {
 ?>
 <ul>
-    <li><a href="<?=BASE_URL?>hunter_map.php">Hunter map</a></li>
-    <li><a href="<?=BASE_URL?>admin/users.php">Users</a></li>
-    <li><a href="<?=BASE_URL?>admin/createusers.php">Auto create users</a></li>
+    <li><a href="<?=WEBSITE_URL?>admin-hunter-map">Hunter map</a></li>
+    <li><a href="<?=WEBSITE_URL?>admin-users">Users</a></li>
+    <li><a href="<?=WEBSITE_URL?>admin-createusers">Auto create users</a></li>
     <li><a href="<?=WEBSITE_URL?>admin-gcm">Android GCM IDs</a></li>
-    <li><a href="<?=BASE_URL?>admin/poi.php">Pois</a></li>
+    <li><a href="<?=WEBSITE_URL?>admin-poi">Pois</a></li>
 </ul>
     <?php if (!$driver->isReady() || $authMgr->isSuperAdmin()) { ?>
     <h2>Super Admin</h2>
     <ul>
-        <li><a href="<?=BASE_URL?>admin/config.php">Config</a></li>
-        <li><a href="<?=BASE_URL?>admin/kml-import.php">KML Import tool</a></li>
-        <li><a href="<?=BASE_URL?>admin/events.php">Events</a> (<?= $driver->getAllEventsCount() ?>)</li>
-        <li><a href="<?=BASE_URL?>admin/organisations.php">Organisations</a> (<?= $driver->getAllOrganisationsCount() ?>)</li>
-        <li><a href="<?=BASE_URL?>admin/deelgebieden.php">Deelgebieden</a> (<?= $driver->getAllDeelgebiedenCount() ?>)</li>
-        <li><a href="<?=BASE_URL?>admin/speelhelften.php">Speelhelften</a> (<?= $driver->getAllSpeelhelftenCount() ?>)</li>
-        <li><a href="<?=BASE_URL?>admin/counterhunt.php">Counterhunt rondes</a> (<?= $driver->getAllCounterhuntrondjesCount() ?>)</li>
-        <li><a href="<?=BASE_URL?>admin/vossen.php">Vossen</a>  (<?= $driver->getAllTeamsCount() ?>)</li>
+        <li><a href="<?=WEBSITE_URL?>suadmin-config">Config</a></li>
+        <li><a href="<?=WEBSITE_URL?>suadmin-kml-import">KML Import tool</a></li>
+        <li><a href="<?=WEBSITE_URL?>suadmin-events">Events</a> (<?= $driver->getAllEventsCount() ?>)</li>
+        <li><a href="<?=WEBSITE_URL?>suadmin-organisations">Organisations</a> (<?= $driver->getAllOrganisationsCount() ?>)</li>
+        <li><a href="<?=WEBSITE_URL?>suadmin-deelgebieden">Deelgebieden</a> (<?= $driver->getAllDeelgebiedenCount() ?>)</li>
+        <li><a href="<?=WEBSITE_URL?>suadmin-speelhelften">Speelhelften</a> (<?= $driver->getAllSpeelhelftenCount() ?>)</li>
+        <li><a href="<?=WEBSITE_URL?>suadmin-counterhunt">Counterhunt rondes</a> (<?= $driver->getAllCounterhuntrondjesCount() ?>)</li>
+        <li><a href="<?=WEBSITE_URL?>suadmin-vossen">Vossen</a>  (<?= $driver->getAllTeamsCount() ?>)</li>
         
-        <li><a href="<?=BASE_URL?>admin/showdatabase.php">Show database</a></li>
-        <li><a href="<?=BASE_URL?>admin/phpinfo.php">phpinfo();</a></li>
+        <li><a href="<?=WEBSITE_URL?>suadmin-showdatabase">Show database</a></li>
+        <li><a href="<?=WEBSITE_URL?>suadmin-phpinfo">phpinfo();</a></li>
     </ul>
     <div><h2>Danger zone</h2>
     <strong>Reset database</strong><br />

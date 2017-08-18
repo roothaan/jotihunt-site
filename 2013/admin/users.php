@@ -1,11 +1,13 @@
 <?php
-require_once '../init.php';
+if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 $authMgr->requireAdmin();
-require_once BASE_DIR . 'header.php';
 
 $users = array();
+$showFooter = true;
 if ($authMgr->isSuperAdmin()) {
     $users = $driver->getAllUsersSuperAdmin();
+    $orgs = $driver->getAllOrganisations();
+    $showFooter = count($orgs) > 0;
 } else {
     $users = $driver->getAllUsers();
 }
@@ -32,8 +34,8 @@ $('#users').dataTable( {
       ]
 	})
 	.makeEditable({
-	    sUpdateURL: "<?php echo BASE_URL . 'ajax/users.ajax.php'; ?>",
-	    sDeleteURL: "<?php echo BASE_URL . 'ajax/users.ajax.php'; ?>"
+	    sUpdateURL: "<?= BASE_URL . 'ajax/users.ajax.php' ?>",
+	    sDeleteURL: "<?= BASE_URL . 'ajax/users.ajax.php' ?>"
 	})
 });
 </script>
@@ -42,7 +44,7 @@ $('#users').dataTable( {
 
 <button id="btnDeleteRow">Verwijder user</button>
 
-<form action="<?php echo BASE_URL . 'ajax/users.ajax.php'; ?>" method="POST">
+<form action="<?= BASE_URL . 'ajax/users.ajax.php' ?>" method="POST">
 <table id="users">
     <thead>
         <tr>
@@ -55,6 +57,7 @@ $('#users').dataTable( {
             <th></th>
         </tr>
     </thead>
+    <?php if ($showFooter) { ?>
  	<tfoot>
             <tr id="addUser">
                 <td></td>
@@ -69,7 +72,6 @@ $('#users').dataTable( {
                 <td>
                     <select name="organisation">
                     <?php
-                    $orgs = $driver->getAllOrganisations();
                     foreach ($orgs as $org) { ?>
                         <option value="<?= $org->getId() ?>"><?= $org->getName() ?></option>
                     <?php } ?>
@@ -86,13 +88,19 @@ $('#users').dataTable( {
                 </td>
             </tr>
         </tfoot>
+        <?php } else { ?>
+         	<tfoot><tr>
+                <td colspan="7">Er zijn nog geen organisaties aangemaakt. Ga naar <a href="<?= WEBSITE_URL ?>suadmin-organisations">Organisaties</a>.</td>
+                </tr>
+                </tfoot>
+        <?php } ?>
     <tbody>
         <?php foreach ($users as $user) { ?>
-        <tr id="<?php echo $user->getId(); ?>">
-            <td class="read_only"><?php echo $user->getId(); ?></td>
-            <td class="read_only"><?php echo $user->getUsername(); ?></td>
-            <td><?php echo $user->getDisplayName(); ?></td>
-            <td><?php echo $user->getPwHash(); ?></td>
+        <tr id="<?= $user->getId() ?>">
+            <td class="read_only"><?= $user->getId() ?></td>
+            <td class="read_only"><?= $user->getUsername() ?></td>
+            <td><?= $user->getDisplayName() ?></td>
+            <td><?= $user->getPwHash() ?></td>
             <td>
             <?php
             $first = true;
@@ -121,6 +129,3 @@ $('#users').dataTable( {
 </table>
 </form>
 <p>Let op, als deze persoon ook een hunter is of de Android app gaat gebruiken, maak er ook een <a href="<?=WEBSITE_URL?>hunters">hunter</a> van!</p>
-<?php
-require_once BASE_DIR . 'footer.php';
-?>

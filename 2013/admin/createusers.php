@@ -1,7 +1,6 @@
 <?php
-require_once '../init.php';
+if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 $authMgr->requireAdmin();
-require_once BASE_DIR . 'header.php'; 
 
 require_once CLASS_DIR . 'datastore/mail/Email.class.php';
 require_once CLASS_DIR . 'datastore/mail/Mailer.class.php';
@@ -179,7 +178,3 @@ function parseExcelFile() {
         </form>
     </div>
 </div>
-
-
-<?php
-require_once BASE_DIR . 'footer.php';

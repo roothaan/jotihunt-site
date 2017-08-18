@@ -23,7 +23,7 @@ if (isset($_POST ['name'])) {
         die();
     }
     
-    header('Location:' . BASE_URL . 'admin/poi.php');
+    header('Location:' . WEBSITE_URL . 'admin-poi');
     die();
 }
 

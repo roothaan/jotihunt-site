@@ -23,9 +23,25 @@ $paths = array(
     "opdrachten"=> "opdrachten.php",
     "invoer"=>"invoer.php",
     "events" => "choose_event.php",
-    'admin-gcm' => 'gcm.php',
     'privacy' => 'privacy.php',
-    'deelgebieden-kml' => 'kml/deelgebieden.php'
+    'deelgebieden-kml' => 'kml/deelgebieden.php',
+    'scores' => 'scores.php',
+    'hunter-map' => 'hunter_map.php',
+    'admin-users' => 'admin/users.php',
+    'admin-createusers' => 'admin/createusers.php',
+    'admin-poi' => 'admin/poi.php',
+    'admin-gcm' => 'gcm.php',
+    'suadmin-config' => 'admin/config.php',
+    'suadmin-kml-import' => 'admin/kml-import.php',
+    'suadmin-events' => 'admin/events.php',
+    'suadmin-organisations' => 'admin/organisations.php',
+    'suadmin-deelgebieden' => 'admin/deelgebieden.php',
+    'suadmin-speelhelften' => 'admin/speelhelften.php',
+    'suadmin-counterhunt' => 'admin/counterhunt.php',
+    'suadmin-vossen' => 'admin/vossen.php',
+    'suadmin-showdatabase' => 'admin/showdatabase.php',
+    'suadmin-phpinfo' => 'admin/phpinfo.php'
+
 );
 
 $needsNoEvent = array(
