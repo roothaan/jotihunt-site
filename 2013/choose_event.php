@@ -37,9 +37,6 @@ if (sizeof($events) == 1 && !isset($event_id)) {
     chooseEvent($events[0]->getId());
 }
 
-require_once BASE_DIR . 'header.php';
-
-
 echo '<h1>Welkom op de Jotihunt site!</h1>';
 if (sizeof($events) == 0) { ?>
     <h2>Waarschuwing</h2>

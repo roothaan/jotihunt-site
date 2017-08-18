@@ -1,7 +1,6 @@
 <?php
-require_once 'init.php';
+if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 $authMgr->requireAdmin();
-require_once BASE_DIR . 'header.php';
 
 require_once CLASS_DIR . 'jotihunt/Gcm.class.php';
 
@@ -46,6 +45,7 @@ if ($authMgr->isSuperAdmin()) {
     $allGcms = $driver->getAllGcmsSU();
 }
 ?>
+<h1>GCM</h1>
 <button id="btnDeleteRow">Verwijder GCM</button>
 <button id="btnAddNewRow">Add</button>
 <div class="add_delete_toolbar"></div>
@@ -111,7 +111,3 @@ foreach ( $allGcms as $gcm ) {
         <input type="text" name="message" /><br /> <input type="submit" value="Verstuur bericht" />
     </form>
 </div>
-
-<?php
-require_once BASE_DIR . 'footer.php';
-?>

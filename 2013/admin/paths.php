@@ -26,7 +26,8 @@ $paths = array(
     'privacy' => 'privacy.php',
     'deelgebieden-kml' => 'kml/deelgebieden.php',
     'scores' => 'scores.php',
-    'hunter-map' => 'hunter_map.php',
+    'kml' => 'kml.php',
+    'admin-hunter-map' => 'hunter_map.php',
     'admin-users' => 'admin/users.php',
     'admin-createusers' => 'admin/createusers.php',
     'admin-poi' => 'admin/poi.php',
@@ -56,10 +57,15 @@ $needsNoDb = array(
     'privacy' => 1
 );
 
+// 1 == <div class="noHeaderFooter"><div id="page"><div id="content">
+// 2 == nothing
 $noHeaderFooter = array(
-    "beamer" => 1,
-    "kaart" => 1,
-    "delete_locatie" => 1
+    "beamer" => 2,
+    "kaart" => 2,
+    // TODO => This should probably be 2. Also, terrible name??
+    "delete_locatie" => 1,
+    'kml' => 2,
+    'deelgebieden-kml' => 2
 );
 
 $urlToParse = $_SERVER['REQUEST_URI'];

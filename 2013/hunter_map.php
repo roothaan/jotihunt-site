@@ -24,7 +24,7 @@ if (isset($_GET ['hunterId'])) {
 }
 if (count($ridercollection) > 0) {
 ?>
-<form action="<?= WEBSITE_URL ?>hunter-map" method="GET">
+<form action="<?= WEBSITE_URL ?>admin-hunter-map" method="GET">
     Kies een hunter: <input type="hidden" name="from" id="from" value="<?php if (isset($_GET['from'])) { echo intval($_GET['from']); } ?>" /> <input type="hidden" name="to" id="to" value="<?php if (isset($_GET['to'])) { echo intval($_GET['to']); } ?>" />
 <?php
 $sep = '';
