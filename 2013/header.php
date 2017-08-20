@@ -94,7 +94,7 @@ if($_headerOptions['includeBody']) { ?>
     			<?php if (!$authMgr->isSuperAdmin()) { ?>
     			Event: <a href="/events" style="line-height:normal;color: #707f55;"><strong><?= $authMgr->getMyEventId() ?></strong></a><br />
     			Organisation: <strong><?= $authMgr->getMyOrganisationId() ?></strong><br /><?php } ?>
-    			User: <?= $authMgr->getMe()->getDisplayName() ?>
+    			User: <a href="<?= WEBSITE_URL ?>me" style="line-height:normal;color: #707f55;"><?= $authMgr->getMe()->getDisplayName() ?></a>
     			<?php if ($authMgr->isSuperAdmin()) { echo ' (<strong>Super</strong>Admin)'; } 
     			  elseif ($authMgr->isAdmin()) { echo ' (Admin)'; } ?>
     			</div>
