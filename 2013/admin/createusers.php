@@ -162,11 +162,11 @@ function parseExcelFile() {
                 </tr>
                 <tr>
                     <th>Van</th>
-                    <td><input type="text" name="rider_van" value="2016-10-01 00:00:00" /></td>
+                    <td><input type="text" name="rider_van" value="<?= date('Y') ?>-10-01 00:00:00" /></td>
                 </tr>
                 <tr>
                     <th>Tot</th>
-                    <td><input type="text" name="rider_tot" value="2016-12-31 23:55:00"/></td>
+                    <td><input type="text" name="rider_tot" value="<?= date('Y') ?>-12-31 23:55:00"/></td>
                 </tr>
         
                 <tr>

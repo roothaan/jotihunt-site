@@ -27,6 +27,7 @@ $paths = array(
     'deelgebieden-kml' => 'kml/deelgebieden.php',
     'scores' => 'scores.php',
     'kml' => 'kml.php',
+    'me' => 'me.php',
     'admin-hunter-map' => 'hunter_map.php',
     'admin-users' => 'admin/users.php',
     'admin-createusers' => 'admin/createusers.php',
