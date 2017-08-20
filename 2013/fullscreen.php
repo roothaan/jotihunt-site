@@ -1,5 +1,5 @@
 <?php
-if(!defined("opoiLoaded")) die("Scouting Putten, het lukt jullie niet om ons te hacken!");
+if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 
 JotihuntUtils::requireLogin();
 $headerOptions = array();
@@ -245,8 +245,7 @@ var team<?= $deelgebied->getId() ?>_old = {
 	    $(clockContainer).data("countdownTimeout", setTimeout(function(){startCountdown(clockContainer, untilTimeSeconds)},500));
 	}
 </script>
-</head>
-<body>
+
 	<img src="<?=BASE_URL?>images/preloader.gif" style="position: absolute; margin: auto; z-index: 100; top: 190px; left: 50%;" id="refreshicon" />
     <table style="width: 100%;">
         <tr>
@@ -256,18 +255,7 @@ var team<?= $deelgebied->getId() ?>_old = {
             	<img src="<?=BASE_URL?>images/arrow-bouncing-left.gif" style="visibility: hidden; height: 30px;" id="arrow_rank" />
             	<span id="rank"></span>
             	<a href="./">
-	<?php
-$r = rand(1, 1);
-switch ($r) {
-    case 1 :
-        echo '<img src="' . BASE_URL . 'images/logos/jotihunt-asianfox.png" alt="Jotihunt Roothaan logo" 
-        		style="height:80px;" />';
-    break;
-    /*case 2 :
-        echo '<img src="' . BASE_URL . 'images/logos/2013/joti-hatter.png" alt="Jotihunt Mad Hatter logo" width="100px" style="float:left; border:0; margin: -10px 20px;position:absolute;" />';
-    break;*/
-}
-?>
+        			<img src="<?=THEME_LOGO_URL?>" alt="Jotihunt logo" style="height:80px;" />
 				</a>
 			</td>
         </tr>
@@ -319,3 +307,9 @@ switch ($r) {
 		<?php } ?>
 
     </table>
+    
+<?php
+$footerOptions = array();
+$footerOptions['includeHtml'] = false;
+require_once BASE_DIR . 'footer.php';
+?>

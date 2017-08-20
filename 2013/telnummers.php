@@ -1,5 +1,5 @@
 <?php
-if(!defined("opoiLoaded")) die("Scouting Putten, het lukt jullie niet om ons te hacken!");
+if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 
 JotihuntUtils::requireLogin();
 
@@ -19,10 +19,10 @@ $result = $driver->getAllPhonenumbers(); ?>
 foreach ( $result as $phonenumber ) { ?>
     <tr>
         <td style="width: 120px"><?= $driver->getUserById($phonenumber ['user_id'])->getDisplayName() ?></td>
-        <td style="width: 120px"><a href="tel:<?php echo $phonenumber ['phonenumber']; ?>"><?php echo $phonenumber ['phonenumber']; ?></a></td>
+        <td style="width: 120px"><a href="tel:<?= $phonenumber ['phonenumber'] ?>"><?= $phonenumber ['phonenumber'] ?></a></td>
         <?php 
         if ($authMgr->isAdmin()) { ?>
-            <td><a href="deletetelefoonnummer/?id=<?php echo $phonenumber ['id']; ?>" onclick="return confirm('Weet je zeker dat je dit telefoonnummer wilt verwijderen?');">[x]</a></td>
+            <td><a href="deletetelefoonnummer/?id=<?= $phonenumber ['id']  ?>" onclick="return confirm('Weet je zeker dat je dit telefoonnummer wilt verwijderen?');">[x]</a></td>
             <?php 
         } ?>
     </tr>

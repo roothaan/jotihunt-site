@@ -3040,25 +3040,4 @@ class SiteDriverPostgresql {
         }
         return null;
     }
-    
-    // public function updateWebcam($webcamData) {
-    //     $sqlName = 'updateWebcam';
-        
-    //     pg_execute($this->conn, $sqlName, array($webcamData));
-    // }
-    
-    // public function getWebcam() {
-    //     $sqlName = 'getWebcam';
-        
-    //     $result = pg_execute($this->conn, $sqlName, array());
-        
-    //     if (! $result) {
-    //         throw new DatastoreException('Could not get Webcam');
-    //     }
-        
-    //     if($row = pg_fetch_assoc($result) ) {
-    //         return pg_unescape_bytea($row['data']);
-    //     }
-    //     return null;
-    // }
 }

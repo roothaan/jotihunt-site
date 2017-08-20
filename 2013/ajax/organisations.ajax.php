@@ -1,6 +1,6 @@
 <?php
 require_once '../init.php';
-JotihuntUtils::requireLogin();
+$authMgr->requireSuperAdmin();
 
 require_once CLASS_DIR . 'user/Organisation.class.php';
 require_once CLASS_DIR . 'user/AuthMgr.class.php';
@@ -17,7 +17,7 @@ if (isset($_POST ['name'])) {
         die();
     }
 
-    header('Location:' . BASE_URL . 'admin/organisations.php');
+    header('Location:' . WEBSITE_URL . 'suadmin-organisations');
     die();
 }
 

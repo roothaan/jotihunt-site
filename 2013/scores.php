@@ -1,7 +1,6 @@
 <?php
-require_once 'init.php';
+if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 JotihuntUtils::requireLogin();
-require_once BASE_DIR . 'header.php';
 
 $scorecollection = $driver->getScoreCollection();
 $firstGroep = array_shift(array_values($scorecollection));
@@ -17,8 +16,8 @@ if (null == $firstGroep) {
     }
     ?>
 
-<script src="http://code.highcharts.com/highcharts.js"></script>
-<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
 
 <div id="container" style="min-width: 400px; height: 800px; margin: 0 auto"></div>
 
@@ -26,7 +25,7 @@ if (null == $firstGroep) {
 $(function () {
     $('#container').highcharts({
         title: {
-            text: 'Scores Jotihunt <?php echo date('Y'); ?>',
+            text: 'Scores Jotihunt <?= date('Y') ?>',
             x: -20 //center
         },
         subtitle: {
@@ -34,7 +33,7 @@ $(function () {
             x: -20
         },
         xAxis: {
-            categories: ["start","<?php echo implode('","',$keyArray);?>"],
+            categories: ["start","<?= implode('","',$keyArray) ?>"],
         },
         yAxis: {
             title: {
@@ -62,7 +61,7 @@ $(function () {
         foreach ( $scorecollection as $groepsnaam => $groepArray ) {
             ?>
     	    {
-    	        name: '<?php echo addslashes($groepsnaam);?>',
+    	        name: '<?= addslashes($groepsnaam) ?>',
     			data : [0
     			    <?php
             foreach ( $groepArray as $groep ) {
@@ -80,5 +79,4 @@ $(function () {
 </script>
 <?php
 }
-require_once BASE_DIR . 'footer.php';
 ?>

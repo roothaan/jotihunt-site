@@ -1,5 +1,5 @@
 <?php
-if(!defined("opoiLoaded")) die("Scouting Putten, het lukt jullie niet om ons te hacken!");
+if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 
 function getHintInstuurTijd() {
     //vossenteams sturen hun locatie om 10 voor het hele uur op
@@ -17,9 +17,9 @@ JotihuntUtils::requireLogin();
 //fetch laatste bericht
 $bericht = $driver->getLastBerichtByType("hint");
 if($bericht){
-    $iframeUrl = "http://jotihunt.net/groep/hint.php?MID=".$bericht->getBericht_id();
+    $iframeUrl = "https://jotihunt.net/groep/hint.php?MID=".$bericht->getBericht_id();
 }else{
-    $iframeUrl = "http://jotihunt.net";
+    $iframeUrl = "https://jotihunt.net";
 }
 
 //fetch vossen locaties voor placeholder

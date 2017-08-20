@@ -67,6 +67,16 @@ function parseJotihuntIniFile($user_config) {
             putenv('SITE_SHOW_ERRORS=' . $jotihunt_config['site-show-errors']);
         }
     }
+    // Themes
+    if (array_key_exists('theme', $user_config)) {
+        $theme_config = $user_config['theme'];
+        if (array_key_exists('name', $theme_config)) {
+            putenv('THEME_NAME=' . $theme_config['name']);
+        }
+        if (array_key_exists('logos', $theme_config)) {
+            putenv('THEME_LOGOS=' . $theme_config['logos']);
+        }
+    }
 }
 
 if (file_exists(ROOT_DIR . 'config/user.ini')) {

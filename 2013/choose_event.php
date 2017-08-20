@@ -1,5 +1,5 @@
 <?php
-if(!defined("opoiLoaded")) die("Scouting Putten, het lukt jullie niet om ons te hacken!");
+if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 
 JotihuntUtils::requireLogin();
 
@@ -36,9 +36,6 @@ $event_id = $authMgr->getMyEventId();
 if (sizeof($events) == 1 && !isset($event_id)) {
     chooseEvent($events[0]->getId());
 }
-
-require_once BASE_DIR . 'header.php';
-
 
 echo '<h1>Welkom op de Jotihunt site!</h1>';
 if (sizeof($events) == 0) { ?>

@@ -1,6 +1,6 @@
 <?php
 
-require_once '../../vendor/autoload.php';
+require_once ROOT_DIR . 'vendor/autoload.php';
 use Mailgun\Mailgun;
 
 /**

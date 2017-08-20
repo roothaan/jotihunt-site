@@ -1,7 +1,6 @@
 <?php
-require_once '../init.php';
+if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 $authMgr->requireSuperAdmin();
-require_once BASE_DIR . 'header.php';
 
 $events = $driver->getAllEvents();
 ?>
@@ -25,8 +24,8 @@ $('#events').dataTable( {
       ]
 	})
 	.makeEditable({
-	    sUpdateURL: "<?php echo BASE_URL . 'ajax/events.ajax.php'; ?>",
-	    sDeleteURL: "<?php echo BASE_URL . 'ajax/events.ajax.php'; ?>"
+	    sUpdateURL: "<?= BASE_URL . 'ajax/events.ajax.php' ?>",
+	    sDeleteURL: "<?= BASE_URL . 'ajax/events.ajax.php' ?>"
 	})
 });
 </script>
@@ -35,7 +34,7 @@ $('#events').dataTable( {
 
 <button id="btnDeleteRow">Verwijder event</button>
 
-<form action="<?php echo BASE_URL . 'ajax/events.ajax.php'; ?>" method="POST">
+<form action="<?= BASE_URL . 'ajax/events.ajax.php' ?>" method="POST">
 <table id="events">
     <thead>
         <tr>
@@ -78,6 +77,3 @@ $('#events').dataTable( {
     </tbody>
 </table>
 </form>
-<?php
-require_once BASE_DIR . 'footer.php';
-?>

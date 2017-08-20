@@ -1,5 +1,5 @@
 <?php
-if(!defined("opoiLoaded")) die("Scouting Putten, het lukt jullie niet om ons te hacken!");
+if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 
 JotihuntUtils::requireLogin();
 require_once CLASS_DIR . 'jotihunt/Bericht.class.php';
@@ -22,12 +22,12 @@ if ($authMgr->isSuperAdmin()) {
 
 $berichtcollection = $driver->getBerichtCollection();
 ?>
-<?php if ($authMgr->isAdmin()) {
+<?php if ($authMgr->isAdmin() && !$authMgr->isSuperAdmin()) {
 ?>
 <script type="text/javascript">
 var syncJotihunt = function() {
 	$( ".result" ).html( 'Syncing...' );
-	$.get( "/2013/cronjob/SyncJotihunt.php", function( data ) {
+	$.get( "<?= BASE_URL ?>cronjob/SyncJotihunt.php", function( data ) {
 		$( ".result" ).html( "Sync was performed." + data );
 	});
 };
@@ -37,6 +37,7 @@ var syncJotihunt = function() {
 <?php } ?>
 <div class="berichten">
 	<h1>Berichten</h1>
+	<?php if (!$authMgr->isSuperAdmin()) { ?>
 	<h2><?= sizeof($berichtcollection) ?> bericht(en)</h2>
 	<div class="berichtenContainer">
 		<?php if (sizeof($berichtcollection) === 0) { ?>
@@ -64,7 +65,7 @@ var syncJotihunt = function() {
 		<div class="clear"></div>
 	</div>
 </div>
-
+<?php } ?>
 <?php if ($authMgr->isSuperAdmin()) { ?>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -100,7 +101,7 @@ $(document).ready(function() {
 			</tr>
 			<tr>
 				<td>Datum <small><font color="red"><br />Verplicht</font></small></td>
-				<td><input type="text" name="datum" value="<?php echo date('Y-m-d H:i');?>" class="datepicker" /></td>
+				<td><input type="text" name="datum" value="<?= date('Y-m-d H:i') ?>" class="datepicker" /></td>
 			</tr>
 			<tr>
 				<td>Max punten <small><font color="red"><br />Verplicht</font></small></td>

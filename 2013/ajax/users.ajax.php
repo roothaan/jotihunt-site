@@ -33,7 +33,7 @@ if (isset($_POST ['username'])) {
         error_log('Not a organisation ID (or 0 for admins): ' . $_POST['organisation']);
     }
     //echo $newUser->getId();
-    header('Location:' . BASE_URL . 'admin/users.php');
+    header('Location:' . WEBSITE_URL . 'admin-users');
     die();
 }
 

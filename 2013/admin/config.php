@@ -1,41 +1,40 @@
 <?php
-require_once '../init.php';
+if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 $authMgr->requireSuperAdmin();
-require_once BASE_DIR . 'header.php';
 ?>
 <h1>Config</h1>
 <h2>Base Config</h2>
 <pre>
-ROOT_DIR : <?php echo ROOT_DIR; ?>
+ROOT_DIR : <?= ROOT_DIR ?>
 
-CLASS_DIR : <?php echo CLASS_DIR; ?>
+CLASS_DIR : <?= CLASS_DIR ?>
 
-TEST_CLASS_DIR : <?php echo TEST_CLASS_DIR; ?>
+TEST_CLASS_DIR : <?= TEST_CLASS_DIR ?>
 
-BASE_URL : <?php echo BASE_URL; ?>
+BASE_URL : <?= BASE_URL ?>
 
-TEST_URL : <?php echo TEST_URL; ?>
+TEST_URL : <?= TEST_URL ?>
 
-$_SERVER ['HTTP_HOST'] = <?php echo $_SERVER ['HTTP_HOST']; ?>
+$_SERVER ['HTTP_HOST'] = <?= $_SERVER ['HTTP_HOST'] ?>
 </pre>
 
 <h2>Database Config</h2>
 <pre>
-DB_TYPE : <?php echo DB_TYPE; ?>
+DB_TYPE : <?= DB_TYPE ?>
 
 DEV_MODE : <?php if (defined('DEV_MODE')) { echo DEV_MODE; } else {echo 'no DEV_MODE defined'; } ?>
 
-DB_SERVER : <?php echo DB_SERVER; ?>
+DB_SERVER : <?= DB_SERVER ?>
 
-DB_PORT : <?php echo DB_PORT; ?>
+DB_PORT : <?= DB_PORT ?>
 
-DB_USERNAME : <?php echo DB_USERNAME; ?>
+DB_USERNAME : <?= DB_USERNAME ?>
 
-DB_PASSWORD : <?php echo DB_PASSWORD; ?>
+DB_PASSWORD : <?= DB_PASSWORD ?>
 
-DB_DATABASE : <?php echo DB_DATABASE; ?>
+DB_DATABASE : <?= DB_DATABASE ?>
 
-DB_OPTS : <?php echo DB_OPTS; ?>
+DB_OPTS : <?= DB_OPTS ?>
 </pre>
 
 <h2>Environment Variables</h2>
@@ -70,6 +69,3 @@ PROXY_SERVER_PORT : <?= getenv('PROXY_SERVER_PORT') ?>
 PROXY_BASE_URL : <?= getenv('PROXY_BASE_URL') ?>
 
 </pre>
-<?php
-require_once BASE_DIR . 'footer.php';
-?>

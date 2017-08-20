@@ -1,5 +1,5 @@
 <?php
-if(!defined("opoiLoaded")) die("Scouting Putten, het lukt jullie niet om ons te hacken!");
+if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 
 JotihuntUtils::requireLogin();
 
@@ -9,7 +9,8 @@ require_once CLASS_DIR . 'jotihunt/MapOptions.class.php';
 $headerOptions = array();
 $headerOptions['title'] = 'Fullscreen Kaart';
 $headerOptions['includeBody'] = false;
-require_once BASE_DIR . 'header.php'; ?>
+require_once BASE_DIR . 'header.php';
+?>
 
 <?php if(GOOGLE_MAPS_ENABLED) { ?>
 <script type="text/javascript">
@@ -44,4 +45,8 @@ make_map($mapOptions);
 ?>
 <?php } else {?>
 <em>Configureer <strong><code>google-js-api-key</code></strong> om Google Maps te gebruiken</em>
-<?php } ?>
+<?php }
+
+$footerOptions = array();
+$footerOptions['includeHtml'] = false;
+require_once BASE_DIR . 'footer.php';

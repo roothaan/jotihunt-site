@@ -1,5 +1,5 @@
 <?php
-if(!defined("opoiLoaded")) die("Scouting Putten, het lukt jullie niet om ons te hacken!");
+if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 
 JotihuntUtils::requireLogin();
 require_once CLASS_DIR . 'jotihunt/MapOptions.class.php';
@@ -312,7 +312,9 @@ function make_map($mapOptions) {
         function addAllHuntersByKml(map) {
 
             <?php
-        $baseUrl = 'https:'.BASE_URL.'kml.php?riderId=';
+            // This is a hack needed to make Google Maps (it needs the protocol, "//" doesn't work)
+        $protocol = 'https';
+        $baseUrl = $protocol . WEBSITE_URL . 'kml?riderId=';
         $baseUrl .= $mapOptions->hunter;
         $baseUrl .= '&sessionId=' . urlencode($authMgr->getSessionId());
         
