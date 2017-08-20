@@ -1,7 +1,6 @@
 <?php
-require_once '../init.php';
+if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 $authMgr->requireSuperAdmin();
-require_once BASE_DIR . 'header.php';
 
 $speelhelften = $driver->getAllSpeelhelften();
 ?>
@@ -24,8 +23,8 @@ $('#speelhelften').dataTable( {
       ]
 	})
 	.makeEditable({
-	    sUpdateURL: "<?php echo BASE_URL . 'ajax/speelhelften.ajax.php'; ?>",
-	    sDeleteURL: "<?php echo BASE_URL . 'ajax/speelhelften.ajax.php'; ?>"
+	    sUpdateURL: "<?= BASE_URL . 'ajax/speelhelften.ajax.php' ?>",
+	    sDeleteURL: "<?= BASE_URL . 'ajax/speelhelften.ajax.php' ?>"
 	})
 });
 </script>
@@ -34,7 +33,7 @@ $('#speelhelften').dataTable( {
 
 <button id="btnDeleteRow">Verwijder speelhelft</button>
 
-<form action="<?php echo BASE_URL . 'ajax/speelhelften.ajax.php'; ?>" method="POST">
+<form action="<?= BASE_URL . 'ajax/speelhelften.ajax.php' ?>" method="POST">
 <table id="speelhelften">
     <thead>
         <tr>
@@ -64,7 +63,7 @@ $('#speelhelften').dataTable( {
         </tfoot>
     <tbody>
         <?php foreach ($speelhelften as $speelhelft) { ?>
-        <tr id="<?php echo $speelhelft->getId(); ?>">
+        <tr id="<?= $speelhelft->getId() ?>">
             <td class="read_only"><?= $speelhelft->getId() ?></td>
             <td><?= $driver->getEventById($speelhelft->getEventId())->getName() ?> <code>(<?= $speelhelft->getEventId() ?>)</code></td>
             <td><?= $speelhelft->getStarttime() ?></td>
@@ -75,6 +74,3 @@ $('#speelhelften').dataTable( {
     </tbody>
 </table>
 </form>
-<?php
-require_once BASE_DIR . 'footer.php';
-?>

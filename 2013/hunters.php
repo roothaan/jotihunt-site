@@ -17,7 +17,7 @@ if ($handle = opendir('images/cars')) {
 }
 ?>
 
-<script src="<?php echo BASE_URL; ?>js/jquery.ddslick.min.js"></script>
+<script src="<?= BASE_URL ?>js/jquery.ddslick.min.js"></script>
 <script type="text/javascript">
     function showRij(){
     	$('#rijtoggle').fadeOut(200, function() {
@@ -136,8 +136,8 @@ if ($handle = opendir('images/cars')) {
                 </select></td>
                 <td><input type="text" name="bijrijders" value="Bijrijders" style="width: 90px;" /></td>
                 <td><em>Wordt automatisch ingevuld</em></td>
-                <td><input type="text" name="startdatum" value="<?php echo date('d-m-Y');?>" style="width: 70px;" class="datepicker" /><input type="text" name="starttijd" value="<?php echo date('H:i');?>" class="timepicker" style="width: 70px;" /></td>
-                <td><input type="text" name="einddatum" value="<?php echo date('d-m-Y');?>" style="width: 70px;" class="datepicker" /><input type="text" name="eindtijd" value="<?php echo date('H:i');?>" class="timepicker" style="width: 70px;" /></td>
+                <td><input type="text" name="startdatum" value="<?= date('d-m-Y') ?>" style="width: 70px;" class="datepicker" /><input type="text" name="starttijd" value="<?= date('H:i') ?>" class="timepicker" style="width: 70px;" /></td>
+                <td><input type="text" name="einddatum" value="<?= date('d-m-Y') ?>" style="width: 70px;" class="datepicker" /><input type="text" name="eindtijd" value="<?= date('H:i') ?>" class="timepicker" style="width: 70px;" /></td>
                 <td><div id="carsselect"></div></td>
                 <td><input type="submit" name="submitrij" value="Voeg toe" class="button" /> <small><a href="javascript:void(0);" onclick="hideRij();" style="text-decoration: none;">Annuleer</a></small></td>
             </tr>
@@ -149,35 +149,35 @@ if ($handle = opendir('images/cars')) {
         $lastriderlocationcollection = $driver->getLastRiderLocations();
         foreach ( $ridercollection as $rider ) {
             ?>
-	        <tr id="<?php echo $rider->getId(); ?>">
+	        <tr id="<?= $rider->getId() ?>">
 	            <td>
 	                <?php
 	                if(isset($lastriderlocationcollection[$rider->getId()])) {
 	                    $lastlocationtime = $lastriderlocationcollection[$rider->getId()]->getTime();
     	                if($lastlocationtime > date("Y-m-d H:i:s",strtotime(date("Y-m-d H:i:s")." - 15 minutes"))) { ?>
-    	                    <img src="<?php echo BASE_URL."images/actief.png";?>" title="Actief" />
+    	                    <img src="<?= BASE_URL."images/actief.png" ?>" title="Actief" />
     	                    <?php
     	                } else if($lastlocationtime > date("Y-m-d H:i:s",strtotime(date("Y-m-d H:i:s")." - 30 minutes"))) { ?>
-    	                    <img src="<?php echo BASE_URL."images/inactief.png";?>" title="Inactief" />
+    	                    <img src="<?= BASE_URL."images/inactief.png" ?>" title="Inactief" />
     	                    <?php
     	                } else { ?>
-    	                    <img src="<?php echo BASE_URL."images/offline.png";?>" title="Offline" />
+    	                    <img src="<?= BASE_URL."images/offline.png" ?>" title="Offline" />
     	                    <?php
     	                }
 	                } else { ?>
-	                    <img src="<?php echo BASE_URL."images/nooit.png";?>" title="Nooit online geweest" />
+	                    <img src="<?= BASE_URL."images/nooit.png" ?>" title="Nooit online geweest" />
 	                    <?php
 	                }
 	                ?>
 	            </td>
-                <td><?php echo $rider->getDeelgebied();?></td>
-                <td class="read_only"><?php echo $rider->getUser()->getDisplayName();?></td>
-                <td><?php echo $rider->getBijrijder();?></td>
+                <td><?= $rider->getDeelgebied() ?></td>
+                <td class="read_only"><?= $rider->getUser()->getDisplayName() ?></td>
+                <td><?= $rider->getBijrijder() ?></td>
         
                 <td><?= JotihuntUtils::getPhoneNumbersForUserId($rider->getUser()->getId()) ?></td>
-                <td><?php echo date('d-m-Y H:i:s',$rider->getVan());?></td>
-                <td><?php echo date('d-m-Y H:i:s',$rider->getTot());?></td>
-                <td><img src="<?php echo BASE_URL."images/cars/".$rider->getAuto();?>" title="auto" alt="<?php echo $rider->getAuto();?>" /></td>
+                <td><?= date('d-m-Y H:i:s',$rider->getVan()) ?></td>
+                <td><?= date('d-m-Y H:i:s',$rider->getTot()) ?></td>
+                <td><img src="<?= BASE_URL."images/cars/".$rider->getAuto() ?>" title="auto" alt="<?= $rider->getAuto() ?>" /></td>
             </tr>
             <?php
         }

@@ -12,7 +12,7 @@ require_once 'authTest.php';
 </head>
 <body>
     <h1>Tests</h1>
-    <a href="<?php echo TEST_URL; ?>?runTest=auth">Auth tests</a>
+    <a href="<?= TEST_URL ?>?runTest=auth">Auth tests</a>
     <hr />
     <?php
     

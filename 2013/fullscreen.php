@@ -245,8 +245,7 @@ var team<?= $deelgebied->getId() ?>_old = {
 	    $(clockContainer).data("countdownTimeout", setTimeout(function(){startCountdown(clockContainer, untilTimeSeconds)},500));
 	}
 </script>
-</head>
-<body>
+
 	<img src="<?=BASE_URL?>images/preloader.gif" style="position: absolute; margin: auto; z-index: 100; top: 190px; left: 50%;" id="refreshicon" />
     <table style="width: 100%;">
         <tr>
@@ -308,3 +307,9 @@ var team<?= $deelgebied->getId() ?>_old = {
 		<?php } ?>
 
     </table>
+    
+<?php
+$footerOptions = array();
+$footerOptions['includeHtml'] = false;
+require_once BASE_DIR . 'footer.php';
+?>

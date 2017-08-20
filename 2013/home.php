@@ -17,7 +17,7 @@ if (isset($_GET ["error"])) {
 <?php
 if ($authMgr->isLoggedIn()) { ?>
     <h2>
-        <a href="<?php echo BASE_URL;?>scores.php">Scorelijst</a>
+        <a href="<?= WEBSITE_URL ?>scores">Scorelijst</a>
     </h2>
     <br />
     

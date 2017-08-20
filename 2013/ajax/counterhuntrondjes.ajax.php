@@ -1,6 +1,6 @@
 <?php
 require_once '../init.php';
-JotihuntUtils::requireLogin();
+$authMgr->requireSuperAdmin();
 
 require_once CLASS_DIR . 'jotihunt/Counterhuntrondje.class.php';
 require_once CLASS_DIR . 'user/AuthMgr.class.php';
@@ -23,7 +23,7 @@ if (isset($_POST ['deelgebied_id'])) {
         die();
     }
 
-    header('Location:' . BASE_URL . 'admin/counterhunt.php');
+    header('Location:' . WEBSITE_URL . 'suadmin-counterhunt');
     die();
 }
 

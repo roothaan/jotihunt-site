@@ -1,5 +1,5 @@
 <?php
-require_once '../init.php';
+if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 $authMgr->requireSuperAdmin();
 
 $db = new DatabaseDriverPostgresql();
@@ -52,10 +52,10 @@ while ( $row = pg_fetch_row($result) ) {
         
         $first = true;
         echo "<h1>".$row[1]."</h1>";
-        echo "<table border='1'>";
         while ( $row_table = pg_fetch_assoc($result_table) ) {
             
             if($first) {
+                echo "<table border='1'>";
                 echo "<tr style='font-weight:bold;'>";
                 foreach($row_table as $key => $value) {
                     echo "<td>".$key."</td>";
@@ -69,8 +69,12 @@ while ( $row = pg_fetch_row($result) ) {
                 echo "<td>".substr($value, 0, 1000)."</td>";
             }
             echo "</tr>";
-            
         }
-        echo "</table><br /><br /><br />";
+        // If there are no results, $first is still true...
+        if (!$first) {
+            echo "</table><br /><br /><br />";
+        } else {
+            echo '<em>No data in table</em>';
+        }
     }
 }

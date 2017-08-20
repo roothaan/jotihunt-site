@@ -1,5 +1,5 @@
 <?php
-require_once 'init.php';
+if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 
 function getStyle($accuracy = 0.0) {
     $a = floatval($accuracy);

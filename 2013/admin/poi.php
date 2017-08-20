@@ -1,7 +1,6 @@
 <?php
-require_once '../init.php';
+if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 $authMgr->requireAdmin();
-require_once BASE_DIR . 'header.php';
 require_once BASE_DIR . 'includes/KmlHelper.class.php';
 
 $kmlHelper = new KmlHelper();
@@ -34,8 +33,8 @@ $('#poi').dataTable( {
       ]
 	})
 	.makeEditable({
-	    sUpdateURL: "<?php echo BASE_URL . 'ajax/poi.ajax.php'; ?>",
-	    sDeleteURL: "<?php echo BASE_URL . 'ajax/poi.ajax.php'; ?>"
+	    sUpdateURL: "<?= BASE_URL . 'ajax/poi.ajax.php' ?>",
+	    sDeleteURL: "<?= BASE_URL . 'ajax/poi.ajax.php' ?>"
 	})
 });
 </script>
@@ -44,7 +43,7 @@ $('#poi').dataTable( {
 
 <button id="btnDeleteRow">Verwijder poi</button>
 
-<form action="<?php echo BASE_URL . 'ajax/poi.ajax.php'; ?>" method="POST">
+<form action="<?= BASE_URL . 'ajax/poi.ajax.php' ?>" method="POST">
 <table id="poi">
     <thead>
         <tr>
@@ -90,14 +89,10 @@ $('#poi').dataTable( {
 </form>
 
 <h1>KML import</h1>
-<form action="/2013/admin/poi.php" method="POST" enctype="multipart/form-data">
+<form action="<?= WEBSITE_URL?>admin-poi" method="POST" enctype="multipart/form-data">
     Type: <input type="text" name="poi_type" value="group" /><br />
     Folder name: <input type="text" name="poi_folder_name" value="Groepen" /> (use this if there are multiple layers. Leave empty if you exported a single layer)<br />
     KML File: <input type="file" name="kml_file"><br />
     import: <input type="checkbox" name="import"><br />
     <input type="submit" value="Upload KML file">
 </form>
-
-<?php
-require_once BASE_DIR . 'footer.php';
-?>

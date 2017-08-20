@@ -2,7 +2,7 @@
 // Generate the KML file needed for this event
 // Required Parameter: Event ID
 
-require_once '../init.php';
+if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 //JotihuntUtils::requireLogin();
 
 if (!isset($_GET['event_id'])) {
