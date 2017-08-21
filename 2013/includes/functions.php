@@ -87,20 +87,6 @@ class JotihuntUtils {
         }
         return $result;
     }
-    
-    static function createKmlCoordinates($coordinates) {
-        $result = '';
-        if (!is_array($coordinates)) {
-            return $result;
-        }
-        
-        foreach ($coordinates as $coordinate) {
-            $result .= $coordinate->getLongitude();
-            $result .= ',';
-            $result .= $coordinate->getLatitude();
-            $result .= ',0.0 ';
-        }
-        return trim($result);
-    }
+
 }
 ?>
