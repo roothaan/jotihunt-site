@@ -29,6 +29,9 @@ if (getenv('PROXY_SERVER_PORT')) {
 if (getenv('PROXY_BASE_URL')) {
     $port = $port . '/' . getenv('PROXY_BASE_URL');
 }
+if (getenv('DEV_MODE')) {
+    define('DEV_MODE', boolval(getenv('DEV_MODE')));
+}
 
 /**
  *

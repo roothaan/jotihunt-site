@@ -95,6 +95,12 @@ class AuthMgr {
             return true;
         }
         
+        if (defined('DEV_MODE') && DEV_MODE == true) {
+            if ($this->attemptAuth()) {
+                return true;
+            }
+        }
+        
         error_log("[AuthMgr->attemptAuthViaAPI] FATAL NO real user found!");
         return false;
     }
@@ -108,7 +114,9 @@ class AuthMgr {
         $this->user = $this->getUser($token);
         if ($this->isRealUser()) {
             $this->setSessionId($token);
+            return true;
         }
+        return false;
     }
 
     private function getCookieValue() {
