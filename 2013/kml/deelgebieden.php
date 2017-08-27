@@ -7,8 +7,8 @@ if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 
 require_once CLASS_DIR . 'jotihunt/helpers/DeelgebiedHelper.class.php';
 
-if(isset($urlArray[1]) && !empty($urlArray[1])) {
-    $eventId = intval(urldecode($urlArray[1]));
+if(!empty(JotihuntUtils::getUrlPart(1))) {
+    $eventId = intval(JotihuntUtils::getUrlPart(1));
 } else {
     echo 'No event_id';
     die();

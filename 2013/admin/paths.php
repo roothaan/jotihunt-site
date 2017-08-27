@@ -1,4 +1,5 @@
 <?php
+
 $paths = array(
     "" => "home.php",
     "home" => "home.php",
@@ -58,17 +59,6 @@ $needsNoDb = array(
     'privacy' => 1
 );
 
-// 1 == <div class="noHeaderFooter"><div id="page"><div id="content">
-// 2 == nothing
-$noHeaderFooter = array(
-    "beamer" => 2,
-    "kaart" => 2,
-    // TODO => This should probably be 2. Also, terrible name??
-    "delete_locatie" => 1,
-    'kml' => 2,
-    'deelgebieden-kml' => 2
-);
-
 $urlToParse = $_SERVER['REQUEST_URI'];
 if (getenv('PROXY_BASE_URL')) {
     $pos = strpos($urlToParse, getenv('PROXY_BASE_URL'));
@@ -77,20 +67,22 @@ if (getenv('PROXY_BASE_URL')) {
     }
 }
 
-$urlParts = parse_url($urlToParse);
+JotihuntUtils::setUrlParts($urlToParse);
 
-$urlArray = array();
-if (isset($urlParts['path'])) {
-    $urlArray = explode('/', trim($urlParts['path'], '/'));
-}
-
-if (count($urlArray) > 0 && in_array($urlArray[0], $needsNoEvent)) {
+if (in_array(JotihuntUtils::getUrlPart(0), $needsNoEvent)) {
     define('NEEDS_NO_EVENT', true);
 }
 
-if(isset($needsNoDb[$urlArray[0]])) {
+if(isset($needsNoDb[JotihuntUtils::getUrlPart(0)])) {
     define('NO_DB_REQUIRED', true);
+}
+
+if(array_key_exists(JotihuntUtils::getUrlPart(0), $paths)) {
+    define('JH_PATH', $paths[JotihuntUtils::getUrlPart(0)]);
 }
 
 unset($needsNoEvent);
 unset($needsNoDb);
+unset($paths);
+unset($urlToParse);
+unset($urlParts);

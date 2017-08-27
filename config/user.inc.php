@@ -83,6 +83,5 @@ function parseJotihuntIniFile($user_config) {
 }
 
 if (file_exists(ROOT_DIR . 'config/user.ini')) {
-    $user_config = parse_ini_file(ROOT_DIR . 'config/user.ini', true);
-    parseJotihuntIniFile($user_config);
+    parseJotihuntIniFile(parse_ini_file(ROOT_DIR . 'config/user.ini', true));
 }

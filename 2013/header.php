@@ -159,4 +159,7 @@ if($_headerOptions['includeBody']) { ?>
 <!-- end #header -->
 <!-- end #header-wrapper -->
 
-<?php } // end 'includeBody' ?>
+<?php 
+} // end 'includeBody'
+unset($_headerOptions);
+?>

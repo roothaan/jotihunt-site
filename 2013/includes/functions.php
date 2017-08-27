@@ -88,5 +88,33 @@ class JotihuntUtils {
         return $result;
     }
 
+    private static $noHeaderFooter = array(
+        'beamer',
+        'kaart',
+        'delete_locatie',
+        'kml',
+        'deelgebieden-kml'
+    );
+    
+    private static $urlParts = array();
+    
+    public static function setUrlParts($urlToParse) {
+        $_urlParts = parse_url($urlToParse);
+
+        if (isset($_urlParts['path'])) {
+            JotihuntUtils::$urlParts = explode('/', trim($_urlParts['path'], '/'));
+        }
+    }
+    
+    public static function getUrlPart($part) {
+        if (isset(JotihuntUtils::$urlParts[$part])) {
+            return urldecode(JotihuntUtils::$urlParts[$part]);
+        }
+        return null;
+    }
+    
+    public static function hasHeaderOrFooter() {
+        return !in_array(JotihuntUtils::getUrlPart(0), JotihuntUtils::$noHeaderFooter);
+    }
 }
 ?>
