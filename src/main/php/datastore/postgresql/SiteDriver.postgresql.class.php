@@ -94,7 +94,7 @@ class SiteDriverPostgresql {
 
         $sqlName = 'removeRider';
         $values = array (
-                $rider->getId(); 
+                $rider->getId()
         );
         
         $result = pg_execute($this->conn, $sqlName, $values);
