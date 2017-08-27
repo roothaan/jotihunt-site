@@ -39,10 +39,10 @@ class JotihuntInformatieRest {
                     }
                     
                     $bericht->setTitel($nieuwsitem->titel);
-                    $bericht->setDatum(SiteDriverPostgresql::psqlDateFromTime($nieuwsitem->datum));
-                    $bericht->setEindtijd(SiteDriverPostgresql::psqlDateFromTime($nieuwsitem->eindtijd));
+                    $bericht->setDatum($nieuwsitem->datum);
+                    $bericht->setEindtijd($nieuwsitem->eindtijd);
                     $bericht->setMaxpunten($nieuwsitem->maxpunten);
-                    $bericht->setLastupdate(SiteDriverPostgresql::psqlDateFromTime($nieuwitemlist->last_update));
+                    $bericht->setLastupdate($nieuwitemlist->last_update);
                     $bericht->setType('opdracht');
                     
                     $itemdetails = $this->getJsonFromJotihunt($this->apiBase . 'opdracht/' . $bericht->getBericht_id());
@@ -82,6 +82,7 @@ class JotihuntInformatieRest {
         } else {
             if (! empty($nieuwitemlist) && isset($nieuwitemlist->data) && count($nieuwitemlist->data) > 0) {
                 foreach ( $nieuwitemlist->data as $nieuwsitem ) {
+
                     $bericht = new Bericht();
                     $bericht->setEventId($authMgr->getMyEventId());
                     
@@ -92,10 +93,10 @@ class JotihuntInformatieRest {
                     }
                     
                     $bericht->setTitel($nieuwsitem->titel);
-                    $bericht->setDatum(SiteDriverPostgresql::psqlDateFromTime($nieuwsitem->datum));
-                    $bericht->setLastupdate(SiteDriverPostgresql::psqlDateFromTime($nieuwitemlist->last_update));
+                    $bericht->setDatum($nieuwsitem->datum);
+                    $bericht->setLastupdate($nieuwitemlist->last_update);
                     $bericht->setType('nieuws');
-                    
+
                     $itemdetails = $this->getJsonFromJotihunt($this->apiBase . 'nieuws/' . $bericht->getBericht_id());
                     if (isset($itemdetails->error) && ! empty($itemdetails->error)) {
                         if ($this->debug) {
@@ -159,8 +160,8 @@ class JotihuntInformatieRest {
                     }
                     
                     $bericht->setTitel($nieuwsitem->titel);
-                    $bericht->setDatum(SiteDriverPostgresql::psqlDateFromTime($nieuwsitem->datum));
-                    $bericht->setLastupdate(SiteDriverPostgresql::psqlDateFromTime($nieuwitemlist->last_update));
+                    $bericht->setDatum($nieuwsitem->datum);
+                    $bericht->setLastupdate($nieuwitemlist->last_update);
 
                     $bericht->setType('hint');
                     

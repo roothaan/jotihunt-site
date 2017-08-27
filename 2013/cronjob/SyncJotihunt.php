@@ -73,6 +73,7 @@ $jotihuntinformatie->setDebug($debug);
 
 print_debug('<h1>Nieuws</h1>');
 $nieuwscollection = $jotihuntinformatie->updateNieuws();
+
 foreach ( $nieuwscollection as $nieuwsitem ) {
     if($debug) {
         print_debug('<h2>Nieuws bericht</h2>');
