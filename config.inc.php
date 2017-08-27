@@ -32,22 +32,23 @@ if (getenv('PROXY_BASE_URL')) {
 if (getenv('DEV_MODE')) {
     define('DEV_MODE', boolval(getenv('DEV_MODE')));
 }
+$urlBase = $_SERVER ['SERVER_NAME'] . $port;
 
 /**
  *
  * @var string Base URL, Ends in a /
  */
-define('BASE_URL', '//' . $_SERVER ['SERVER_NAME'] . $port . '/2013/');
+define('BASE_URL', '//' . $urlBase . '/2013/');
 /**
  *
  * @var string Website URL, Ends in a /
  */
-define('WEBSITE_URL', '//' . $_SERVER ['SERVER_NAME'] . $port .'/');
+define('WEBSITE_URL', '//' . $urlBase .'/');
 /**
  *
  * @var string Base Test URL, Ends in a /
  */
-define('TEST_URL', '//' . $_SERVER ['SERVER_NAME'] . $port . '/test/');
+define('TEST_URL', '//' . $urlBase . '/test/');
 
 require_once ROOT_DIR . 'config/dbconfig.inc.php';
 require_once ROOT_DIR . 'config/google.inc.php';
@@ -66,4 +67,7 @@ setlocale(LC_TIME, 'nl_NL');
 error_reporting(E_ALL);
 ini_set('display_errors', getenv('SITE_SHOW_ERRORS') ? boolval(getenv('SITE_SHOW_ERRORS')) : 0);
 ini_set('html_errors', getenv('SITE_SHOW_ERRORS') ? boolval(getenv('SITE_SHOW_ERRORS')) : 0);
+
+unset($port);
+unset($urlBase);
 ?>

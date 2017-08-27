@@ -9,6 +9,7 @@ if (isset($_GET ["error"])) {
 } ?>
 
 <h1>Home</h1>
+
 <p>Welkom op de Jotihunt-spelsite van de <a href="http://roothaangroep.nl/" target="_blank">Roothaangroep</a>. De Jotihunt is een door Scouting Gelderland georganiseerde vossenjacht die ieder jaar tijdens de JOTA/JOTI plaats vindt. Tijdens de 30 uur durende vossenjacht proberen maar liefst 70 groepen uit heel Gelderland 12 verschillende vossenteams te vinden. Hierbij worden zij geholpen door aanwijzingen die regelmatig op <a href="https://www.jotihunt.net" target="_blank">Jotihunt.net</a> verschijnen.</p>
 <p>Deze site is bedoeld voor hunters van de Generaal Roothaangroep. Via deze site kunnen vossen-locaties worden opgezocht, het rijschema worden bekeken en dankzij de alarmpagina worden wij zo snel mogelijk gewaarschuwd wanneer een vossenteam actief/inactief wordt, een nieuw bericht op de site verschijnt en we een plaatsje stijgen/zakken in de scorelijst.</p>
 <p>Ook dit jaar zijn wij op <strong><a href="https://www.facebook.com/RoothaanJotihunt">facebook.com/RoothaanJotihunt</a></strong> te volgen. Stay tuned voor foto's, filmpjes en andere nieuwtjes!</p>

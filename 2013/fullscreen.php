@@ -5,7 +5,9 @@ JotihuntUtils::requireLogin();
 $headerOptions = array();
 $headerOptions['title'] = 'Fullscreen Kaart';
 $headerOptions['includeBody'] = false;
-require_once BASE_DIR . 'header.php'; ?>
+require_once BASE_DIR . 'header.php';
+
+?>
 
 <style>
 	.foxText {
