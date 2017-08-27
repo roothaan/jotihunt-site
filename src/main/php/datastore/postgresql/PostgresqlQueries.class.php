@@ -32,19 +32,6 @@ class PostgresqlQueries {
         $sqlQuery = 'UPDATE hunts SET hunter_id=$2, vossentracker_id=$3, code=$4, goedgekeurd=$5 WHERE id=$1';
         $this->prepareInternal($sqlName, $sqlQuery);
 
-        $sqlName = 'getHunt';
-        $sqlQuery = 'SELECT hunts.id, hunter_id, vossentracker_id, code, goedgekeurd, time 
-                        FROM hunts
-                    INNER JOIN hunter ON (hunts.hunter_id = hunter.id) 
-                    JOIN _user ON (hunter.user_id = _user.id)
-                    JOIN user_organisation ON (_user.id = user_organisation.user_id)
-                    JOIN vossentracker ON (hunts.vossentracker_id = vossentracker.id)
-                    JOIN events_has_organisation ON (user_organisation.organisation_id = events_has_organisation.organisation_id)
-                    WHERE user_organisation.organisation_id = $2
-                    AND events_has_organisation.events_id = $3                      
-                    AND hunts.id = $1';
-        $this->prepareInternal($sqlName, $sqlQuery);
-
         $sqlName = 'getLastHunt';
         $sqlQuery = 'SELECT hunts.id, hunter_id, vossentracker_id, code, goedgekeurd, time 
                     FROM hunts 
@@ -125,22 +112,45 @@ class PostgresqlQueries {
                         WHERE user_organisation.organisation_id = $1
                         AND enabled';
         $this->prepareInternal($sqlName, $sqlQuery);
+
+        $sqlName = 'getHunt';
+        $sqlQuery = 'SELECT 
+                    hunts.id, hunts.hunter_id, hunts.vossentracker_id, hunts.code, hunts.goedgekeurd,
+                    hunter.user_id, 
+                    vossentracker.time, vossentracker.adres, 
+                    deelgebied.name AS deelgebied
+                    FROM hunts
+                    JOIN hunter ON hunts.hunter_id = hunter.id
+                    LEFT OUTER JOIN vossentracker ON hunts.vossentracker_id = vossentracker.id
+                    JOIN vossen ON vossentracker.vossen_id = vossen.id
+                    JOIN deelgebied ON vossen.deelgebied_id = deelgebied.id
+                    JOIN user_organisation ON user_organisation.user_id = hunter.user_id
+                    JOIN events_has_organisation ON user_organisation.organisation_id = events_has_organisation.organisation_id
+                    
+                    WHERE vossentracker.organisation_id = $2
+                    AND events_has_organisation.events_id = $3
+                    AND deelgebied.event_id = $3
+                    AND hunts.id = $1';
+        $this->prepareInternal($sqlName, $sqlQuery);
         
         $sqlName = 'getAllHunts';
-        $sqlQuery  = 'SELECT hunts.id, hunter.user_id, hunts.code, ';
-        $sqlQuery .= 'vossentracker.time, vossentracker.adres, hunts.goedgekeurd, deelgebied.name AS deelgebied ';
-        $sqlQuery .= 'FROM hunts ';
-        $sqlQuery .= 'JOIN hunter ON (hunts.hunter_id = hunter.id) ';
-        $sqlQuery .= 'LEFT OUTER JOIN vossentracker ON (hunts.vossentracker_id = vossentracker.id) ';
-        $sqlQuery .= 'JOIN vossen ON (vossentracker.vossen_id = vossen.id) ';
-        $sqlQuery .= 'JOIN deelgebied ON (vossen.deelgebied_id = deelgebied.id) ';
-        $sqlQuery .= 'JOIN user_organisation ON (user_organisation.user_id = hunter.user_id) ';
-        $sqlQuery .= 'JOIN events_has_organisation ON (user_organisation.organisation_id = events_has_organisation.organisation_id) ';
-        
-        $sqlQuery .= 'WHERE vossentracker.organisation_id = $1 ';
-        $sqlQuery .= 'AND events_has_organisation.events_id = $2 ';
-        $sqlQuery .= 'AND deelgebied.event_id = $2 ';
-        $sqlQuery .= 'ORDER BY time DESC';
+        $sqlQuery  = 'SELECT 
+                    hunts.id, hunts.hunter_id, hunts.vossentracker_id, hunts.code, hunts.goedgekeurd,
+                    hunter.user_id, 
+                    vossentracker.time, vossentracker.adres, 
+                    deelgebied.name AS deelgebied
+                    FROM hunts
+                    JOIN hunter ON hunts.hunter_id = hunter.id
+                    LEFT OUTER JOIN vossentracker ON hunts.vossentracker_id = vossentracker.id
+                    JOIN vossen ON vossentracker.vossen_id = vossen.id
+                    JOIN deelgebied ON vossen.deelgebied_id = deelgebied.id
+                    JOIN user_organisation ON user_organisation.user_id = hunter.user_id
+                    JOIN events_has_organisation ON user_organisation.organisation_id = events_has_organisation.organisation_id
+                    
+                    WHERE vossentracker.organisation_id = $1
+                    AND events_has_organisation.events_id = $2
+                    AND deelgebied.event_id = $2
+                    ORDER BY time DESC';
         $this->prepareInternal($sqlName, $sqlQuery);
         
         $sqlName = 'getHunterHighscore';
@@ -177,6 +187,19 @@ class PostgresqlQueries {
 
         $sqlName = 'removeRiderViaUserId';
         $sqlQuery = 'DELETE FROM hunter WHERE user_id = $1';
+        $this->prepareInternal($sqlName, $sqlQuery);
+
+        $sqlName = 'getOpziener';
+        $sqlQuery = 'SELECT opzieners.id, _user.id AS user_id, displayname, deelgebied_id, type 
+                    FROM opzieners
+                    JOIN _user ON opzieners.user_id = _user.id
+                    JOIN user_organisation ON (_user.id = user_organisation.user_id)
+                    JOIN deelgebied ON opzieners.deelgebied_id = deelgebied.id
+                    WHERE user_organisation.organisation_id = $2
+                    AND deelgebied.event_id = $3
+                    AND opzieners.user_id = _user.id 
+                    AND opzieners.id = $1
+                    ORDER BY deelgebied_id ASC';
         $this->prepareInternal($sqlName, $sqlQuery);
         
         $sqlName = 'getAllOpzieners';
@@ -487,7 +510,9 @@ class PostgresqlQueries {
         $this->prepareInternal($sqlName, $sqlQuery);
         
         $sqlName = 'authUserById';
-        $sqlQuery = 'SELECT id, username, displayname, pw_hash FROM _user WHERE id = $1';
+        $sqlQuery = 'SELECT id, username, displayname, pw_hash 
+                        FROM _user 
+                        WHERE id = $1';
         $this->prepareInternal($sqlName, $sqlQuery);
         
         $sqlName = 'authLogin';

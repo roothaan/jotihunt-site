@@ -6,7 +6,7 @@ JotihuntUtils::requireLogin();
 if (isset($_POST ['submithunt'])) {
     $hunter_id = $_POST ['hunter_id'];
     $vossentracker_id = $_POST['vossentracker_id'];
-    $code = $_POST ['code'];
+    $code = $_POST['code'];
     $driver->addHunt($hunter_id, $vossentracker_id, $code);
 } ?>
 
@@ -99,29 +99,29 @@ if ($authMgr->isAdmin()) {
 <?php
 foreach ( $allHunts as $hunt ) { 
     $adres = "";
-    if (! empty($hunt ['adres'])) {
-        $adres = '<br/>' . $hunt ['adres'];
+    if (! empty($hunt->getAdres())) {
+        $adres = '<br/>' . $hunt->getAdres();
     } ?>
     <tr>
-        <td><?= $hunt['deelgebied'] ?></td>
-        <td><?= $hunt['username'] ?></td>
-        <td><strong><code><?= $hunt ['code'] ?></code><?= $adres ?></strong></td>
-        <td><?= date('d-m-Y H:i', strtotime($hunt ['time'])) ?></td>
+        <td><?= $hunt->getDeelgebied() ?></td>
+        <td><?= $hunt->getUsername() ?></td>
+        <td><strong><code><?= $hunt->getCode() ?></code><?= $adres ?></strong></td>
+        <td><?= date('d-m-Y H:i', strtotime($hunt->getTime())) ?></td>
         <td>
             <?php
-            if($hunt ['goedgekeurd'] == 2) { ?>
-                <a href="huntgoedkeuren/?id=<?= $hunt['id'] ?>&goedkeuren=0" class="goedkeuren"><img src="<?= BASE_URL ?>images/goedgekeurd.png" title="Inleveren ongedaanmaken" alt="Inleveren ongedaanmaken" /></a>
+            if($hunt->getGoedgekeurd() == 2) { ?>
+                <a href="huntgoedkeuren/?id=<?= $hunt->getId() ?>&goedkeuren=0" class="goedkeuren"><img src="<?= BASE_URL ?>images/goedgekeurd.png" title="Inleveren ongedaanmaken" alt="Inleveren ongedaanmaken" /></a>
                 <?php
-            } elseif($hunt ['goedgekeurd'] == 1) { ?>
-                <a href="huntgoedkeuren/?id=<?= $hunt['id'] ?>&goedkeuren=2" class="goedkeuren"><img src="<?= BASE_URL ?>images/goedgekeurd_ingeleverd.png" title="Goedkeuren" alt="Goedkeuren" /></a>
+            } elseif($hunt->getGoedgekeurd() == 1) { ?>
+                <a href="huntgoedkeuren/?id=<?= $hunt->getId() ?>&goedkeuren=2" class="goedkeuren"><img src="<?= BASE_URL ?>images/goedgekeurd_ingeleverd.png" title="Goedkeuren" alt="Goedkeuren" /></a>
                 <?php
             } else { ?>
-                <a href="huntgoedkeuren/?id=<?= $hunt['id'] ?>&goedkeuren=1" class="goedkeuren"><img src="<?= BASE_URL ?>images/goedgekeurd_leeg.png" title="Inleveren" alt="Inleveren" /></a>
+                <a href="huntgoedkeuren/?id=<?= $hunt->getId() ?>&goedkeuren=1" class="goedkeuren"><img src="<?= BASE_URL ?>images/goedgekeurd_leeg.png" title="Inleveren" alt="Inleveren" /></a>
                 <?php
             }
             
             if ($authMgr->isAdmin()) { ?>
-                <a href="deletehunt/?id=<?= $hunt['id'] ?>" onclick="return confirm('Weet je zeker dat je deze hunt wilt verwijderen?');"><img src="<?= BASE_URL ?>images/delete.png" title="Verwijderen" alt="Verwijderen" /></a>
+                <a href="deletehunt/?id=<?= $hunt->getId() ?>" onclick="return confirm('Weet je zeker dat je deze hunt wilt verwijderen?');"><img src="<?= BASE_URL ?>images/delete.png" title="Verwijderen" alt="Verwijderen" /></a>
                 <?php
             } ?>
         </td>

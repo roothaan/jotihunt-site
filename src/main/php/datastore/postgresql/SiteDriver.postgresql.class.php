@@ -20,6 +20,8 @@ require_once CLASS_DIR . 'jotihunt/Speelhelft.class.php';
 require_once CLASS_DIR . 'jotihunt/Poi.class.php';
 require_once CLASS_DIR . 'jotihunt/Counterhuntrondje.class.php';
 require_once CLASS_DIR . 'jotihunt/Image.class.php';
+require_once CLASS_DIR . 'jotihunt/Opziener.class.php';
+require_once CLASS_DIR . 'jotihunt/Hunt.class.php';
 
 require_once CLASS_DIR . 'datastore/jotihunt/JotihuntInformatie.rest.class.php';
 
@@ -47,9 +49,14 @@ class SiteDriverPostgresql {
     }
 
     public function removeOpziener($id) {
+        $opziener = $this->getOpzienerById($id);
+        if (!$opziener) {
+            throw new DatastoreException('Not a valid opziener ID ' . $id);
+        }
+
         $sqlName = 'removeOpziener';
         $values = array (
-                $id 
+            $opziener->getId()
         );
         
         $result = pg_execute($this->conn, $sqlName, $values);
@@ -59,23 +66,16 @@ class SiteDriverPostgresql {
         }
     }
 
-    public function huntGoedkeuren($id) {
-        $sqlName = 'removeHunt';
-        $values = array (
-                $id 
-        );
-        
-        $result = pg_execute($this->conn, $sqlName, $values);
-        
-        if (! $result) {
-            throw new DatastoreException('Could not remove hunt ' . $id);
-        }
-    }
-    
     public function removeHunt($id) {
+        $hunt = $this->getHunt($id);
+
+        if (!$hunt) {
+            throw new DatastoreException('Not a valid hunt ID ' . $id);
+        }
+        
         $sqlName = 'removeHunt';
         $values = array (
-                $id 
+                $hunt->getId() 
         );
         
         $result = pg_execute($this->conn, $sqlName, $values);
@@ -86,9 +86,15 @@ class SiteDriverPostgresql {
     }
 
     public function removeRider($id) {
+        $rider = $this->getRider($id);
+        
+        if (!$rider) {
+            throw new DatastoreException('Not a valid rider ID ' . $id);
+        }
+
         $sqlName = 'removeRider';
         $values = array (
-                $id 
+                $rider->getId(); 
         );
         
         $result = pg_execute($this->conn, $sqlName, $values);
@@ -99,6 +105,9 @@ class SiteDriverPostgresql {
     }
     
     public function removeRiderViaUserId($userId) {
+        // XXX protect via getuserbyid
+        
+
         $sqlName = 'removeRiderViaUserId';
         $values = array (
                 $userId 
@@ -146,11 +155,11 @@ class SiteDriverPostgresql {
         $sqlName = 'updateHunt';
         
         $values = array (
-                $hunt['id'],
-                $hunt['hunter_id'],
-                $hunt['vossentracker_id'],
-                $hunt['code'],
-                $hunt['goedgekeurd']
+                $hunt->getId(),
+                $hunt->getHunterId(),
+                $hunt->getVossenTrackerId(),
+                $hunt->getCode(),
+                $hunt->getGoedgekeurd()
         );
         
         $result = pg_execute($this->conn, $sqlName, $values);
@@ -174,12 +183,12 @@ class SiteDriverPostgresql {
         );
         
         $result = pg_execute($this->conn, $sqlName, $values);
+        $row = pg_fetch_assoc($result);
         
-        if (! $result) {
-            throw new DatastoreException('Could not find hunt with id:' . $id);
+        if (!$row) {
+            throw new DatastoreException('Could not find hunt with id: ' . $id);
         }
-        
-        return pg_fetch_assoc($result);
+        return $this->createHunt($row);        
     }
 
     public function addGcm($gcm) {
@@ -398,15 +407,26 @@ class SiteDriverPostgresql {
         
         $_result = array ();
         while ( $row = pg_fetch_assoc($result) ) {
-            // Get the user as well!
-            $user = $this->getUserById($row ['user_id']);
-            $row ['username'] = $user->getDisplayName();
-            
-            $_result [] = $row;
+            $_result [] = $this->createHunt($row);
         }
         return $_result;
     }
 
+    private function createHunt($result) {
+        $hunt = new Hunt($result['id'], $result['hunter_id'], $result['vossentracker_id'], $result['code'], $result['goedgekeurd'], $result['time']);
+
+        // Get the user as well!
+        $user = $this->getUserById($result ['user_id']);
+        $hunt->setUsername($user->getDisplayName());
+
+        $hunt->setUserId($result ['user_id']);
+        $hunt->setAdres($result ['adres']);
+        $hunt->setDeelgebied($result ['deelgebied']);
+
+        
+        return $hunt;
+
+    }
     /**
      * 
      * @throws DatastoreException
@@ -567,6 +587,26 @@ class SiteDriverPostgresql {
         }
     }
 
+    public function getOpzienerById($id) {
+        global $authMgr;
+        $sqlName = 'getOpziener';
+        $values = array (
+            $id,
+            $authMgr->getMyOrganisationId(),
+            $authMgr->getMyEventId()
+        );
+        
+        $result = pg_execute($this->conn, $sqlName, $values);
+        
+        if (! $result) {
+            throw new DatastoreException('Could not get opziener with ID ' . $id);
+        }
+        
+        if ( $row = pg_fetch_assoc($result) ) {
+            return new Opziener($row['id'], $row['user_id'],$row['displayname'], $row['deelgebied_id'], $row['type']);
+        }
+        return null;
+    }
     public function getAllOpzieners() {
         global $authMgr;
         $sqlName = 'getAllOpzieners';
@@ -583,7 +623,8 @@ class SiteDriverPostgresql {
         
         $_result = array ();
         while ( $row = pg_fetch_assoc($result) ) {
-            $_result [] = $row;
+            $opziener = new Opziener($row['id'], $row['user_id'],$row['displayname'], $row['deelgebied_id'], $row['type']);
+            $_result [] = $opziener;
         }
         return $_result;
     }
@@ -2302,6 +2343,7 @@ class SiteDriverPostgresql {
     }
 
     public function getUserById($userId) {
+        // XXX Protect
         $sqlName = 'authUserById';
         $values = array (
                 $userId 
