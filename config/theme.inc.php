@@ -2,9 +2,13 @@
 /**
  * Used for Skinning the site
  */
- if (getenv('THEME_NAME') && getenv('THEME_LOGOS') ) {
+ if (getenv('THEME_NAME')) {
     define('THEME_NAME', getenv('THEME_NAME'));
-    define('THEME_LOGOS', intval(getenv('THEME_LOGOS')));
+    if (getenv('THEME_LOGOS')) {
+        define('THEME_LOGOS', intval(getenv('THEME_LOGOS')));
+    } else {
+        define('THEME_LOGOS', 1);
+    }
 } else {
     define('THEME_NAME', 'default');
     define('THEME_LOGOS', 1);

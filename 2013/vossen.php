@@ -13,8 +13,8 @@ if (sizeof($allDeelgebieden) === 0 ) {
 	?>Dit event heeft nog geen deelgebieden<?php
 } else {
 
-if(isset($urlArray[1]) && !empty($urlArray[1])) {
-	$deelgebiedName = urldecode($urlArray[1]);
+if(null != JotihuntUtils::getUrlPart(1)) {
+	$deelgebiedName = JotihuntUtils::getUrlPart(1);
 } else {
 	$deelgebiedName = $allDeelgebieden[0]->getName();
 }

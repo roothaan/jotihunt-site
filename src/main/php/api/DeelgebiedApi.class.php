@@ -2,6 +2,7 @@
 require_once CLASS_DIR . 'api/ApiException.class.php';
 require_once CLASS_DIR . 'datastore/Datastore.class.php';
 require_once CLASS_DIR . 'jotihunt/Gcm.class.php';
+require_once CLASS_DIR . 'jotihunt/helpers/DeelgebiedHelper.class.php';
 
 class DeelgebiedApi {
     private $request;
@@ -13,6 +14,11 @@ class DeelgebiedApi {
         $this->request = $request;
     }
 
+    /**
+     *  /api/deelgebied
+     *  /api/deelgebied/10
+     *  /api/deelgebied/kml
+     */
     private function init() {
         // Check for size of ApiParts (need at least 1, the name)
         $apiParts = $this->request->getApiParts();
@@ -24,7 +30,21 @@ class DeelgebiedApi {
 
     public function doGet() {
         $this->init();
-        
+        if ('kml' === $this->requestedId) {
+            return $this->doGetKml();
+        }
+        return $this->doGetJson();
+    }
+
+    public function doGetKml() {
+        global $authMgr;
+        $deelgebiedHelper = new DeelgebiedHelper();
+        $kmlOutput = $deelgebiedHelper->getKmlForEventId($authMgr->getMyEventId());
+        $deelgebiedHelper->outputAsKml($kmlOutput);
+        die();
+    }
+    
+    public function doGetJson() {
         if (null == $this->requestedId) {
             $allAreas = $this->siteDriver->getAllDeelgebieden();
             

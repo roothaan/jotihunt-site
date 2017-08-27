@@ -2,7 +2,7 @@
 require_once CLASS_DIR . 'jotihunt/Gcm.class.php';
 
 class GcmSender {
-    private $googleUri = 'https://android.googleapis.com/gcm/send';
+    private $googleUri = 'https://fcm.googleapis.com/fcm/send';
     private $googleApiKey;
     private $proximoUser;
     private $proximoPass;

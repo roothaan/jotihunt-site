@@ -3,16 +3,16 @@ if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 $authMgr->requireAdmin();
 
 // Handle ID
-if (isset($urlArray[1])) {
-    $id = intval($urlArray[1]);
+if (null != JotihuntUtils::getUrlPart(1)) {
+    $id = intval(JotihuntUtils::getUrlPart(1));
     $driver->removeVossenLocation($id);
 }
 
 // Handle TEAM
 $team = '';
-if (isset($urlArray[2])) {
-    $team = '/'.$urlArray[2];
+if (null != JotihuntUtils::getUrlPart(2)) {
+    $team = '/' . JotihuntUtils::getUrlPart(1);
 }
 
-header("Location: ".WEBSITE_URL."vossen".$team);
+header('Location: ' . WEBSITE_URL . 'vossen' . $team);
 die();

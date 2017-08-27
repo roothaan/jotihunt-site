@@ -1,8 +1,10 @@
 <?php
+
 define('BASE_DIR', dirname(__FILE__) . '/');
 
 require_once BASE_DIR . 'includes/global_include.php';
 require_once BASE_DIR . 'includes/functions.php';
+require_once BASE_DIR . 'admin/paths.php';
 
 $authMgr->attemptAuth();
 if (! $driver->isReady()) {

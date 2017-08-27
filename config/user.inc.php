@@ -66,6 +66,9 @@ function parseJotihuntIniFile($user_config) {
         if (array_key_exists('site-show-errors', $jotihunt_config)) {
             putenv('SITE_SHOW_ERRORS=' . $jotihunt_config['site-show-errors']);
         }
+        if (array_key_exists('dev-mode', $jotihunt_config)) {
+            putenv('DEV_MODE=' . $jotihunt_config['dev-mode']);
+        }
     }
     // Themes
     if (array_key_exists('theme', $user_config)) {
@@ -80,6 +83,5 @@ function parseJotihuntIniFile($user_config) {
 }
 
 if (file_exists(ROOT_DIR . 'config/user.ini')) {
-    $user_config = parse_ini_file(ROOT_DIR . 'config/user.ini', true);
-    parseJotihuntIniFile($user_config);
+    parseJotihuntIniFile(parse_ini_file(ROOT_DIR . 'config/user.ini', true));
 }

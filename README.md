@@ -89,6 +89,13 @@ Bijvoorbeeld `/forwarded`
 Dit is een `boolean` waarde ((`1`/`true` of `0`/`false`).  
 Standaard staan de errors uit.
 
+`DEV_MODE`  
+Dit is een `boolean` waarde ((`1`/`true` of `0`/`false`).  
+Als deze aanstaat is het mogelijk om:
+- API calls te doen met een ingelogde user
+- Testen uit te voeren (/test)
+- De Google maps kaart toont een dummy hunter
+
 
 # Overig
 ## Update tot PHP7
