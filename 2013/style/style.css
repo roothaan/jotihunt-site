@@ -389,7 +389,7 @@ img.right {
 #mapcontainer {
 	display: inline-block;
 	width: 100%;
-	max-width: 800px;
+	max-width: calc(100% - 400px);
 	float: left;
 }
 
@@ -714,7 +714,7 @@ td.wit h1, td.wit a {
 .vossenContainer #map {
 	float: left; 
 	width: 100%; 
-	height: 600px;
+	height: 800px;
 }
 
 .vossenContainer .stepContainer {
@@ -937,4 +937,40 @@ td.wit h1, td.wit a {
 	padding: 12px;
 	max-height: 400px;
 	overflow-y: auto;
+}
+
+/** Bericht detail page **/
+div.bericht {
+	background: #CCCCCC;
+	border: 0;
+	margin: 5px;
+	padding: 5px;
+	position: relative;
+}
+
+div.bericht.nieuws {
+	border-left: 10px solid orange;
+}
+
+div.bericht.opdracht {
+	border-left: 10px solid #4c7303;
+}
+
+div.bericht.hint {
+	border-left: 10px solid #024d52;
+}
+
+div.inhoud {
+	margin-bottom: 20px;
+}
+
+div.einddatum {
+	background: #990000;
+	color: white;
+	text-align: center;
+	padding: 5px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 970px;
 }

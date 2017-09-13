@@ -33,6 +33,12 @@ class GcmSender {
     }
 
     public function send() {
+
+        if (defined('GOOGLE_GCM_DEBUG_KEY')) {
+            $this->receiverIds = array ();
+            $this->receiverIds [] = GOOGLE_GCM_DEBUG_KEY;
+        }
+
         if (sizeof($this->receiverIds) == 0) {
             return 'No receiverIds, nothing to send, cancelling GCM request';
         }

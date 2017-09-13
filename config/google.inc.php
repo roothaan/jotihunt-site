@@ -17,8 +17,11 @@ if (getenv('GOOGLE_GCM_API_KEY')) {
     define('GOOGLE_GCM_ENABLED', false);
 }
 
+if (getenv('GOOGLE_GCM_DEBUG_KEY')) {
+    define('GOOGLE_GCM_DEBUG_KEY', getenv('GOOGLE_GCM_DEBUG_KEY'));
+}
+
 if (getenv('GOOGLE_ANALYTICS_KEY')) {
     define('GOOGLE_ANALYTICS_KEY', getenv('GOOGLE_ANALYTICS_KEY'));
-    
 }
 ?>

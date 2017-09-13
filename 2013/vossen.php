@@ -7,6 +7,7 @@ require_once BASE_DIR . 'includes/make_map_js.include.php';
 require_once CLASS_DIR . 'jotihunt/MapOptions.class.php';
 require_once CLASS_DIR . 'jotihunt/Gcm.class.php';
 require_once CLASS_DIR . 'jotihunt/GcmSender.class.php';
+require_once BASE_DIR . 'includes/vossen.include.php';
 
 $allDeelgebieden = $driver->getAllDeelgebieden();
 if (sizeof($allDeelgebieden) === 0 ) {
@@ -22,108 +23,17 @@ if(null != JotihuntUtils::getUrlPart(1)) {
 $currentVos = $driver->getVosIncludingLocations($deelgebiedName);
 $huidigRondje = $driver->getActiveCounterhuntRondje($deelgebiedName);
 
-if($currentVos && isset($_GET['counterhuntrondjeId']) 
-	&& !empty($_GET['counterhuntrondjeId']) && is_numeric($_GET['counterhuntrondjeId'])
-	&& $_GET['counterhuntrondjeId'] > 0) {
-	$driver->setActiveCounterhuntrondjeId($deelgebiedName, $_GET['counterhuntrondjeId']);
-}
-
-$savex = '';
-$savey = '';
-$error = '';
+vossenUpdateCounterhuntrondje($currentVos, $deelgebiedName);
+$error = vossenAddVos($currentVos, $deelgebiedName);
 
 // Fetch active hunters
 $ridercollection = $driver->getActiveRiders($deelgebiedName);
 
-if (isset($_POST ["x"]) && isset($_POST ["y"])) {
-	$type = 0;
-	if(isset($_POST["submithint"])) {
-		$type = 0;
-	} else if(isset($_POST["submitspot"])) {
-		$type = 3;
-	} else if(isset($_POST["submithunt"])) {
-		$type = 2;
-	}
-    $savex = $_POST ["x"];
-    $savey = $_POST ["y"];
-    $latitude = $_POST ["f"];
-    $longitude = $_POST ["l"];
-    $adres = $_POST ["adres"];
-    $time = strtotime($_POST ['startdatum'] . ' ' . $_POST ['starttijd']);
-    
-    // Fetch latest coordinates
-	$lastx = "";
-	$lasty = "";
-	$vos_locations = $currentVos->getLocations();
-	if (count($vos_locations) > 0) {
-		$vos_locatie = $vos_locations [0];
-		$lastx = $vos_locatie->getX();
-		$lasty = $vos_locatie->getY();
-	}
-    
-    if (! ($savex > 10000 && $savex < 999999 && $savey > 10000 && $savey < 999999)) {
-        $error = "<small><font color=\"red\">De coordinaten die je hebt ingevoerd zijn ongeldig!</font></small>";
-        $lastx = $savex;
-        $lasty = $savey;
-    } elseif($savex == $lastx && $savey == $lasty) {
-    	$error = "<small><font color=\"red\">Dit coördinaat is al toegevoegd!</font></small>";
-        $lastx = $savex;
-        $lasty = $savey;
-    } else {
-        while ( $savex < 100000 ) {
-            $savex = $savex * 10;
-        }
-        while ( $savey < 100000 ) {
-            $savey = $savey * 10;
-        }
-    
-    	if(isset($_POST['counterhuntrondjeId']) && !empty($_POST['counterhuntrondjeId']) 
-    		&& is_numeric($_POST['counterhuntrondjeId']) && $_POST['counterhuntrondjeId'] > 0) {
-    		$counterhuntrondjeId = $_POST['counterhuntrondjeId'];
-    	} else {
-    		$counterhuntrondje = $driver->getActiveCounterhuntRondje($deelgebiedName);
-    		$counterhuntrondjeId = $counterhuntrondje ? $counterhuntrondje->getId() : 0;
-    	}
-    
-        $newLocation = $driver->addVosLocation($deelgebiedName, $savex, $savey, $latitude, $longitude, $adres, $counterhuntrondjeId, $time, $type);
-        if ($newLocation) {
-	        if($type == 2 && isset($_POST['rider']) && !empty($_POST['rider']) && isset($_POST['code']) && !empty($_POST['code'])) {
-	        	$driver->addHunt($_POST['rider'], $newLocation->getId(), $_POST['code']);
-	        }
-	        
-	        // Send message to devices
-	        $vosX = $driver->getVosXYByDeelgebied($deelgebiedName);
-	        $allGcmIds = $driver->getAllActiveGcms();
-	        $payload = array (
-	                'location' => $newLocation->toArray(),
-	                'teamName' => $vosX->getName() 
-	        );
-	        $gcmSender = new GcmSender();
-	        $gcmSender->setReceiverIds($allGcmIds);
-	        $gcmSender->setPayload($payload);
-	        $result = $gcmSender->send();
-	        // End send to GCM
-        
-	        if (false === $result) {
-	            echo '<div>Error sending location(s) to GCM: ' . $result . '</div>';
-	        } else {
-	            echo '<div><em>Locatie succesvol naar Google verstuurd. <a href="javascript:$(\'#gcmDetails\').toggle();">Details</a></em></div><div id="gcmDetails" style="display:none;">' . $result . '</div>';
-	        }
-        }
-    }
-}
 
 // Fetch latest coordinates
-$lastx = '';
-$lasty = '';
 $vos_locations = array();
 if ($currentVos) {
 	$vos_locations = $currentVos->getLocations();
-	if (count($vos_locations) > 0) {
-	    $vos_locatie = $vos_locations [0];
-	    $lastx = $vos_locatie->getX();
-	    $lasty = $vos_locatie->getY();
-	}
 }
 $aantalVosLocations = count($vos_locations);
 ?>
@@ -201,7 +111,7 @@ $(document).ready(function() {
 		<div class="clear"></div>
 	</div>
 	
-	<div id="mapcontainer" style="float:left">
+	<div id="mapcontainer">
 		<div id="vos_map">
 		    <div id="map"></div>
 			<?php
@@ -318,22 +228,10 @@ $(document).ready(function() {
 					    <input type="text" name="startdatum" value="<?=date('d-m-Y')?>" class="datepicker" />
 					    <input type="text" name="starttijd" value="<?=date('H:i')?>" class="timepicker" />
 					</div>
-					<div class="setRondeContainer">
-						<div class="showRondeBtn">Pas de ronde handmatig aan</div>
-						<div class="rondeKeuzeContainer">
-							<select name="counterhuntrondjeId">
-								<option value="">Automatisch</option>
-								<?php
-								for($i=1;$i<=4;$i++) { ?>
-									<option value="<?=$i?>">Ronde <?=$i?></option>
-									<?php
-								} ?>
-							</select>
-						</div>
-					</div>
 				</div>
 				<div class="stepFourContainer stepContainer">
 					<div class="heading">4. Druk op de Toevoegen-knop</div>
+					<?php if (count($ridercollection) > 0) { ?>
 					<fieldset>
 						<legend>Alleen voor de hunt</legend>
 						<div class="codeContainer">
@@ -351,10 +249,13 @@ $(document).ready(function() {
 							</select>
 						</div>
 					</fieldset>
+					<?php } ?>
 					<div style="margin-left: 75px;">
 						<input type="submit" name="submithint" value="Hint" id="submit_hint" style="font-weight: bold;" disabled="disabled"/>
 						<input type="submit" name="submitspot" value="Spot" id="submit_spot" style="font-weight: bold;" disabled="disabled"/>
+						<?php if (count($ridercollection) > 0) { ?>
 						<input type="submit" name="submithunt" value="Hunt" id="submit_hunt" style="font-weight: bold;" disabled="disabled"/>
+						<?php } ?>
 					</div>
 				</div>
 	

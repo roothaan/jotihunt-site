@@ -59,6 +59,7 @@ Voor Heroku: `sslmode=require options='--client_encoding=UTF8'`
 
 # Optional environment variables
 `GOOGLE_GCM_API_KEY`
+`GOOGLE_GCM_DEBUG_KEY`
 
 Google GCM wordt gebruikt om notificaties naar de Android app te sturen.
 

@@ -47,7 +47,7 @@ var syncJotihunt = function() {
 		foreach ( $berichtcollection as $bericht ) { ?>
 			<div class="bericht <?=$bericht->getType()?>">
 			    <div class="titel">
-			        <a href="<?=WEBSITE_URL?>bericht/?id=<?=$bericht->getBericht_id()?>"><?=$bericht->getTitel()?></a>
+			        <a href="<?=WEBSITE_URL?>bericht/<?=$bericht->getBericht_id()?>"><?=$bericht->getTitel()?></a>
 			    </div>
 			    <div class="type"><?=ucfirst($bericht->getType())?></div>
 			    <div class="datum"><?=strftime('%a, %d %b %H:%M', strtotime($bericht->getDatum()))?></div>
