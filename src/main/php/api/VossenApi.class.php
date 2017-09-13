@@ -30,7 +30,9 @@ class VossenApi {
         if (null != $vossenTeam) {
             $this->team = $this->siteDriver->getTeamByDeelgebiedName($vossenTeam);
             $counterhuntRondje = $this->siteDriver->getActiveCounterhuntRondje($vossenTeam);
-            $this->team->setCounterhuntRondjeId($counterhuntRondje->getId());
+            if ($counterhuntRondje) {
+                $this->team->setCounterhuntRondjeId($counterhuntRondje->getId());
+            }
             $locations = $this->siteDriver->getLocations($this->team);
             $this->team->setLocations($locations);
         }
@@ -47,7 +49,9 @@ class VossenApi {
                 $team = $this->siteDriver->getTeamByDeelgebiedName($area->getName());
                 if ($team) {
                     $counterhuntRondje = $this->siteDriver->getActiveCounterhuntRondje($area->getName());
-                    $team->setCounterhuntRondjeId($counterhuntRondje->getId());
+                    if ($counterhuntRondje) {
+                        $team->setCounterhuntRondjeId($counterhuntRondje->getId());
+                    }
                     $locations = $this->siteDriver->getLocations($team);
                     $team->setLocations($locations);
                     $result [] = $team->toArray();
