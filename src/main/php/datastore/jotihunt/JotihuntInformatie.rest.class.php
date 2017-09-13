@@ -4,8 +4,8 @@ class JotihuntInformatieRest {
     
     var $debug;
     var $conn;
-    var $jhBase = 'https://www.jotihunt.net/';
-    var $apiBase = 'https://www.jotihunt.net/api/1.0/';
+    var $jhBase = 'https://jotihunt.net/';
+    var $apiBase = 'https://jotihunt.net/api/1.0/';
 
     public function __construct() {
         $conn = Datastore::getDatastore();

@@ -24,6 +24,9 @@ function parseJotihuntIniFile($user_config) {
         if (array_key_exists('google-gcm-api-key', $google_config)) {
             putenv('GOOGLE_GCM_API_KEY=' . $google_config['google-gcm-api-key']);
         }
+        if (array_key_exists('google-gcm-debug-key', $google_config)) {
+            putenv('GOOGLE_GCM_DEBUG_KEY=' . $google_config['google-gcm-debug-key']);
+        }
     }
 
     //Mailgun
