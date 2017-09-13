@@ -69,7 +69,7 @@ foreach ( $allGcms as $gcm ) {
     echo '<tr id="' . $gcm->getId() . '">';
     echo '<td class="read_only">' . $gcm->getId() . '</td>';
     if (strlen($gcm->getGcmId()) > 40) {
-        echo '<td class="read_only"><code>' . substr($gcm->getGcmId(), 0, 40) . '... (' . strlen($gcm->getGcmId()) . ')</code></td>';
+        echo '<td class="read_only"><code title="'.$gcm->getGcmId().'">' . substr($gcm->getGcmId(), 0, 40) . '... (' . strlen($gcm->getGcmId()) . ')</code></td>';
     } else {
         echo '<td class="read_only"><code>' . $gcm->getGcmId() . '</code></td>';
     }

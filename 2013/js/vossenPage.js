@@ -130,7 +130,9 @@ function setMap(f,l){
 	map.setCenter(pos);
 	document.getElementById("submit_hint").disabled = false;
 	document.getElementById("submit_spot").disabled = false;
-	document.getElementById("submit_hunt").disabled = false;
+	if (document.getElementById("submit_hunt")) {
+		document.getElementById("submit_hunt").disabled = false;
+	}
 }
 
 function setRD(f,l){
