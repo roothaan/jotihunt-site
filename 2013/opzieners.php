@@ -79,16 +79,16 @@ $(document).ready(function() {
             foreach ( $result as $opziener ) { ?>
                 <tr>
                     <td>
-                        <?= $driver->getDeelgebiedById($opziener ["deelgebied_id"])->getName() ?>
+                        <?= $driver->getDeelgebiedById($opziener->getDeelgebiedId())->getName() ?>
                         <?php
-                        if ($opziener ["type"] == 2) echo " <i>(Stand-in)</i>"; ?>
+                        if ($opziener->getType() == 2) echo " <i>(Stand-in)</i>"; ?>
                     </td>
-                    <td><?=$opziener ["displayname"]?></td>
-                    <td><?= JotihuntUtils::getPhoneNumbersForUserId($opziener['user_id']) ?></td>
+                    <td><?= $opziener->getDisplayName() ?></td>
+                    <td><?= JotihuntUtils::getPhoneNumbersForUserId($opziener->getUserId()) ?></td>
                     <td>
                         <?php
                         if ($authMgr->isAdmin()) { ?>
-                            <a href="deleteopziener/?id=<?=$opziener ["id"]?>" onclick="return confirm('Weet je zeker dat je deze Opziener wilt verwijderen?');">[x]</a>
+                            <a href="deleteopziener/<?= $opziener->getId() ?>" onclick="return confirm('Weet je zeker dat je deze Opziener wilt verwijderen?');">[x]</a>
                             <?php
                         } ?>
                     </td>

@@ -9,7 +9,7 @@ $allHunts = $driver->getAllHunts();
 
 $huntCounter = array ();
 foreach ( $allHunts as $hunt ) {
-    $deelGebied = $hunt ['deelgebied'];
+    $deelGebied = $hunt->getDeelgebied();
     if (! array_key_exists($deelGebied, $huntCounter)) {
         $huntCounter [$deelGebied] = 0;
     }
