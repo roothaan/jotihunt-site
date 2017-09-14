@@ -437,7 +437,8 @@ class SiteDriverPostgresql {
         $sqlName = 'getHunterHighscore';
         
         $values = array (
-            $authMgr->getMyOrganisationId()
+            $authMgr->getMyOrganisationId(),
+            $authMgr->getMyEventId()
         );
         
         $result = pg_execute($this->conn, $sqlName, $values);
@@ -465,9 +466,13 @@ class SiteDriverPostgresql {
     }
     
     public function getScoreByGroep($groepnaam) {
+        global $authMgr;
         $sqlName = 'getScoreByGroep';
+        
         $values = array (
-                $groepnaam 
+                $groepnaam,
+                $authMgr->getMyEventId()
+                
         );
         
         $result = pg_execute($this->conn, $sqlName, $values);
@@ -525,23 +530,25 @@ class SiteDriverPostgresql {
     }
 
     public function addScore($score) {
+        global $authMgr;
         $sqlName = 'addScore';
         
         // TODO Sinds de JotihuntSync ook al een check op de score doet, is deze check zo te zien wat overbodig?
         $oudeScore = $this->getScoreByGroep($score->getGroep());
         if (empty($oudeScore) || $oudeScore->getLastupdate() != '' || $oudeScore->getLastupdate() != $score->getLastupdate()) {
             $values = array (
-                    $score->getPlaats(),
-                    $score->getGroep(),
-                    $score->getWoonplaats(),
-                    $score->getRegio(),
-                    $score->getHunts(),
-                    $score->getTegenhunts(),
-                    $score->getOpdrachten(),
-                    $score->getFotoopdrachten(),
-                    $score->getHints(),
-                    $score->getTotaal(),
-                    $score->getLastupdate() 
+                $authMgr->getMyEventId(),
+                $score->getPlaats(),
+                $score->getGroep(),
+                $score->getWoonplaats(),
+                $score->getRegio(),
+                $score->getHunts(),
+                $score->getTegenhunts(),
+                $score->getOpdrachten(),
+                $score->getFotoopdrachten(),
+                $score->getHints(),
+                $score->getTotaal(),
+                $score->getLastupdate() 
             );
             
             $result = pg_execute($this->conn, $sqlName, $values);
@@ -1770,7 +1777,8 @@ class SiteDriverPostgresql {
         
         $values = array (
                 $team->getId(),
-                $authMgr->getMyOrganisationId()
+                $authMgr->getMyOrganisationId(),
+                $authMgr->getMyEventId()
         );
         
         $result = pg_execute($this->conn, $sqlName, $values);
