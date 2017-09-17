@@ -313,7 +313,7 @@ function make_map($mapOptions) {
 
             <?php
             // This is a hack needed to make Google Maps (it needs the protocol, "//" doesn't work)
-        $protocol = 'https';
+        $protocol = 'https:';
         $baseUrl = $protocol . WEBSITE_URL . 'kml?riderId=';
         $baseUrl .= $mapOptions->hunter;
         $baseUrl .= '&sessionId=' . urlencode($authMgr->getSessionId());
