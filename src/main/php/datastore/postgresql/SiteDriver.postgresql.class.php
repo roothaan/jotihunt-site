@@ -725,8 +725,13 @@ class SiteDriverPostgresql {
     }
 
     public function getLastRiderLocations() {
+        global $authMgr;
         $sqlName = 'getLastRiderLocations';
-        $values = array ();
+        
+        $values = array (
+            $authMgr->getMyOrganisationId(),
+            $authMgr->getMyEventId()
+            );
         
         $result = pg_execute($this->conn, $sqlName, $values);
         
@@ -1191,7 +1196,9 @@ class SiteDriverPostgresql {
     public function getRiderByName($name) {
         $sqlName = 'getRiderByName';
         $values = array (
-                $name 
+                $name,
+                $authMgr->getMyOrganisationId(),
+                $authMgr->getMyEventId()
         );
         
         $result = pg_execute($this->conn, $sqlName, $values);

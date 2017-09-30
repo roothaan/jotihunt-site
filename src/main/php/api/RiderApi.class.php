@@ -62,13 +62,16 @@ class RiderApi {
             error_log('# of riders found: ' . count($result));
             $locations = $this->siteDriver->getLastRiderLocations();
             error_log('# of locations found: ' . count($locations));
+            foreach ( $locations as $hunterId => $location) {
+                error_log('hunterID:' . $hunterId . ', location: [' . $location->getLongitude() . ',' . $location->getLatitude() .']');
+            }
             $returnVal = array ();
             foreach ( $result as $rider ) {
                 $riderInfo = $rider->toArray();
-                error_log('Parsing Rider user_id: ' . $riderInfo['user_id']);
-                if (array_key_exists($rider->getUserId(), $locations)) {
-                    error_log(' - Found locations for this Rider user_id: ' . $riderInfo['user_id']);
-                    $location = $locations [$rider->getUserId()];
+                error_log('Parsing Rider user_id: ' . $riderInfo['user_id'] . ', id: ' . $riderInfo['id']);
+                if (array_key_exists($rider->getId(), $locations)) {
+                    error_log(' - Found locations for this Hunter ID: ' . $rider->getId());
+                    $location = $locations [$rider->getId()];
                     $timeLastLocation = strtotime($location->getTime());
                     $currentTime = time();
                     error_log('$currentTime     : ' . $currentTime);
@@ -84,7 +87,7 @@ class RiderApi {
                     $riderInfo ['location'] = $location->toArray();
                     error_log(' - Adding location [' . $location->getLongitude() . ',' . $location->getLatitude() .'] Rider user_id: ' . $riderInfo['user_id']);
                 } else {
-                    error_log(' - Found NO locations for this Rider user_id: ' . $riderInfo['user_id']);
+                    error_log(' - Found NO locations for this Hunter user_id: ' . $rider->getId());
                 }
                 $returnVal [] = $riderInfo;
             }
