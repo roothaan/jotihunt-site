@@ -258,7 +258,9 @@ class PostgresqlQueries {
         $this->prepareInternal($sqlName, $sqlQuery);
         
         $sqlName = 'getLastRiderLocations';
-        $sqlQuery = 'SELECT DISTINCT ON (hunter_id) id, hunter_id, longitude, latitude, accuracy, provider, time FROM huntertracker ORDER BY hunter_id, time DESC';
+        $sqlQuery = 'SELECT DISTINCT ON (hunter_id) id, hunter_id, longitude, latitude, accuracy, provider, time 
+                            FROM huntertracker 
+                            ORDER BY hunter_id, time DESC';
         $this->prepareInternal($sqlName, $sqlQuery);
         
         $sqlName = 'getRiderLocation';

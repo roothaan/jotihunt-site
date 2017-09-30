@@ -66,20 +66,23 @@ class RiderApi {
             foreach ( $result as $rider ) {
                 $riderInfo = $rider->toArray();
                 error_log('Parsing Rider user_id: ' . $riderInfo['user_id']);
-                if (array_key_exists($rider->getId(), $locations)) {
+                if (array_key_exists($rider->getUserId(), $locations)) {
                     error_log(' - Found locations for this Rider user_id: ' . $riderInfo['user_id']);
-                    $location = $locations [$rider->getId()];
+                    $location = $locations [$rider->getUserId()];
                     $timeLastLocation = strtotime($location->getTime());
                     $currentTime = time();
+                    error_log('$currentTime     : ' . $currentTime);
+                    error_log('$timeLastLocation: ' . $timeLastLocation);
+                    
                     $diff = $currentTime - $timeLastLocation;
                     // If the rider hasn't been seen for 3600 seconds (an hour), we skip it
                     if ($diff > 3600) {
-                        error_log(' - Found Stale location for this Rider user_id: ' . $riderInfo['user_id']);
+                        error_log(' - Found stale location [diff='.$diff.'] for this Rider user_id: ' . $riderInfo['user_id']);
                         continue;
                     }
                     $riderInfo ['displayname'] = $rider->getUser()->getDisplayName();
                     $riderInfo ['location'] = $location->toArray();
-                    error_log(' - Adding location [' . $location['x'] . ',' . $location['y'] .'] Rider user_id: ' . $riderInfo['user_id']);
+                    error_log(' - Adding location [' . $location->getLongitude() . ',' . $location->getLatitude() .'] Rider user_id: ' . $riderInfo['user_id']);
                 } else {
                     error_log(' - Found NO locations for this Rider user_id: ' . $riderInfo['user_id']);
                 }
