@@ -1194,7 +1194,9 @@ class SiteDriverPostgresql {
      * @return Rider|NULL
      */
     public function getRiderByName($name) {
+        global $authMgr;
         $sqlName = 'getRiderByName';
+        
         $values = array (
                 $name,
                 $authMgr->getMyOrganisationId(),
