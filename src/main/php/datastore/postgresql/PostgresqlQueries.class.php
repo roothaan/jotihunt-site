@@ -258,13 +258,22 @@ class PostgresqlQueries {
         $this->prepareInternal($sqlName, $sqlQuery);
         
         $sqlName = 'getLastRiderLocations';
-        $sqlQuery = 'SELECT DISTINCT ON (hunter_id) id, hunter_id, longitude, latitude, accuracy, provider, time 
+        $sqlQuery = 'SELECT DISTINCT ON (hunter_id) huntertracker.id, hunter_id, longitude, latitude, accuracy, provider, time 
                             FROM huntertracker 
+                            INNER JOIN hunter ON (huntertracker.hunter_id = hunter.id) 
+                            JOIN _user ON (hunter.user_id = _user.id)
+                            JOIN user_organisation ON (_user.id = user_organisation.user_id)
+                            JOIN events_has_organisation ON (user_organisation.organisation_id = events_has_organisation.organisation_id)
+                            WHERE user_organisation.organisation_id = $1
+                            AND events_has_organisation.events_id = $2
                             ORDER BY hunter_id, time DESC';
         $this->prepareInternal($sqlName, $sqlQuery);
         
         $sqlName = 'getRiderLocation';
-        $sqlQuery = 'SELECT id, hunter_id, longitude, latitude, accuracy, provider, time FROM huntertracker WHERE hunter_id = $1 ORDER BY time DESC';
+        $sqlQuery = 'SELECT id, hunter_id, longitude, latitude, accuracy, provider, time 
+                        FROM huntertracker 
+                        WHERE hunter_id = $1 
+                        ORDER BY time DESC';
         $this->prepareInternal($sqlName, $sqlQuery);
         
         $sqlName = 'getRiderLocationWithGcm';
@@ -389,7 +398,14 @@ class PostgresqlQueries {
         $this->prepareInternal($sqlName, $sqlQuery);
         
         $sqlName = 'getRiderByName';
-        $sqlQuery = 'SELECT hunter.id, user_id, deelgebied_id, van, tot, auto FROM hunter INNER JOIN _user ON (hunter.user_id = _user.id) WHERE _user.username = $1';
+        $sqlQuery = 'SELECT hunter.id, hunter.user_id, deelgebied_id, van, tot, auto 
+                        FROM hunter 
+                        INNER JOIN _user ON (hunter.user_id = _user.id) 
+                        JOIN user_organisation ON (_user.id = user_organisation.user_id)
+                        JOIN events_has_organisation ON (user_organisation.organisation_id = events_has_organisation.organisation_id)
+                        WHERE _user.username = $1
+                        AND user_organisation.organisation_id = $2
+                        AND events_has_organisation.events_id = $3';
         $this->prepareInternal($sqlName, $sqlQuery);
         
         $sqlName = 'getTotalAmountOfVossenLocations';
