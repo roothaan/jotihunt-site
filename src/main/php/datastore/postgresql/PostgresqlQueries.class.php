@@ -402,10 +402,8 @@ class PostgresqlQueries {
                         FROM hunter 
                         INNER JOIN _user ON (hunter.user_id = _user.id) 
                         JOIN user_organisation ON (_user.id = user_organisation.user_id)
-                        JOIN events_has_organisation ON (user_organisation.organisation_id = events_has_organisation.organisation_id)
                         WHERE _user.username = $1
-                        AND user_organisation.organisation_id = $2
-                        AND events_has_organisation.events_id = $3';
+                        AND user_organisation.organisation_id = $2';
         $this->prepareInternal($sqlName, $sqlQuery);
         
         $sqlName = 'getTotalAmountOfVossenLocations';
