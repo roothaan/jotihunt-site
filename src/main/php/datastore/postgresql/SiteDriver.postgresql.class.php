@@ -1199,21 +1199,14 @@ class SiteDriverPostgresql {
         
         $values = array (
                 $name,
-                $authMgr->getMyOrganisationId(),
-                $authMgr->getMyEventId()
+                $authMgr->getMyOrganisationId()
         );
         
         $result = pg_execute($this->conn, $sqlName, $values);
         
         error_log("RESULT getRiderByName");
-        //var_dump($result);
         while ( $row = pg_fetch_assoc($result) ) {
-            //var_dump("ROW getRiderByName");
-            //var_dump($row);
-            $rider = $this->_getRider($row);
-            //var_dump("RIDER getRiderByName");
-            //var_dump($rider);
-            return $rider;
+            return $this->_getRider($row);
         }
         error_log("ERROR getRiderByName return null");
         return null;

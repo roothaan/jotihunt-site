@@ -33,13 +33,23 @@ class RiderApi {
         
         error_log("riderTeamName=".$riderTeamName);
         if ('me' === $riderTeamName) {
-            error_log("getAuthCode=".$this->request->getAuthCode());
-            $user = $this->siteDriver->getUser($this->request->getAuthCode());
-            error_log("user:");
-            //var_dump($user->toArray());
-            $this->riderTeam = $this->siteDriver->getRiderByName($user->getUsername());
-            error_log("riderTeam=");
-            //var_dump($this->riderTeam);
+            $authCode = $this->request->getAuthCode();
+            error_log("getAuthCode:" . $authCode);
+            if (null == $authCode && defined('DEV_MODE') && DEV_MODE == true) {
+                // This is allowed if you use debug mode
+                // So you can use "/api/rider/me" to debug
+                global $authMgr;
+                $authCode = $authMgr->getSessionId();
+            error_log("getAuthCode reset via SessionId:" . $authCode);
+            }
+            $user = $this->siteDriver->getUser($authCode);
+            if ($user) {
+                error_log("user:" . print_r($user->toArray(), true));
+                $this->riderTeam = $this->siteDriver->getRiderByName($user->getUsername());
+                error_log("riderTeam=" . print_r($this->riderTeam, true));
+            } else {
+                error_log('Cannot find the "me" rider!');
+            }
         } else if (null != $riderTeamName) {
             $this->riderTeam = $this->siteDriver->getRiderByName($riderTeamName);
         }
