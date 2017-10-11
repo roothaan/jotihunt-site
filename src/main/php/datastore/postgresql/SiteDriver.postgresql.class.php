@@ -844,7 +844,7 @@ class SiteDriverPostgresql {
         return pg_affected_rows($result);
     }
 
-    public function getBericht($bericht_id) {
+    public function getBericht($bericht_id, $replaceWebsiteUrl=true) {
         global $authMgr;
         $sqlName = 'getBericht';
         
@@ -866,6 +866,9 @@ class SiteDriverPostgresql {
                 $bericht->setEindtijd($row ['eindtijd']);
                 $bericht->setMaxpunten($row ['maxpunten']);
                 $bericht->setInhoud($row ['inhoud']);
+                if ($replaceWebsiteUrl) {
+                    $bericht->setInhoud(str_replace('__WEBSITE_URL__', WEBSITE_URL, $row ['inhoud']));
+                }
                 $bericht->setLastupdate($row ['lastupdate']);
                 $bericht->setType($row ['type']);
                 
@@ -896,7 +899,7 @@ class SiteDriverPostgresql {
                 $bericht->setDatum($row ['datum']);
                 $bericht->setEindtijd($row ['eindtijd']);
                 $bericht->setMaxpunten($row ['maxpunten']);
-                $bericht->setInhoud($row ['inhoud']);
+                $bericht->setInhoud(str_replace('__WEBSITE_URL__', WEBSITE_URL, $row ['inhoud']));
                 $bericht->setLastupdate($row ['lastupdate']);
                 $bericht->setType($row ['type']);
                 
@@ -927,7 +930,7 @@ class SiteDriverPostgresql {
                 $bericht->setDatum($row ['datum']);
                 $bericht->setEindtijd($row ['eindtijd']);
                 $bericht->setMaxpunten($row ['maxpunten']);
-                $bericht->setInhoud($row ['inhoud']);
+                $bericht->setInhoud(str_replace('__WEBSITE_URL__', WEBSITE_URL, $row ['inhoud']));
                 $bericht->setLastupdate($row ['lastupdate']);
                 $bericht->setType($row ['type']);
                 
@@ -961,15 +964,19 @@ class SiteDriverPostgresql {
     public function addBericht($bericht) {
         $sqlName = 'addBericht';
         
-        $db_bericht = $this->getBericht($bericht->getBericht_id());
+        $db_bericht = $this->getBericht($bericht->getBericht_id(), false);
         
         $zelfde = true;
-        if ($db_bericht !== false && ($bericht->getTitel() != $db_bericht->getTitel() || $bericht->getInhoud() != $db_bericht->getInhoud() || $bericht->getMaxpunten() != $db_bericht->getMaxpunten())) {
+        if ($db_bericht !== false && 
+            ($bericht->getTitel()     != $db_bericht->getTitel()  || 
+             $bericht->getInhoud()    != $db_bericht->getInhoud() || 
+             $bericht->getMaxpunten() != $db_bericht->getMaxpunten())
+        ) {
             $zelfde = false;
         }
-        
-        if ($db_bericht === false || ! $zelfde) {
-        } else {
+
+        if (!($db_bericht === false || ! $zelfde)) {
+            // This message already exists
             return true;
         }
         
@@ -1014,7 +1021,7 @@ class SiteDriverPostgresql {
                     $bericht->setDatum($row ['datum']);
                     $bericht->setEindtijd($row ['eindtijd']);
                     $bericht->setMaxpunten($row ['maxpunten']);
-                    $bericht->setInhoud($row ['inhoud']);
+                    $bericht->setInhoud(str_replace('__WEBSITE_URL__', WEBSITE_URL, $row ['inhoud']));
                     $bericht->setLastupdate($row ['lastupdate']);
                     $bericht->setType($row ['type']);
                     
@@ -1048,7 +1055,7 @@ class SiteDriverPostgresql {
                     $bericht->setDatum($row ['datum']);
                     $bericht->setEindtijd($row ['eindtijd']);
                     $bericht->setMaxpunten($row ['maxpunten']);
-                    $bericht->setInhoud($row ['inhoud']);
+                    $bericht->setInhoud(str_replace('__WEBSITE_URL__', WEBSITE_URL, $row ['inhoud']));
                     $bericht->setLastupdate($row ['lastupdate']);
                     $bericht->setType($row ['type']);
                     
@@ -1083,7 +1090,7 @@ class SiteDriverPostgresql {
                     $bericht->setDatum($row ['datum']);
                     $bericht->setEindtijd($row ['eindtijd']);
                     $bericht->setMaxpunten($row ['maxpunten']);
-                    $bericht->setInhoud($row ['inhoud']);
+                    $bericht->setInhoud(str_replace('__WEBSITE_URL__', WEBSITE_URL, $row ['inhoud']));
                     $bericht->setLastupdate($row ['lastupdate']);
                     $bericht->setType($row ['type']);
                     
