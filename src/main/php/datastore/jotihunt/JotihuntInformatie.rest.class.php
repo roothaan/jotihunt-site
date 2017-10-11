@@ -249,19 +249,16 @@ class JotihuntInformatieRest {
                 foreach ( $scorelijst->data as $scoreitem ) {
                     $score = new Score();
                     
-                    //werkt niet atm
-                    // $score->setPlaats($scoreitem->plaats);
-                    // $score->setGroep($scoreitem->groep);
-                    // $score->setWoonplaats($scoreitem->woonplaats);
-                    // $score->setRegio($scoreitem->regio);
-                    // $score->setHunts($scoreitem->hunts);
-                    // $score->setTegenhunts($scoreitem->tegenhunts);
-                    // $score->setOpdrachten($scoreitem->opdrachten);
-                    // $score->setFotoopdrachten($scoreitem->fotoopdrachten);
-                    // $score->setHints($scoreitem->hints);
-                    // $score->setTotaal($scoreitem->totaal);
-                    // $score->setLastupdate($scorelijst->last_update);
-                    
+                    // Check for the bare minimum
+                    if (!isset($scoreitem->plaats) ||
+                        !isset($scoreitem->groep) ||
+                        !isset($scoreitem->woonplaats) ||
+                        !isset($scoreitem->regio)
+                    ) {
+                        // If there is none of the items above, skip it.
+                        continue;
+                    }
+                
                     $score->setPlaats($scoreitem->plaats);
                     $score->setGroep($scoreitem->groep);
                     $score->setWoonplaats($scoreitem->woonplaats);
