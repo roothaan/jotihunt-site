@@ -22,7 +22,8 @@ function localizeImagesInText($text) {
     // Check of er images in staan
     if(strpos($text,"<img")) {
         $dom = new DOMDocument();
-        $text = str_replace('id="m_506514002950288963gmail-m_3742687155103668368AppleMailSignature"', '', $text);
+        // Example in case duplicate IDs make it into the same document (bug from a previous Jotihunt)
+        //$text = str_replace('id="m_506514002950288963gmail-m_3742687155103668368AppleMailSignature"', '', $text);
         $dom->loadHTML($text);
         $images = $dom->getElementsByTagName('img');
         foreach ($images as $image) {
@@ -46,7 +47,7 @@ function localizeImagesInText($text) {
                 $image->setId($driver->addImage($image));
             }
 
-            $text = str_replace($imageUrl, WEBSITE_URL."images/".$image->getId(), $text);
+            $text = str_replace($imageUrl, "__WEBSITE_URL__images/".$image->getId(), $text);
         }
     }
     return $text;
@@ -111,6 +112,7 @@ $berichtcollection = $driver->getBerichtCollection();
 
 $vossenstatuscollection = $jotihuntinformatie->getVossenStatusen();
 $allGcmIds = $driver->getAllActiveGcms();
+// $vossenstatuscollection == Warning: Invalid argument supplied for foreach() in /app/2013/cronjob/SyncJotihunt.php on line 114
 foreach ( $vossenstatuscollection as $vossenstatus ) {
     $oudeteam = $driver->getVosXYByDeelgebied($vossenstatus->getDeelgebied());
     if (!$oudeteam) {
