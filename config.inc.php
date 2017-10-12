@@ -32,6 +32,10 @@ if (getenv('PROXY_BASE_URL')) {
 if (getenv('DEV_MODE')) {
     define('DEV_MODE', boolval(getenv('DEV_MODE')));
 }
+if (getenv('WELCOME_MESSAGE')) {
+    define('WELCOME_MESSAGE', boolval(getenv('WELCOME_MESSAGE')));
+}
+
 $urlBase = $_SERVER ['SERVER_NAME'] . $port;
 
 /**
