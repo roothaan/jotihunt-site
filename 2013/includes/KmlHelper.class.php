@@ -203,7 +203,7 @@ class KmlHelper {
             echo 'POI Name: <strong>' . $name . '</strong><br />';
             $poi = array();
             $poi['name'] = $name;
-            $poi['data'] = $data;
+            $poi['data'] = isset($data) ? $data : '';
             $poi['coordinates'] = $coordinates;
             $pois[] = $poi;
         }
