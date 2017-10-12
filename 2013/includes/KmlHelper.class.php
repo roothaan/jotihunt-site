@@ -149,7 +149,7 @@ class KmlHelper {
             $pois = $this->parsePoiKmlPlaceMarks($folder);
             $this->importPois($pois);
         } else {
-            echo 'Skipping layer <strong>' . $folderLayer . '</strong>';
+            echo 'Skipping layer <strong>' . $folder['name'] . '</strong>';
         }
     }
     
