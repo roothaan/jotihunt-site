@@ -97,6 +97,8 @@ Als deze aanstaat is het mogelijk om:
 - Testen uit te voeren (/test)
 - De Google maps kaart toont een dummy hunter
 
+`WELCOME_MESSAGE`  
+Dit is het bericht dat op de homepage wordt getoond. Dit mag HTML bevatten. Hier "moet" ook de header (h1) in gezet worden.
 
 # Overig
 ## Update tot PHP7

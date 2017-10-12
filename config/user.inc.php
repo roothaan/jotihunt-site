@@ -72,6 +72,9 @@ function parseJotihuntIniFile($user_config) {
         if (array_key_exists('dev-mode', $jotihunt_config)) {
             putenv('DEV_MODE=' . $jotihunt_config['dev-mode']);
         }
+        if (array_key_exists('welcome-message', $jotihunt_config)) {
+            putenv('WELCOME_MESSAGE=' . $jotihunt_config['welcome-message']);
+        }
     }
     // Themes
     if (array_key_exists('theme', $user_config)) {
