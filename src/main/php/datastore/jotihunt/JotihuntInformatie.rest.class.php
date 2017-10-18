@@ -246,6 +246,16 @@ class JotihuntInformatieRest {
         } else {
             if (! empty($scorelijst) && isset($scorelijst->data) && count($scorelijst->data) > 0) {
                 $collection = array ();
+                
+                // Sometimes (during development of 2017, for example)
+                // the last_update stamp was not part of the API response.
+                // This is dirty hack to have a fallback timestamp
+                // '2017-10-21 08:00:00' == 1508572800
+                $timestamp = 1508572800;
+
+                if (!empty($scorelijst->last_update)) {
+                    $timestamp = strtotime($scorelijst->last_update);
+                }
                 foreach ( $scorelijst->data as $scoreitem ) {
                     $score = new Score();
                     
@@ -269,10 +279,7 @@ class JotihuntInformatieRest {
                     $score->setFotoopdrachten((!empty($scoreitem->fotoopdrachten))?$scoreitem->fotoopdrachten:0);
                     $score->setHints((!empty($scoreitem->hints))?$scoreitem->hints:0);
                     $score->setTotaal((!empty($scoreitem->totaal))?$scoreitem->totaal:0);
-                    
-                    // Since 2017, this is no longer part of the API response.
-                    // '2017-10-21 08:00:00' == 1508572800
-                    $score->setLastupdate((!empty($scoreitem->last_update))?$scorelijst->last_update: 1508572800);
+                    $score->setLastupdate($timestamp);
                     
                     $collection [] = $score;
                 }
