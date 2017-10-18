@@ -270,7 +270,9 @@ class JotihuntInformatieRest {
                     $score->setHints((!empty($scoreitem->hints))?$scoreitem->hints:0);
                     $score->setTotaal((!empty($scoreitem->totaal))?$scoreitem->totaal:0);
                     
-                    $score->setLastupdate($scorelijst->last_update);
+                    // Since 2017, this is no longer part of the API response.
+                    // '2017-10-21 08:00:00' == 1508572800
+                    $score->setLastupdate((!empty($scoreitem->last_update))?$scorelijst->last_update: 1508572800);
                     
                     $collection [] = $score;
                 }

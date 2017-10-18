@@ -21,6 +21,7 @@ if ($driver->isReady()) {
     <li><a href="<?=WEBSITE_URL?>admin-createusers">Auto create users</a></li>
     <li><a href="<?=WEBSITE_URL?>admin-gcm">Android GCM IDs</a></li>
     <li><a href="<?=WEBSITE_URL?>admin-poi">Pois</a></li>
+    <li><a href="<?=WEBSITE_URL?>admin-poi-types">Poi Types <strong>(Nog in ontwikkeling!)</strong></a></li>
 </ul>
     <?php if (!$driver->isReady() || $authMgr->isSuperAdmin()) { ?>
     <h2>Super Admin</h2>
