@@ -70,6 +70,7 @@ class SiteDriverPostgresql_PoiType {
             $poitypes = new PoiType(
                             $row ['id'],
                             $row ['event_id'],
+                            $row ['organisation_id'],
                             $row ['name'],
                             $row ['onmap'],
                             $row ['onapp'],
@@ -144,6 +145,35 @@ class SiteDriverPostgresql_PoiType {
             $poitype = new PoiType(
                         $row ['id'],
                         $row ['event_id'],
+                        $row ['organisation_id'],
+                        $row ['name'],
+                        $row ['onmap'],
+                        $row ['onapp'],
+                        $row ['image']);
+            return $poitype;
+        }
+        return null;
+    }
+    
+    public function getPoiTypeByName($poiTypeName) {
+        global $authMgr;
+        $sqlName = 'getPoiTypeByName';
+        $values = array (
+            $authMgr->getMyEventId(),
+            $poiTypeName
+        );
+        
+        $result = pg_execute($this->conn, $sqlName, $values);
+        
+        if (! $result) {
+            throw new DatastoreException('Could not get Poitype by Name:' . $poiTypeName);
+        }
+        
+        while ( $row = pg_fetch_assoc($result) ) {
+            $poitype = new PoiType(
+                        $row ['id'],
+                        $row ['event_id'],
+                        $row ['organisation_id'],
                         $row ['name'],
                         $row ['onmap'],
                         $row ['onapp'],

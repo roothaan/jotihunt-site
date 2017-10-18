@@ -2661,6 +2661,9 @@ class SiteDriverPostgresql {
     public function getPoiTypeById($poiTypeId) {
         return $this->poiTypes->getPoiTypeById($poiTypeId);
     }
+    public function getPoiTypeByName($poiTypeName) {
+        return $this->poiTypes->getPoiTypeByName($poiTypeName);
+    }
     
     
     
@@ -2703,6 +2706,30 @@ class SiteDriverPostgresql {
             $_result [] = $poi;
         }
         return $_result;
+    }
+    
+    public function getAllMapPois() {
+        global $authMgr;
+        $pois = $this->getAllPois();
+        $organisation = $this->getOrganisationById($authMgr->getMyOrganisationId());
+        
+        $poiResult = array();
+        foreach ($pois as $poi) {
+            if($poi->getName() == $organisation->getName()) {
+                $poi->setType('homebase');
+                
+            }
+            $type = $poi->getType();
+            $poiType = $this->getPoiTypeByName($type);
+            if (null != $poiType) {
+                if ($poiType->getOnMap() === 'f') {
+                    continue;
+                }
+                $poi->setPoiType($poiType);
+            }
+            $poiResult[] = $poi;
+        }
+        return $poiResult;
     }
     
     public function getAllPois() {

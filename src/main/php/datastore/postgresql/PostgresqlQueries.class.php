@@ -797,9 +797,10 @@ class PostgresqlQueries {
         $this->prepareInternal($sqlName, $sqlQuery);
         
         $sqlName = 'getAllPoiTypes';
-        $sqlQuery = 'SELECT id, event_id, name, onmap, onapp, image
+        $sqlQuery = 'SELECT id, event_id, organisation_id, name, onmap, onapp, image
                     FROM poitype
-                    WHERE event_id = $1 and organisation_id = $2';
+                    WHERE event_id = $1
+                    AND organisation_id = $2';
         $this->prepareInternal($sqlName, $sqlQuery);
 
         $sqlName = 'getAllPoiTypesSu';
@@ -808,12 +809,19 @@ class PostgresqlQueries {
         $this->prepareInternal($sqlName, $sqlQuery);
 
         $sqlName = 'getPoiTypeById';
-        $sqlQuery = 'SELECT id, event_id, name, onmap, onapp, image
+        $sqlQuery = 'SELECT id, event_id, organisation_id, name, onmap, onapp, image
                     FROM poitype
                     WHERE event_id = $1
                     AND id = $2';
         $this->prepareInternal($sqlName, $sqlQuery);
-        // End POITypess
+
+        $sqlName = 'getPoiTypeByName';
+        $sqlQuery = 'SELECT id, event_id, organisation_id, name, onmap, onapp, image
+                    FROM poitype
+                    WHERE event_id = $1
+                    AND name = $2';
+        $this->prepareInternal($sqlName, $sqlQuery);
+        // End POITypes
         
         $sqlName = 'imageGetBySha';
         $sqlQuery = 'SELECT * FROM image WHERE sha1 = $1';

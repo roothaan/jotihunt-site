@@ -8,10 +8,17 @@ var aMarkers = new Array();
 
 <?php
 
-$allPois = $driver->getAllPois();
+$allPois = $driver->getAllMapPois();
 
 foreach ( $allPois as $poi ) {
-    if ($poi) { ?>
+    if ($poi) {
+        $poiTypeName = $poi->getType();
+        $poiType = $poi->getPoiType();
+        $url = '';
+        if ($poiType) {
+            $url = $poiType->getImage();
+        }
+        ?>
         var groepnaam = <?= json_encode($poi->getName()) ?>;
         var tekst = <?= json_encode($poi->getData()) ?>;
         aMarkers.push(
@@ -19,7 +26,8 @@ foreach ( $allPois as $poi ) {
                 groepnaam + '<br />' + tekst,
                 <?= $poi->getLongitude() ?>,
                 <?= $poi->getLatitude() ?>,
-                '<?= $poi->getType()?>'
+                '<?= $poiTypeName ?>',
+                '<?= $url ?>'
             )
         );
     <?php
@@ -28,10 +36,11 @@ foreach ( $allPois as $poi ) {
 
 ?>
 
-function createGroep(info, long, lat, type) {
+function createGroep(info, long, lat, type, url) {
     var aGroep = new Array();
     aGroep.push(new google.maps.LatLng(lat, long));
     aGroep.push(info);
     aGroep.push(type);
+    aGroep.push(url);
     return aGroep;
 }
