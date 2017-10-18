@@ -4,6 +4,8 @@ require_once CLASS_DIR . 'datastore/DatastoreException.class.php';
 
 require_once CLASS_DIR . 'datastore/postgresql/PostgresqlDatastore.class.php';
 
+require_once CLASS_DIR . 'datastore/postgresql/helpers/PoiTypes.driver.class.php';
+
 require_once CLASS_DIR . 'jotihunt/VossenTeam.class.php';
 require_once CLASS_DIR . 'jotihunt/Location.class.php';
 require_once CLASS_DIR . 'jotihunt/Rider.class.php';
@@ -35,9 +37,14 @@ class SiteDriverPostgresql {
     // DataStore
     private $conn;
 
+    // Driver helpers
+    private $poiTypes;
     public function __construct() {
         $conn = Datastore::getDatastore();
         $this->conn = $conn->getConnection();
+        
+        $this->poiTypes = new SiteDriverPostgresql_PoiType();
+        $this->poiTypes->setConn($this->conn);
     }
 
     public function isReady() {
@@ -500,8 +507,11 @@ class SiteDriverPostgresql {
     }
 
     public function getScoreCollection() {
+        global $authMgr;
         $sqlName = 'getScoreCollection';
-        $values = array ();
+        $values = array (
+                $authMgr->getMyEventId()
+            );
         $result = pg_execute($this->conn, $sqlName, $values);
         
         if (! $result) {
@@ -533,29 +543,25 @@ class SiteDriverPostgresql {
         global $authMgr;
         $sqlName = 'addScore';
         
-        // TODO Sinds de JotihuntSync ook al een check op de score doet, is deze check zo te zien wat overbodig?
-        $oudeScore = $this->getScoreByGroep($score->getGroep());
-        if (empty($oudeScore) || $oudeScore->getLastupdate() != '' || $oudeScore->getLastupdate() != $score->getLastupdate()) {
-            $values = array (
-                $authMgr->getMyEventId(),
-                $score->getPlaats(),
-                $score->getGroep(),
-                $score->getWoonplaats(),
-                $score->getRegio(),
-                $score->getHunts(),
-                $score->getTegenhunts(),
-                $score->getOpdrachten(),
-                $score->getFotoopdrachten(),
-                $score->getHints(),
-                $score->getTotaal(),
-                $score->getLastupdate() 
-            );
-            
-            $result = pg_execute($this->conn, $sqlName, $values);
-            
-            if (! $result) {
-                throw new DatastoreException('Could not add score');
-            }
+        $values = array (
+            $authMgr->getMyEventId(),
+            $score->getPlaats(),
+            $score->getGroep(),
+            $score->getWoonplaats(),
+            $score->getRegio(),
+            $score->getHunts(),
+            $score->getTegenhunts(),
+            $score->getOpdrachten(),
+            $score->getFotoopdrachten(),
+            $score->getHints(),
+            $score->getTotaal(),
+            $score->getLastupdate() 
+        );
+        
+        $result = pg_execute($this->conn, $sqlName, $values);
+        
+        if (! $result) {
+            throw new DatastoreException('Could not add score');
         }
     }
 
@@ -2636,6 +2642,28 @@ class SiteDriverPostgresql {
             throw new DatastoreException('Could not update $speelhelft (speelhelft === null)');
         }
     }
+
+    public function removePoiType($poiTypeId) {
+        return $this->poiTypes->removePoiType($poiTypeId);
+    }
+    public function getAllPoiTypesSu() {
+        return $this->poiTypes->getAllPoiTypesSu();
+    }
+    public function getAllPoiTypes() {
+        return $this->poiTypes->getAllPoiTypes();
+    }
+    public function addPoiType($poitype) {
+        return $this->poiTypes->addPoiType($poitype);
+    }
+    public function updatePoiType($poi) {
+        return $this->poiTypes->updatePoiType($poi);
+    }
+    public function getPoiTypeById($poiTypeId) {
+        return $this->poiTypes->getPoiTypeById($poiTypeId);
+    }
+    
+    
+    
 
     public function removePoi($poiId) {
         $sqlName = 'removePoi';

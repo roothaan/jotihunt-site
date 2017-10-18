@@ -188,8 +188,8 @@ function make_map($mapOptions) {
             <?php } ?>
     		
     		<?php if ($mapOptions->showGroups) { ?>
-    		    //Groepen op de kaart
-    		    addGroepen(map);
+    		    //POIs op de kaart
+    		    addPois(map);
     		<?php } ?>
             
     		//Vossen
@@ -525,27 +525,49 @@ function make_map($mapOptions) {
     	}
     	<?php } // Ends "showVos" ?>
     	
-    	function addGroepen(map) {
+    	function addPois(map) {
             <?php require BASE_DIR . 'includes/groepen.php'; ?>
     		for (var i = 0; i < aMarkers.length; i++) {
     		    var position = aMarkers[i][0];
     		    var groepnaam = aMarkers[i][1];
     		    var poiType = aMarkers[i][2];
-    		    if (poiType !== 'group') {
-    		        continue;
-    		    }
-    		    var isHomeBase = false;
-    		    var img = "<?= BASE_URL; ?>images/maps-scoutinggroep.png";
 
+                // Default image
+    		    var img = null;
+    		    var isHomeBase = false;
+    		    var scaledSize = null;
+                //console.log ("Type '" + poiType + "' for " + groepnaam);
     			if(groepnaam.search(<?= json_encode($organisation->getName()) ?>) != -1) {
-    			    var img = "<?= BASE_URL; ?>images/maps-scoutinggroep-home.png";
     			    isHomeBase = true;
+    			    poiType = 'homebase';
     			}
+
+    		    switch (poiType) {
+    		        case 'group':
+    		            img = "<?= BASE_URL; ?>images/maps-scoutinggroep.png";
+            			break;
+            		case 'homebase':
+            		    img = "<?= BASE_URL; ?>images/maps-scoutinggroep-home.png";
+            		    break;
+            		case 'pontjes':
+            		    img = "https://maps.google.com/mapfiles/ms/icons/ferry.png";
+            		    scaledSize = new google.maps.Size(20, 20)
+            		    break;
+    		    }
+    		    
+    		    var image = {
+                  url: img,
+                  size: null,
+                  origin: null,
+                  anchor: new google.maps.Point(10, 10),
+                  scaledSize: scaledSize
+                };
+
 			    a[i] = new google.maps.Marker({
         			position: position,
         			map: map,
         			html: groepnaam,
-        			icon: new google.maps.MarkerImage(img, null, null, new google.maps.Point(10, 10)),
+        			icon: image,
         			zIndex: 100
         		});
         		if (isHomeBase) {

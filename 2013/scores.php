@@ -3,7 +3,8 @@ if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 JotihuntUtils::requireLogin();
 
 $scorecollection = $driver->getScoreCollection();
-$firstGroep = array_shift(array_values($scorecollection));
+$scorecollectionAV = array_values($scorecollection);
+$firstGroep = array_shift($scorecollectionAV);
 
 $keyArray = array ();
 if (null == $firstGroep) {

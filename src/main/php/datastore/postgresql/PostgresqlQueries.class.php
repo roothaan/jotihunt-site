@@ -179,7 +179,10 @@ class PostgresqlQueries {
         $this->prepareInternal($sqlName, $sqlQuery);
         
         $sqlName = 'getScoreCollection';
-        $sqlQuery = 'SELECT id, plaats, groep, woonplaats, regio, hunts, tegenhunts, opdrachten, fotoopdrachten, hints, totaal, lastupdate FROM score ORDER BY groep ASC, lastupdate ASC';
+        $sqlQuery = 'SELECT id, plaats, groep, woonplaats, regio, hunts, tegenhunts, opdrachten, fotoopdrachten, hints, totaal, lastupdate 
+                        FROM score 
+                        WHERE event_id = $1
+                        ORDER BY groep ASC, lastupdate ASC';
         $this->prepareInternal($sqlName, $sqlQuery);
         
         $sqlName = 'addScore';
@@ -731,6 +734,7 @@ class PostgresqlQueries {
         $sqlQuery = 'UPDATE speelhelft SET event_id=$2, starttime=$3, endtime=$4 WHERE id=$1';
         $this->prepareInternal($sqlName, $sqlQuery);
 
+        // POIs
         $sqlName = 'addPoi';
         $sqlQuery = 'INSERT INTO poi(event_id, name, data, latitude, longitude, type)
                         VALUES($1, $2, $3, $4, $5, $6)
@@ -752,7 +756,6 @@ class PostgresqlQueries {
         $sqlQuery = 'DELETE FROM poi WHERE id = $1';
         $this->prepareInternal($sqlName, $sqlQuery);
         
-
         $sqlName = 'getAllPois';
         $sqlQuery = 'SELECT id, event_id, name, data, latitude, longitude, type
                     FROM poi
@@ -770,7 +773,48 @@ class PostgresqlQueries {
                     WHERE event_id = $1
                     AND id = $2';
         $this->prepareInternal($sqlName, $sqlQuery);
+        // End POIs
 
+        // POITypess
+        $sqlName = 'addPoiType';
+        $sqlQuery = 'INSERT INTO poitype(event_id, organisation_id, name, onmap, onapp, image)
+                        VALUES($1, $2, $3, $4, $5, $6)
+                        RETURNING id';
+        $this->prepareInternal($sqlName, $sqlQuery);
+
+        $sqlName = 'updatePoiType';
+        $sqlQuery = 'UPDATE poitype SET 
+                    event_id=$2,
+                    name=$3,
+                    onmap=$4,
+                    onapp=$5,
+                    image=$6
+                    WHERE id=$1';
+        $this->prepareInternal($sqlName, $sqlQuery);
+
+        $sqlName = 'removePoiType';
+        $sqlQuery = 'DELETE FROM poitype WHERE id = $1';
+        $this->prepareInternal($sqlName, $sqlQuery);
+        
+        $sqlName = 'getAllPoiTypes';
+        $sqlQuery = 'SELECT id, event_id, name, onmap, onapp, image
+                    FROM poitype
+                    WHERE event_id = $1 and organisation_id = $2';
+        $this->prepareInternal($sqlName, $sqlQuery);
+
+        $sqlName = 'getAllPoiTypesSu';
+        $sqlQuery = 'SELECT id, event_id, organisation_id, name, onmap, onapp, image
+                    FROM poitype';
+        $this->prepareInternal($sqlName, $sqlQuery);
+
+        $sqlName = 'getPoiTypeById';
+        $sqlQuery = 'SELECT id, event_id, name, onmap, onapp, image
+                    FROM poitype
+                    WHERE event_id = $1
+                    AND id = $2';
+        $this->prepareInternal($sqlName, $sqlQuery);
+        // End POITypess
+        
         $sqlName = 'imageGetBySha';
         $sqlQuery = 'SELECT * FROM image WHERE sha1 = $1';
         $this->prepareInternal($sqlName, $sqlQuery);

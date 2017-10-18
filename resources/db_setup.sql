@@ -295,6 +295,20 @@ CREATE TABLE "poi" (
 	PRIMARY KEY("id")
 );
 
+
+DROP TABLE IF EXISTS "poitypes" CASCADE;
+
+CREATE TABLE "poitype" (
+	"id" SERIAL NOT NULL,
+	"event_id" int4,
+	"organisation_id" int4,
+	"name" varchar(254),
+	"onmap" bool DEFAULT True,
+	"onapp" bool DEFAULT True,
+	"image" text,
+	PRIMARY KEY("id")
+);
+
 DROP TABLE IF EXISTS "image" CASCADE;
 
 CREATE TABLE "image" (
