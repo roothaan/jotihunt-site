@@ -8,6 +8,8 @@ class Poi {
     private $latitude;
     private $longitude;
     private $type;
+    // The object, not the name
+    private $poiType;
 
     public function __construct($id, $event_id, $name, $data, $latitude, $longitude, $type) {
         $this->id = $id;
@@ -73,6 +75,14 @@ class Poi {
 
     public function setType($type){
         $this->type = $type;
+    }
+
+    public function getPoiType(){
+        return $this->poiType;
+    }
+
+    public function setPoiType($poiType){
+        $this->poiType = $poiType;
     }
     
     public function toArray() {

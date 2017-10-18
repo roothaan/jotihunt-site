@@ -531,27 +531,27 @@ function make_map($mapOptions) {
     		    var position = aMarkers[i][0];
     		    var groepnaam = aMarkers[i][1];
     		    var poiType = aMarkers[i][2];
+    		    var poiUrl = aMarkers[i][3];
 
                 // Default image
-    		    var img = null;
-    		    var isHomeBase = false;
-    		    var scaledSize = null;
-                //console.log ("Type '" + poiType + "' for " + groepnaam);
-    			if(groepnaam.search(<?= json_encode($organisation->getName()) ?>) != -1) {
-    			    isHomeBase = true;
-    			    poiType = 'homebase';
-    			}
+    		    var img = poiUrl ? poiUrl : null;
+    		    var scaledSize = new google.maps.Size(20, 20);
 
     		    switch (poiType) {
     		        case 'group':
-    		            img = "<?= BASE_URL; ?>images/maps-scoutinggroep.png";
+    		            if (!img) {
+    		                img = "<?= BASE_URL; ?>images/maps-scoutinggroep.png";
+    		            }
             			break;
             		case 'homebase':
-            		    img = "<?= BASE_URL; ?>images/maps-scoutinggroep-home.png";
+    		            if (!img) {
+                		    img = "<?= BASE_URL; ?>images/maps-scoutinggroep-home.png";
+    		            }
             		    break;
             		case 'pontjes':
-            		    img = "https://maps.google.com/mapfiles/ms/icons/ferry.png";
-            		    scaledSize = new google.maps.Size(20, 20)
+    		            if (!img) {
+                		    img = "https://maps.google.com/mapfiles/ms/icons/ferry.png";
+    		            }
             		    break;
     		    }
     		    
@@ -570,7 +570,7 @@ function make_map($mapOptions) {
         			icon: image,
         			zIndex: 100
         		});
-        		if (isHomeBase) {
+        		if(poiType == 'homebase') {
         		    addHomebaseCirkel(map, position);
         		}
     		}
