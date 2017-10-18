@@ -548,7 +548,7 @@ function make_map($mapOptions) {
                 		    img = "<?= BASE_URL; ?>images/maps-scoutinggroep-home.png";
     		            }
             		    break;
-            		case 'pontjes':
+            		case 'pont':
     		            if (!img) {
                 		    img = "https://maps.google.com/mapfiles/ms/icons/ferry.png";
     		            }
