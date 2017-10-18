@@ -33,6 +33,7 @@ $paths = array(
     'admin-users' => 'admin/users.php',
     'admin-createusers' => 'admin/createusers.php',
     'admin-poi' => 'admin/poi.php',
+    'admin-poi-types' => 'admin/poitypes.php',
     'admin-gcm' => 'gcm.php',
     'suadmin-config' => 'admin/config.php',
     'suadmin-kml-import' => 'admin/kml-import.php',
