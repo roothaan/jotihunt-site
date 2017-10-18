@@ -48,6 +48,8 @@ $('#poitypes').dataTable( {
 
 <h1>Pois (Point Of Interest) Types</h1>
 
+<div><strong>NOTE: De app respecteert deze instellingen (nog?) niet.</strong><br/>In de app kunnen gebruikers individueel de categorieen aan en uit zetten.</div>
+<br /><br />
 <button id="btnDeleteRow">Verwijder poi-type</button>
 
 <form action="<?= BASE_URL . 'ajax/poitypes.ajax.php' ?>" method="POST">
