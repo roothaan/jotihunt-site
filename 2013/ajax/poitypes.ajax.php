@@ -5,17 +5,22 @@ JotihuntUtils::requireLogin();
 require_once CLASS_DIR . 'jotihunt/PoiType.class.php';
 require_once CLASS_DIR . 'user/AuthMgr.class.php';
 
+$event_id = $authMgr->getMyEventId();
+if ($authMgr->isSuperAdmin()) {
+    $event_id = $_POST ['event_id'];
+}
 // Insert
 if (isset($_POST ['name'])) {
     // Add POIType
-    $poitype = new PoiType(null, 
-                $_POST ['event_id'], 
-                $authMgr->getMyOrganisationId(), 
-                $_POST ['name'], 
-                $_POST ['onmap'],
-                $_POST ['onapp'],
-                $_POST ['image']
-                );
+    $poitype = new PoiType(
+        null, 
+        $event_id, 
+        $authMgr->getMyOrganisationId(), 
+        $_POST ['name'], 
+        $_POST ['onmap'],
+        $_POST ['onapp'],
+        $_POST ['image']
+        );
     $newPoiType = $driver->addPoiType($poitype);
 
     if (!$newPoiType) {
@@ -23,7 +28,7 @@ if (isset($_POST ['name'])) {
         die();
     }
     
-    header('Location:' . WEBSITE_URL . 'admin-poi-type');
+    header('Location:' . WEBSITE_URL . 'admin-poi-types');
     die();
 }
 
@@ -34,10 +39,12 @@ if (isset($_POST ['columnName'])) {
     $changed = false;
     
     $poitype = $driver->getPoiTypeById($id);
-    if ($_POST ['columnName'] == 'event_id') {
-        $poitype->setEventId($newValue);
-        $driver->updatePoiType($poitype);
-        $changed = true;
+    if ($authMgr->isSuperAdmin()) {
+        if ($_POST ['columnName'] == 'event_id') {
+            $poitype->setEventId($newValue);
+            $driver->updatePoiType($poitype);
+            $changed = true;
+        }
     }
 
     if ($_POST ['columnName'] == 'name') {
