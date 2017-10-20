@@ -1225,6 +1225,32 @@ class SiteDriverPostgresql {
         return null;
     }
 
+    /**
+     *
+     * @param String $name
+     *            username (not displayname!)
+     * @return Rider|NULL
+     */
+    public function getRiderByName2($name) {
+        global $authMgr;
+        $sqlName = 'getRiderByName2';
+        
+        $values = array (
+                $name,
+                $authMgr->getMyOrganisationId(),
+                $authMgr->getMyEventId()
+        );
+        
+        $result = pg_execute($this->conn, $sqlName, $values);
+        
+        error_log("RESULT getRiderByName2");
+        while ( $row = pg_fetch_assoc($result) ) {
+            return $this->_getRider($row);
+        }
+        error_log("ERROR getRiderByName return null");
+        return null;
+    }
+
     private function _getRider($row) {
         $user = $this->getUserById($row ['user_id']);
         $deelgebied = $this->getDeelgebiedById($row ['deelgebied_id']);

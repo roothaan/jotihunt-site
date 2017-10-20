@@ -267,8 +267,10 @@ class PostgresqlQueries {
                             JOIN _user ON (hunter.user_id = _user.id)
                             JOIN user_organisation ON (_user.id = user_organisation.user_id)
                             JOIN events_has_organisation ON (user_organisation.organisation_id = events_has_organisation.organisation_id)
+                            JOIN deelgebied ON hunter.deelgebied_id = deelgebied.id
                             WHERE user_organisation.organisation_id = $1
                             AND events_has_organisation.events_id = $2
+                            AND deelgebied.event_id = $2
                             ORDER BY hunter_id, time DESC';
         $this->prepareInternal($sqlName, $sqlQuery);
         
@@ -407,6 +409,19 @@ class PostgresqlQueries {
                         JOIN user_organisation ON (_user.id = user_organisation.user_id)
                         WHERE _user.username = $1
                         AND user_organisation.organisation_id = $2';
+        $this->prepareInternal($sqlName, $sqlQuery);
+
+        $sqlName = 'getRiderByName2';
+        $sqlQuery = 'SELECT hunter.id, hunter.user_id, deelgebied_id, van, tot, auto 
+                        FROM hunter
+                            JOIN _user ON (hunter.user_id = _user.id)
+                            JOIN user_organisation ON (_user.id = user_organisation.user_id)
+                            JOIN events_has_organisation ON (user_organisation.organisation_id = events_has_organisation.organisation_id)
+                            JOIN deelgebied ON hunter.deelgebied_id = deelgebied.id
+                        WHERE _user.username = $1
+                        AND user_organisation.organisation_id = $2
+                        AND events_has_organisation.events_id = $3
+                        AND deelgebied.event_id = $3';
         $this->prepareInternal($sqlName, $sqlQuery);
         
         $sqlName = 'getTotalAmountOfVossenLocations';
