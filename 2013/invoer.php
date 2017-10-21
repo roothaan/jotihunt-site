@@ -17,7 +17,7 @@ JotihuntUtils::requireLogin();
 //fetch laatste bericht
 $bericht = $driver->getLastBerichtByType("hint");
 if($bericht){
-    $iframeUrl = "https://jotihunt.net/groep/hint.php?MID=".$bericht->getBericht_id();
+    $iframeUrl = "https://jotihunt.net/subscription/message/".$bericht->getBericht_id();
 }else{
     $iframeUrl = "https://jotihunt.net";
 }
