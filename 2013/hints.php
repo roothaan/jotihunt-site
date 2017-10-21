@@ -242,15 +242,16 @@ het berekenen van de kortste afstand.
             <tr>
                 <td><?= $deelgebied->getName() ?></td>
                 <td><input type="text" name="numbers[<?= $deelgebied->getId() ?>][x]"
-                           value="<?= $_POST['numbers'][$deelgebied->getId()]['x'] ?>"/></td>
+                           value="<?= $deelgebieden_locs[$deelgebied->getId()][0] ?>"/></td>
                 <td><input type="text" name="numbers[<?= $deelgebied->getId() ?>][y]"
-                           value="<?= $_POST['numbers'][$deelgebied->getId()]['y'] ?>"/></td>
+                           value="<?= $deelgebieden_locs[$deelgebied->getId()][1] ?>"/></td>
                 <td><input type="checkbox" name="ignore[<?= $deelgebied->getId() ?>]" value="1" <?= $_POST['ignore'][$deelgebied->getId()] == 1 ? 'checked="checked"' : '' ?>/> Negeer</td>
             </tr>
         <?php } ?>
     </table>
     <hr id="hrheader">
     <h2>Hint coördinaten</h2>
+    <table>
     <?php foreach ($deelgebieden as $deelgebied) { ?>
         <tr>
             <td><?= $deelgebied->getName() ?></td>
@@ -260,6 +261,7 @@ het berekenen van de kortste afstand.
                        value="<?= $_POST['letters'][$deelgebied->getId()]['y'] ?>"/></td>
         </tr>
     <?php } ?>
+    </table>
     <input type="submit" class="bruteforce" value="Bereken locaties"/>
 </form>
     <hr id="hrheader">
