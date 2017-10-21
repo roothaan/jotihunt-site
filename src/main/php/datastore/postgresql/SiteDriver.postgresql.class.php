@@ -1231,14 +1231,27 @@ class SiteDriverPostgresql {
      *            username (not displayname!)
      * @return Rider|NULL
      */
-    public function getRiderByName2($name) {
+    public function getRiderByNameHackForJotihunt2017($name) {
         global $authMgr;
         $sqlName = 'getRiderByName2';
         
+        // The app doesn't succesfully ask for an event,
+        // so we pick it during Jotihunt 2017
+        $eventId = $authMgr->getMyEventId();
+        if (!$eventId) {
+            $allEvents = $this->getEventsForOrganisation($authMgr->getMyOrganisationId());
+            foreach ($allEvents as $event) {
+                if ($event->getName() == 'Jotihunt 2017') {
+                    $eventId = $event->getId();
+                    break;
+                }
+            }
+        }
+
         $values = array (
                 $name,
                 $authMgr->getMyOrganisationId(),
-                $authMgr->getMyEventId()
+                $eventId
         );
         
         $result = pg_execute($this->conn, $sqlName, $values);

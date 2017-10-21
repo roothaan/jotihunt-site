@@ -45,13 +45,13 @@ class RiderApi {
             $user = $this->siteDriver->getUser($authCode);
             if ($user) {
                 error_log("user:" . print_r($user->toArray(), true));
-                $this->riderTeam = $this->siteDriver->getRiderByName2($user->getUsername());
+                $this->riderTeam = $this->siteDriver->getRiderByNameHackForJotihunt2017($user->getUsername());
                 error_log("riderTeam=" . print_r($this->riderTeam, true));
             } else {
                 error_log('Cannot find the "me" rider!');
             }
         } else if (null != $riderTeamName) {
-            $this->riderTeam = $this->siteDriver->getRiderByName2($riderTeamName);
+            $this->riderTeam = $this->siteDriver->getRiderByNameHackForJotihunt2017($riderTeamName);
         }
         
         if (count($this->apiParts) > 0) {
