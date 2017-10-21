@@ -23,6 +23,7 @@ $paths = array(
     "bericht"=> "bericht_detail.php",
     "opdrachten"=> "opdrachten.php",
     "invoer"=>"invoer.php",
+    "hints"=>"hints.php",
     "events" => "choose_event.php",
     'privacy' => 'privacy.php',
     'deelgebieden-kml' => 'kml/deelgebieden.php',
