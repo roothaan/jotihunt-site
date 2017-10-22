@@ -116,7 +116,7 @@ function recursiveCalcBestPath($legend, $availableLetters, $availableNumbers, $c
             $bestLocalPathScore = max($probability, $bestLocalPathScore);
             
             // Ignore paths that are significantly worse than the best of this stage (i.e. < 33% score)
-            if($probability >= $bestLocalPathScore/3) {
+            if($probability >= floor($bestLocalPathScore/3)) {
                 $availableNumbersCopy = $availableNumbers;
                 unset($availableNumbersCopy[$number]);
                 
@@ -162,8 +162,8 @@ function calculateProbabilities(&$probabilities, $letters, $numbers)
         5,
         1,
         1,
-        1,
-        1,
+        0,
+        0,
     ];
     
     // Compare old coords
@@ -241,11 +241,11 @@ het berekenen van de kortste afstand.
         <?php foreach ($deelgebieden as $deelgebied) { ?>
             <tr>
                 <td><?= $deelgebied->getName() ?></td>
-                <td><input type="text" name="numbers[<?= $deelgebied->getId() ?>][x]"
+                <td><input type="text" name="numbers[<?= strtolower($deelgebied->getName()) ?>][x]"
                            value="<?= $deelgebieden_locs[$deelgebied->getId()][0] ?>"/></td>
-                <td><input type="text" name="numbers[<?= $deelgebied->getId() ?>][y]"
+                <td><input type="text" name="numbers[<?= strtolower($deelgebied->getName()) ?>][y]"
                            value="<?= $deelgebieden_locs[$deelgebied->getId()][1] ?>"/></td>
-                <td><input type="checkbox" name="ignore[<?= $deelgebied->getId() ?>]" value="1" <?= $_POST['ignore'][$deelgebied->getId()] == 1 ? 'checked="checked"' : '' ?>/> Negeer</td>
+                <td><input type="checkbox" name="ignore[<?= strtolower($deelgebied->getName()) ?>]" value="1" <?= $_POST['ignore'][strtolower($deelgebied->getName())] == 1 ? 'checked="checked"' : '' ?>/> Negeer</td>
             </tr>
         <?php } ?>
     </table>
@@ -255,10 +255,10 @@ het berekenen van de kortste afstand.
     <?php foreach ($deelgebieden as $deelgebied) { ?>
         <tr>
             <td><?= $deelgebied->getName() ?></td>
-            <td><input type="text" name="letters[<?= $deelgebied->getId() ?>][x]"
-                       value="<?= $_POST['letters'][$deelgebied->getId()]['x'] ?>"/></td>
-            <td><input type="text" name="letters[<?= $deelgebied->getId() ?>][y]"
-                       value="<?= $_POST['letters'][$deelgebied->getId()]['y'] ?>"/></td>
+            <td><input type="text" name="letters[<?= strtolower($deelgebied->getName()) ?>][x]"
+                       value="<?= $_POST['letters'][strtolower($deelgebied->getName())]['x'] ?>"/></td>
+            <td><input type="text" name="letters[<?= strtolower($deelgebied->getName()) ?>][y]"
+                       value="<?= $_POST['letters'][strtolower($deelgebied->getName())]['y'] ?>"/></td>
         </tr>
     <?php } ?>
     </table>
