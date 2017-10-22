@@ -41,13 +41,18 @@ if (!empty($_POST)) {
     
     // Read letters input
     foreach ($newCoords as $team => $coords) {
-        $words[$team] = $coords['x'] . '-' . $coords['y'];
+        $words[$team] = trim($coords['x']) . '-' . trim($coords['y']);
         foreach ($coords as $type => $chars) {
-            for ($i = 0; $i < strlen($chars); $i++) {
-                $char = substr($chars, $i, 1);
-                $letters[$team][$type][$i] = $char;
-                if (!isset($probabilities[$char])) {
-                    $probabilities[$char] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+            $chars = trim($chars);
+            if(empty($chars)){
+                $_POST['ignore'][$team] = 1;
+            } else {
+                for ($i = 0; $i < strlen($chars); $i++) {
+                    $char = substr($chars, $i, 1);
+                    $letters[$team][$type][$i] = $char;
+                    if (!isset($probabilities[$char])) {
+                        $probabilities[$char] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+                    }
                 }
             }
         }
@@ -56,6 +61,7 @@ if (!empty($_POST)) {
     // Read old coords
     foreach ($oldCoords as $team => $coords) {
         foreach ($coords as $type => $chars) {
+            $chars = trim($chars);
             for ($i = 0; $i < strlen($chars); $i++) {
                 $char = substr($chars, $i, 1);
                 $numbers[$team][$type][$i] = $char;
@@ -170,7 +176,9 @@ function calculateProbabilities(&$probabilities, $letters, $numbers)
     foreach ($numbers as $team => $coordSet) {
         foreach ($coordSet as $type => $coords) {
             foreach ($coords as $i => $coord) {
-                $probabilities[$letters[$team][$type][$i]][$coord] += $values[$i];
+                if(!empty($letters[$team][$type][$i])) {
+                    $probabilities[$letters[$team][$type][$i]][$coord] += $values[$i];
+                }
             }
         }
     }
