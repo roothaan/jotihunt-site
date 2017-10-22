@@ -116,7 +116,7 @@ function recursiveCalcBestPath($legend, $availableLetters, $availableNumbers, $c
             $bestLocalPathScore = max($probability, $bestLocalPathScore);
             
             // Ignore paths that are significantly worse than the best of this stage (i.e. < 33% score)
-            if($probability >= $bestLocalPathScore/3) {
+            if($probability >= floor($bestLocalPathScore/5)) {
                 $availableNumbersCopy = $availableNumbers;
                 unset($availableNumbersCopy[$number]);
                 
