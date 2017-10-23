@@ -21,7 +21,14 @@ function getImages($element, $team)
         if (preg_match('/^\/\//', $imgSrc)) {
             $imgSrc = 'http:' . $imgSrc;
         }
-        $imgHash = md5(file_get_contents($imgSrc));
+        
+        if(extension_loaded('imagick')) {
+            $imagick = new Imagick();
+            $imagick->readImage($imgSrc);
+            $imgHash = $imagick->getImageSignature();
+        } else {
+            $imgHash = md5_file($imgSrc);
+        }
         
         if (!isset($pictures[$imgHash])) {
             $nextLetterPosition = count($pictures);
@@ -39,6 +46,7 @@ function getImages($element, $team)
 $pictures = [];
 $letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 $status = 'failure';
+$hintNaam = '';
 $teamLetters = [
     'alpha'   => [],
     'bravo'   => [],
@@ -75,6 +83,7 @@ $prefilledLetters = [
 ];
 $hint = $driver->getLastBerichtByType('hint');
 if ($hint instanceof Bericht && !empty($hint->getInhoud())) {
+    $hintNaam = $hint->getTitel();
     // Loop through DIVs
     $dom = new DOMDocument();
     $dom->loadHTML($hint->getInhoud());
@@ -138,4 +147,5 @@ if ($hint instanceof Bericht && !empty($hint->getInhoud())) {
 die(json_encode([
     'status' => $status,
     'letters' => $prefilledLetters,
+    'hintnaam' => $hintNaam,
 ]));

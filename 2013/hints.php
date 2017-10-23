@@ -32,6 +32,7 @@ foreach ($deelgebieden as $deelgebied) {
 }
 
 $html = '';
+$error = '';
 if (!empty($_POST)) {
     define('MAX_ITERATIONS', 10);
     $availableNumbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -46,6 +47,8 @@ if (!empty($_POST)) {
             $chars = trim($chars);
             if (empty($chars)) {
                 $_POST['ignore'][$team] = 1;
+            } elseif(strlen($chars) != 5) {
+                $error .= 'Hint letters niet compleet. Controleer of ze allemaal 5 tekens bevatten.<br />';
             } else {
                 for ($i = 0; $i < strlen($chars); $i++) {
                     $char = substr($chars, $i, 1);
@@ -69,35 +72,46 @@ if (!empty($_POST)) {
         }
     }
     
-    calculateProbabilities($probabilities, $letters, $numbers);
-    
-    // Sort probabilities
-    $letterOrder = [];
-    foreach ($probabilities as $letter => $array) {
-        arsort($array);
-        $probabilities[$letter] = $array;
-        $letterOrder[$letter] = reset($array);
-    }
-    // Determine order of letters (most "solid" letters first)
-    arsort($letterOrder);
-    
-    // Determine the best legenda's
-    recursiveCalcBestPath(array_keys($letterOrder), $availableNumbers);
-    
-    // Calculate distance between new coords and old coords
-    foreach ($resultArray as $key => $result) {
-        $resultArray[$key] = calculateDistance($result, $oldCoords, $newCoords, $_POST['ignore']);
-    }
-    
-    // Sort result array, best results first
-    usort($resultArray, "cmpLegend");
-    
-    // Print results
-    foreach ($resultArray as $legendArray) {
-        if($legendArray['distance'] < 60) {
+    if(empty($error)) {
+        calculateProbabilities($probabilities, $letters, $numbers);
+        
+        // Sort probabilities
+        $letterOrder = [];
+        foreach ($probabilities as $letter => $array) {
+            arsort($array);
+            $probabilities[$letter] = $array;
+            $letterOrder[$letter] = reset($array);
+        }
+        // Determine order of letters (most "solid" letters first)
+        arsort($letterOrder);
+        
+        // Determine the best legenda's
+        recursiveCalcBestPath(array_keys($letterOrder), $availableNumbers);
+        
+        // Calculate distance between new coords and old coords
+        $resultArrayWithCalculatedDistance = [];
+        foreach ($resultArray as $key => $result) {
+            $result = calculateDistance($result, $oldCoords, $newCoords, $_POST['ignore']);
+            if(!empty($result)) {
+                $resultArrayWithCalculatedDistance[$key] = $result;
+            }
+        }
+        
+        // Sort result array, best results first
+        usort($resultArrayWithCalculatedDistance, "cmpLegend");
+        
+        // Print results
+        foreach ($resultArrayWithCalculatedDistance as $legendArray) {
             // Groups wont walk over 10km in one hour
-            $html .= $legendArray['distance'] . ' km - ' . printLegend($legendArray['legend']) . '<br />';
-            $html .= 'coords: ' . printCoords($words, $legendArray['legend']) . '<br /><br />';
+            if ($legendArray['distance'] < 200) {
+                $html .= printLegendAndCoords($words, $legendArray);
+            } else {
+                $t = 1;
+            }
+        }
+        
+        if(!empty($html)){
+            $html = '<table class="resultTable" cellspacing="0" cellpadding="0">'.$html.'</table>';
         }
     }
 }
@@ -151,12 +165,17 @@ function calculateDistance($legendArray, $oldCoords, $newCoords, $ignoreArray)
             $oldY = intval($oldCoords[$team]['y']);
             $newX = intval(strtr($coords['x'], $legendArray['legend']));
             $newY = intval(strtr($coords['y'], $legendArray['legend']));
-            $diffX = abs($oldX - $newX);
-            $diffY = abs($oldY - $newY);
-            $distance = intval(sqrt(pow($diffX, 2) + pow($diffY, 2)))/100;
-            if($distance > 50){
-                // Team walked over 50km in an hour?! Not very likely
-                $distance *= 10000; // Multiply by 10000 to ensure it isn't listed
+            if($newX > 12000 && $newX < 26000 && $newY > 41000 && $newY < 51000) {
+                $diffX = abs($oldX - $newX);
+                $diffY = abs($oldY - $newY);
+                $distance = intval(sqrt(pow($diffX, 2) + pow($diffY, 2))) / 100;
+                if ($distance > 50) {
+                    // Team walked over 50km in an hour?! Not very likely
+                    return [];
+                }
+            } else {
+                // Coordinates are outside Gelderland
+                return [];
             }
             $totalDistance += $distance;
         }
@@ -193,23 +212,6 @@ function calculateProbabilities(&$probabilities, $letters, $numbers)
 }
 
 /**
- * Translate word using the legend
- *
- * @param $words
- * @param $legend
- *
- * @return string
- */
-function printCoords($words, $legend)
-{
-    $html = '';
-    foreach ($words as $key => $word) {
-        $html .= strtoupper(substr($key, 0, 1)) . ": " . strtr($word, $legend) . ', ';
-    }
-    return $html;
-}
-
-/**
  * Compare two legends by their scores
  *
  * @param $a
@@ -227,6 +229,39 @@ function cmpLegend($a, $b)
 }
 
 /**
+ * @param $words
+ * @param $legendArray
+ *
+ * @return string
+ */
+function printLegendAndCoords($words, $legendArray)
+{
+    $html = '<tr>';
+    $html .= '<td>'.$legendArray['distance'].' km</td>';
+    $html .= '<td>'.printLegend($legendArray['legend']).'</td>';
+    $html .= '<td>'.printCoords($words, $legendArray['legend']).'</td>';
+    $html .= '</tr>';
+    return $html;
+}
+
+/**
+ * Translate word using the legend
+ *
+ * @param $words
+ * @param $legend
+ *
+ * @return string
+ */
+function printCoords($words, $legend)
+{
+    $html = '';
+    foreach ($words as $key => $word) {
+        $html .= strtoupper(substr($key, 0, 1)) . ":" . strtr($word, $legend) . ', ';
+    }
+    return substr($html, 0, -2);
+}
+
+/**
  * Print the legend
  *
  * @param $legend
@@ -238,7 +273,7 @@ function printLegend($legend)
     ksort($legend);
     $html = '';
     foreach ($legend as $letter => $number) {
-        $html .= $letter . "=" . $number . ", ";
+        $html .= $letter . " = " . $number . ", ";
     }
     
     return substr($html, 0, -2);
@@ -285,6 +320,14 @@ function printLegend($legend)
         });
     });
 </script>
+<style>
+    table.resultTable td {
+        padding: 5px;
+    }
+    table.resultTable tr:nth-of-type(odd) {
+        background-color: rgba(0,0,0,0.2);
+    }
+</style>
 <h1>Hints oplossen</h1>
 Via dit formulier kun je hints op laten lossen aan de hand van vorige coördinaten. Dit werkt het beste bij hints met
 tien plaatjes o.i.d., waarbij ieder plaatje overeenkomt met 1 cijfer. De vorige coördinaten worden gebruikt om te
