@@ -296,7 +296,7 @@ CREATE TABLE "poi" (
 );
 
 
-DROP TABLE IF EXISTS "poitypes" CASCADE;
+DROP TABLE IF EXISTS "poitype" CASCADE;
 
 CREATE TABLE "poitype" (
 	"id" SERIAL NOT NULL,
