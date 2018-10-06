@@ -4,7 +4,7 @@ $authMgr->requireAdmin();
 
 $poitypes = $driver->getAllPoiTypes();
 if ($authMgr->isSuperAdmin()) {
-    $poitypes = $driver->getAllPoisTypeSu();
+    $poitypes = $driver->getAllPoiTypesSu();
 }
 
 $pois = $driver->getAllPois();
