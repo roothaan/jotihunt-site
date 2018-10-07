@@ -221,11 +221,59 @@ foreach($deelgebieden as $deelgebied){
                 logMessage(count+' locaties ingevoerd');
             }
         });
+    
+        $('#pasteCoords').blur(function(){
+            if($(this).val().length > 20){
+                var text = $(this).val();
+                text = text.replace(' ','');
+                var textArray = text.split(',');
+                textArray.forEach(function(val){
+                    var matches = val.match(/[abcdef]:[0-9]{5}-[0-9]{5}/i);
+                    if(matches){
+                        matches.forEach(function(coord){
+                            var coordMatches = coord.match(/([abcdef]):([0-9]{5})-([0-9]{5})/i);
+                            if(coordMatches) {
+                                switch(coordMatches[1]){
+                                    case 'A':
+                                        $('#invoerAlphax').val(coordMatches[2]);
+                                        $('#invoerAlphay').val(coordMatches[3]);
+                                        break;
+                                    case 'B':
+                                        $('#invoerBravox').val(coordMatches[2]);
+                                        $('#invoerBravoy').val(coordMatches[3]);
+                                        break;
+                                    case 'C':
+                                        $('#invoerCharliex').val(coordMatches[2]);
+                                        $('#invoerCharliey').val(coordMatches[3]);
+                                        break;
+                                    case 'D':
+                                        $('#invoerDeltax').val(coordMatches[2]);
+                                        $('#invoerDeltay').val(coordMatches[3]);
+                                        break;
+                                    case 'E':
+                                        $('#invoerEchox').val(coordMatches[2]);
+                                        $('#invoerEchoy').val(coordMatches[3]);
+                                        break;
+                                    case 'F':
+                                        $('#invoerFoxtrotx').val(coordMatches[2]);
+                                        $('#invoerFoxtroty').val(coordMatches[3]);
+                                        break;
+                                }
+                            }
+                        });
+                    }
+                });
+                $('#pasteCoords').val('');
+            }
+        });
     });
 </script>
 <div class="invoerLeft">
     <h1>Vossenlocaties invoeren</h1>
     Via dit formulier kun je vossenlocaties voor alle deelgebied tegelijk invoeren. Indien je Chrome met de <a href="https://chrome.google.com/webstore/detail/roothaan-jotihunt-helper/ofgofkabgpfgoemeenoknhkjeefgofia" target="_blank">RoothaanJotihuntHelper-extensie</a> gebruikt, kun je de locaties die je hieronder hebt ingevoerd met één druk op de knop in het hint-inleverformulier zetten. 
+    <hr id="hrheader">
+    Plak coördinaat-string om deze snel in te voeren (opmaak: "A:12345-45678, B:12345:45678, ..., F: 12345-45678")<br />
+    <textarea id="pasteCoords" rows="3" cols="60"></textarea>
     <hr id="hrheader">
     <div class="invoerForm">
         <div class="invoerItem tijd">

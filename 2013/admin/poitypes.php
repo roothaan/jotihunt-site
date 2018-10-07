@@ -4,7 +4,7 @@ $authMgr->requireAdmin();
 
 $poitypes = $driver->getAllPoiTypes();
 if ($authMgr->isSuperAdmin()) {
-    $poitypes = $driver->getAllPoisTypeSu();
+    $poitypes = $driver->getAllPoiTypesSu();
 }
 
 $pois = $driver->getAllPois();
@@ -48,7 +48,11 @@ $('#poitypes').dataTable( {
 
 <h1>Pois (Point Of Interest) Types</h1>
 
-<div><strong>NOTE: De app respecteert deze instellingen (nog?) niet.</strong><br/>In de app kunnen gebruikers individueel de categorieen aan en uit zetten.</div>
+<div><strong>NOTE</strong>:
+    In de app kunnen gebruikers individueel de categorieen aan en uit zetten.<br /><br />
+    Het is niet nodig om voor <strong>group</strong> en <strong>homebase</strong> aparte iconen aan te maken.<br /><br />
+    Iconen grootte is tussen de 25x25px en 50x50x. Alles groter dan dat overheerst de kaart.
+</div>
 <br /><br />
 <button id="btnDeleteRow">Verwijder poi-type</button>
 

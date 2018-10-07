@@ -82,8 +82,7 @@ class PoiType {
             'name' => $this->getName(),
             'onmap' => $this->getOnmap(),
             'onapp' => $this->getOnapp(),
-            'image' => $this->getImage(),
-            'type' => $this->getType(),
+            'image' => $this->getImage()
             );
     }
 }

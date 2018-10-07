@@ -35,6 +35,15 @@ if (getenv('DEV_MODE')) {
 if (getenv('WELCOME_MESSAGE')) {
     define('WELCOME_MESSAGE', getenv('WELCOME_MESSAGE'));
 }
+if (getenv('SITE_TITLE')) {
+    define('SITE_TITLE', getenv('SITE_TITLE'));
+}
+if (getenv('SITE_KEYWORDS')) {
+    define('SITE_KEYWORDS', getenv('SITE_KEYWORDS'));
+}
+if (getenv('SITE_DESCRIPTION')) {
+    define('SITE_DESCRIPTION', getenv('SITE_DESCRIPTION'));
+}
 
 $urlBase = $_SERVER ['SERVER_NAME'] . $port;
 

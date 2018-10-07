@@ -7,7 +7,9 @@ require_once CLASS_DIR . 'user/AuthMgr.class.php';
 
 $event_id = $authMgr->getMyEventId();
 if ($authMgr->isSuperAdmin()) {
-    $event_id = $_POST ['event_id'];
+    if (isset($_POST ['event_id'])) {
+        $event_id = $_POST ['event_id'];
+    }
 }
 // Insert
 if (isset($_POST ['name'])) {
