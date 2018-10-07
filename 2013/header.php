@@ -1,5 +1,5 @@
 <?php
-$_headerOptions['title'] = 'Spelsite van de Roothaangroep, Doetinchem';
+$_headerOptions['title'] = defined('SITE_TITLE') ? SITE_TITLE : '';
 $_headerOptions['includeBody'] = true;
 if (isset($headerOptions)) {
     $_headerOptions = array_merge($_headerOptions, $headerOptions);
@@ -12,8 +12,8 @@ if (isset($headerOptions)) {
 <title>Jotihunt <?= date('Y')  ?> &bull; <?= $_headerOptions['title'] ?></title>
 <link rel="shortcut icon" href="<?= BASE_URL ?>images/favicon.png" type="image/x-icon" />
 <meta name="author" content="Ralf van den Boom, Sander Roebers, Jasper Roel" />
-<meta name="description" lang="nl" content="De Roothaan Jotihunt Website" />
-<meta name="keywords" content="Jotihunt, NUNC, Willie, Wortel, Stam, Roothaan, Roothaangroep, Doetinchem" />
+<meta name="description" lang="nl" content="<?= defined('SITE_DESCRIPTION') ? SITE_DESCRIPTION : ''?>" />
+<meta name="keywords" content="<?= defined('SITE_KEYWORDS') ? SITE_KEYWORDS : ''?>" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="content-language" content="nl" />
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
