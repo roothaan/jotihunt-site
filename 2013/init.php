@@ -15,15 +15,13 @@ if (! $driver->isReady()) {
 }
 
 // Redirect to https if possible
-if (defined('REDIRECT_TO_HTTPS')) {
+if (defined('REDIRECT_TO_HTTPS') && REDIRECT_TO_HTTPS == true) {
     if(
         (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'http')
         ||
         (isset($_SERVER['X-Forwarded-Proto']) && $_SERVER['X-Forwarded-Proto'] == 'http')
         ||
         (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'off')
-        ||
-        (isset($_SERVER['REQUEST_SCHEME']) && $_SERVER['REQUEST_SCHEME'] == 'http')
     )
     {
         $redirect = 'https:' . WEBSITE_URL;
