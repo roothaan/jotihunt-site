@@ -84,6 +84,10 @@ function parseJotihuntIniFile($user_config) {
         if (array_key_exists('site-description', $jotihunt_config)) {
             putenv('SITE_DESCRIPTION=' . $jotihunt_config['site-description']);
         }
+        if (array_key_exists('redirect-to-https', $jotihunt_config)) {
+            putenv('REDIRECT_TO_HTTPS=' . $jotihunt_config['redirect-to-https']);
+        }
+        
         // TODO api-token?
         
     }

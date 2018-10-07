@@ -25,6 +25,7 @@
 ; dev-mode = true
 ; proxy-server-port
 ; proxy-base-url
+; redirect-to-https
 
 ; api-token = your-jotihunt.net-api-token
 
