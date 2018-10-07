@@ -14,6 +14,23 @@ if (! $driver->isReady()) {
     }
 }
 
+// Redirect to https if possible
+if (defined('REDIRECT_TO_HTTPS') && REDIRECT_TO_HTTPS == true) {
+    if(
+        (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'http')
+        ||
+        (isset($_SERVER['X-Forwarded-Proto']) && $_SERVER['X-Forwarded-Proto'] == 'http')
+        ||
+        (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'off')
+    )
+    {
+        $redirect = 'https:' . WEBSITE_URL;
+        header('HTTP/1.1 301 Moved Permanently');
+        header('Location: ' . $redirect);
+        exit();
+    }
+}
+
 // Figure out if they need to go to the "choose_event" page
 if ($authMgr->isLoggedIn() && !$authMgr->isSuperAdmin() 
 && !$authMgr->getMyEventId()) {
