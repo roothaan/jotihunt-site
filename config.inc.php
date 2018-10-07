@@ -44,6 +44,9 @@ if (getenv('SITE_KEYWORDS')) {
 if (getenv('SITE_DESCRIPTION')) {
     define('SITE_DESCRIPTION', getenv('SITE_DESCRIPTION'));
 }
+if (getenv('REDIRECT_TO_HTTPS')) {
+    define('REDIRECT_TO_HTTPS', getenv('REDIRECT_TO_HTTPS'));
+}
 
 $urlBase = $_SERVER ['SERVER_NAME'] . $port;
 

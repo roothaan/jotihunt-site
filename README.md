@@ -97,8 +97,24 @@ Als deze aanstaat is het mogelijk om:
 - Testen uit te voeren (/test)
 - De Google maps kaart toont een dummy hunter
 
+`API_TOKEN`
+Momenteel ongebruikt, maar wellicht later voor de cronjob richting the Jotihunt API
+
+`REDIRECT_TO_HTTPS`
+Forceert het gebruik van https door een 301 redirect to sturen in het geval van http URLs.
+
+`SITE_TITLE`
+Wordt gebruikt in het title element als titel van de site
+
+`SITE_DESCRIPTION`
+Wordt gebruikt in het description element als SEO omschrijving van de site
+
+`SITE_KEYWORDS`
+Wordt gebruikt in het keywords element als SEO omschrijving van de site
+
 `WELCOME_MESSAGE`  
-Dit is het bericht dat op de homepage wordt getoond. Dit mag HTML bevatten. Hier "moet" ook de header (h1) in gezet worden.
+Dit is het bericht dat op de homepage wordt getoond.
+Dit mag HTML bevatten. Hier "moet" ook de header (h1) in gezet worden.
 
 # Overig
 ## Update tot PHP7
