@@ -75,6 +75,17 @@ function parseJotihuntIniFile($user_config) {
         if (array_key_exists('welcome-message', $jotihunt_config)) {
             putenv('WELCOME_MESSAGE=' . $jotihunt_config['welcome-message']);
         }
+        if (array_key_exists('site-title', $jotihunt_config)) {
+            putenv('SITE_TITLE=' . $jotihunt_config['site-title']);
+        }
+        if (array_key_exists('site-keywords', $jotihunt_config)) {
+            putenv('SITE_KEYWORDS=' . $jotihunt_config['site-keywords']);
+        }
+        if (array_key_exists('site-description', $jotihunt_config)) {
+            putenv('SITE_DESCRIPTION=' . $jotihunt_config['site-description']);
+        }
+        // TODO api-token?
+        
     }
     // Themes
     if (array_key_exists('theme', $user_config)) {
