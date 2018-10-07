@@ -60,7 +60,15 @@ $('#poi').dataTable( {
  	<tfoot>
             <tr id="addPoi">
                 <td></td>
-                <td><input type="text" name="event_id" /></td>
+				<td><select name="event_id">';
+	            	<?php
+						// Get all events for this user
+						$events = $driver->getAllEvents();
+					    foreach ($events as $event) {
+					        echo '<option value="'.$event->getId().'">'.$event->getName().'</option>';
+					    }
+					?>
+				</td>
                 <td><input type="text" name="name" /></td>
                 <td><input type="text" name="data" /></td>
                 <td><input type="text" name="latitude" /></td>
