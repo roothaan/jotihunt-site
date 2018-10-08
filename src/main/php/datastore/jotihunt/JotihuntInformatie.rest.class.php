@@ -4,6 +4,7 @@ class JotihuntInformatieRest {
     
     var $debug;
     var $conn;
+    var $protocolPrefix = 'https://';
     var $jhBase = 'https://jotihunt.net/';
     var $apiBase = 'https://jotihunt.net/api/1.0/';
 
@@ -14,6 +15,33 @@ class JotihuntInformatieRest {
     
     public function setDebug($debug) {
         $this->debug = $debug;
+    }
+    
+    public function fixUrls($original) {
+        if ($this->debug) {
+            echo "<br /><br /><span> BEFORE" . 
+            $original . 
+            "</span><br /><br />";
+        }
+        
+        $patterns = array();
+        
+        // This is for relative URLs, we prefix those with the Jotihunt site
+        $patterns[0] = '/src\="\/[^\/]/';
+        $replacement = 'src="'.$this->jhBase;
+        $result = preg_replace($patterns, $replacement, $original);
+        
+        // This is for protocol-less URLs, we assume https here
+        $patterns[0] = '/src\="\/\//';
+        $replacement = 'src="'.$this->protocolPrefix;
+        $result = preg_replace($patterns, $replacement, $result);
+        
+        if ($this->debug) {
+            echo "<br /><br /><span>AFTER: " . 
+            $result . 
+            "</span><br /><br />";
+        }
+        return $result;
     }
 
     public function updateOpdrachten() {
@@ -55,7 +83,7 @@ class JotihuntInformatieRest {
                     } else {
                         if (! empty($itemdetails) && isset($itemdetails->data) && count($itemdetails->data) > 0) {
                             foreach ( $itemdetails->data as $itemdetail ) {
-                                $inhoud = str_replace("src=\"/","src=\"".$this->jhBase,$itemdetail->inhoud);
+                                $inhoud = $this->fixUrls($itemdetail->inhoud);
                                 $bericht->setInhoud($inhoud);
                             }
                         }
@@ -107,7 +135,7 @@ class JotihuntInformatieRest {
                     } else {
                         if (! empty($itemdetails) && isset($itemdetails->data) && count($itemdetails->data) > 0) {
                             foreach ( $itemdetails->data as $itemdetail ) {
-                                $inhoud = str_replace("src=\"/","src=\"".$this->jhBase,$itemdetail->inhoud);
+                                $inhoud = $this->fixUrls($itemdetail->inhoud);
                                 $bericht->setInhoud($inhoud);
                             }
                         }
@@ -175,7 +203,7 @@ class JotihuntInformatieRest {
                     } else {
                         if (! empty($itemdetails) && isset($itemdetails->data) && count($itemdetails->data) > 0) {
                             foreach ( $itemdetails->data as $itemdetail ) {
-                                $inhoud = str_replace("src=\"/","src=\"".$this->jhBase,$itemdetail->inhoud);
+                                $inhoud = $this->fixUrls($itemdetail->inhoud);
                                 $inhoud = "<div class='inhoud'>".$inhoud."</div>";
                                 
                                 if(isset($nieuwsitem->Alpha)) {
