@@ -41,7 +41,6 @@ if(isset($_POST['query']) && !empty($_POST['query']) && isset($_POST['code']) &&
     <ul>
         <li>Optie: <code>expand</code> - toont de inhoud van de tabellen</li>
         <li>Optie: <code>table=tabel-naam</code> -toont de inhoud van een speciefieke tabel</li>
-        
     </ul>
 </div>
 <form method="post">
