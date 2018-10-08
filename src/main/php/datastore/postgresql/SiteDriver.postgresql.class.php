@@ -1245,8 +1245,9 @@ class SiteDriverPostgresql {
         // and there is only 1, pick that one
         if (!$eventId) {
             $allEvents = $this->getMyEvents();
-            if (count($allEvents == 1)) {
+            if (count($allEvents) == 1) {
                 $eventId = $allEvents[0]->getId();
+                error_log('[SiteDriver->getRiderByNameHackForAppUsers] Fallback #1: ' . $eventId);
             }
         }
         // Fallback #2, hardcode it to Jotihunt of this year
@@ -1255,6 +1256,7 @@ class SiteDriverPostgresql {
             foreach ($allEvents as $event) {
                 if ($event->getName() == 'Jotihunt ' . date('Y')) {
                     $eventId = $event->getId();
+                    error_log('[SiteDriver->getRiderByNameHackForAppUsers] Fallback #2: ' . $eventId);
                     break;
                 }
             }
