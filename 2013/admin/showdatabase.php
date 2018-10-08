@@ -36,6 +36,14 @@ if(isset($_POST['query']) && !empty($_POST['query']) && isset($_POST['code']) &&
     echo "</table><br /><br /><br />";
 } ?>
 
+<h1>Database opties</h1>
+<div>
+    <ul>
+        <li>Optie: <code>expand</code> - toont de inhoud van de tabellen</li>
+        <li>Optie: <code>table=tabel-naam</code> -toont de inhoud van een speciefieke tabel</li>
+        
+    </ul>
+</div>
 <form method="post">
     Denk aan de geheime code!<br />
     <input name="code" type="password" value="<?= $customQueryUsed ? $secretCode : '' ?>" /><br />

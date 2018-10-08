@@ -31,24 +31,27 @@ class RiderApi {
         
         $this->siteDriver = Datastore::getSiteDriver();
         
-        error_log("riderTeamName=".$riderTeamName);
+        error_log('[RiderApi->init] $apiParts (riderTeamName)='.$riderTeamName);
         if ('me' === $riderTeamName) {
             $authCode = $this->request->getAuthCode();
-            error_log("getAuthCode:" . $authCode);
+            error_log("[RiderApi->init] getAuthCode:" . $authCode);
             if (null == $authCode && defined('DEV_MODE') && DEV_MODE == true) {
                 // This is allowed if you use debug mode
                 // So you can use "/api/rider/me" to debug
                 global $authMgr;
                 $authCode = $authMgr->getSessionId();
-            error_log("getAuthCode reset via SessionId:" . $authCode);
+                error_log("[RiderApi->init DEV_MODE] getAuthCode reset via SessionId:" . $authCode);
             }
             $user = $this->siteDriver->getUser($authCode);
             if ($user) {
-                error_log("user:" . print_r($user->toArray(), true));
+                error_log('[RiderApi->init] $this->siteDriver->getUser($authCode):' . print_r($user->toArray(), true));
+                // So, we have a USER now, but we need to find the rider team that goes along with it
+                //
                 $this->riderTeam = $this->siteDriver->getRiderByNameHackForJotihunt2017($user->getUsername());
-                error_log("riderTeam=" . print_r($this->riderTeam, true));
+                error_log('[RiderApi->init] riderTeam for ' . $user->getUsername() . '=' . print_r($this->riderTeam, true));
+                error_log('[RiderApi->init] If the above riderTeam is null, that is a BUG!');
             } else {
-                error_log('Cannot find the "me" rider!');
+                error_log('[RiderApi->init] Cannot find the "me" rider!');
             }
         } else if (null != $riderTeamName) {
             $this->riderTeam = $this->siteDriver->getRiderByNameHackForJotihunt2017($riderTeamName);
@@ -69,35 +72,35 @@ class RiderApi {
         if (null == $this->riderTeam) {
             // no team specified, return all
             $result = $this->siteDriver->getAllRiders();
-            error_log('# of riders found: ' . count($result));
+            error_log('[RiderApi->doGet] # of riders found: ' . count($result));
             $locations = $this->siteDriver->getLastRiderLocations();
-            error_log('# of locations found: ' . count($locations));
+            error_log('[RiderApi->doGet] # of locations found: ' . count($locations));
             foreach ( $locations as $hunterId => $location) {
-                error_log('hunterID:' . $hunterId . ', location: [' . $location->getLongitude() . ',' . $location->getLatitude() .']');
+                error_log('[RiderApi->doGet] hunterID:' . $hunterId . ', location: [' . $location->getLongitude() . ',' . $location->getLatitude() .']');
             }
             $returnVal = array ();
             foreach ( $result as $rider ) {
                 $riderInfo = $rider->toArray();
-                error_log('Parsing Rider user_id: ' . $riderInfo['user_id'] . ', id: ' . $riderInfo['id']);
+                error_log('[RiderApi->doGet] Parsing Rider user_id: ' . $riderInfo['user_id'] . ', id: ' . $riderInfo['id']);
                 if (array_key_exists($rider->getId(), $locations)) {
-                    error_log(' - Found locations for this Hunter ID: ' . $rider->getId());
+                    error_log('[RiderApi->doGet]  - Found locations for this Hunter ID: ' . $rider->getId());
                     $location = $locations [$rider->getId()];
                     $timeLastLocation = strtotime($location->getTime());
                     $currentTime = time();
-                    error_log('$currentTime     : ' . $currentTime);
-                    error_log('$timeLastLocation: ' . $timeLastLocation);
+                    error_log('[RiderApi->doGet] $currentTime     : ' . $currentTime);
+                    error_log('[RiderApi->doGet] $timeLastLocation: ' . $timeLastLocation);
                     
                     $diff = $currentTime - $timeLastLocation;
                     // If the rider hasn't been seen for 3600 seconds (an hour), we skip it
                     if ($diff > 3600) {
-                        error_log(' - Found stale location [diff='.$diff.'] for this Rider user_id: ' . $riderInfo['user_id']);
+                        error_log('[RiderApi->doGet]  - Found stale location [diff='.$diff.'] for this Rider user_id: ' . $riderInfo['user_id']);
                         continue;
                     }
                     $riderInfo ['displayname'] = $rider->getUser()->getDisplayName();
                     $riderInfo ['location'] = $location->toArray();
-                    error_log(' - Adding location [' . $location->getLongitude() . ',' . $location->getLatitude() .'] Rider user_id: ' . $riderInfo['user_id']);
+                    error_log('[RiderApi->doGet]  - Adding location [' . $location->getLongitude() . ',' . $location->getLatitude() .'] Rider user_id: ' . $riderInfo['user_id']);
                 } else {
-                    error_log(' - Found NO locations for this Hunter user_id: ' . $rider->getId());
+                    error_log('[RiderApi->doGet]  - Found NO locations for this Hunter user_id: ' . $rider->getId());
                 }
                 $returnVal [] = $riderInfo;
             }
@@ -149,17 +152,17 @@ class RiderApi {
             $locations = json_decode($json, true);
             if (null != $locations) {
                 if (is_array($locations)) {
-                    error_log('JSON decode success array (size):' . sizeof($locations));
+                    error_log('[RiderApi->handleLocationData] JSON decode success array (size):' . sizeof($locations));
                 }else {
-                    error_log('JSON decode succes:' . $locations);
+                    error_log('[RiderApi->handleLocationData] JSON decode succes:' . $locations);
                 }
 
                 foreach ( $locations as $data ) {
                     $rowsChanged += $this->addLocation($data);
                 }
-                error_log('Num rows added:' . $rowsChanged);
+                error_log('[RiderApi->handleLocationData] Num rows added:' . $rowsChanged);
             } else {
-                error_log('JSON decode failed, error code:' . json_last_error());
+                error_log('[RiderApi->handleLocationData] JSON decode failed, error code:' . json_last_error());
             }
         }
         

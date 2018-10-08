@@ -1238,6 +1238,7 @@ class SiteDriverPostgresql {
         // The app doesn't succesfully ask for an event,
         // so we pick it during Jotihunt 2017
         $eventId = $authMgr->getMyEventId();
+        error_log('[SiteDriver->getRiderByNameHackForJotihunt2017] $authMgr->getMyEventId()=' . $eventId);
         if (!$eventId) {
             $allEvents = $this->getEventsForOrganisation($authMgr->getMyOrganisationId());
             foreach ($allEvents as $event) {
