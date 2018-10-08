@@ -1231,18 +1231,29 @@ class SiteDriverPostgresql {
      *            username (not displayname!)
      * @return Rider|NULL
      */
-    public function getRiderByNameHackForJotihunt2017($name) {
+    public function getRiderByNameHackForAppUsers($name) {
         global $authMgr;
         $sqlName = 'getRiderByName2';
         
         // The app doesn't succesfully ask for an event,
         // so we pick it during Jotihunt 2017
         $eventId = $authMgr->getMyEventId();
-        error_log('[SiteDriver->getRiderByNameHackForJotihunt2017] $authMgr->getMyEventId()=' . $eventId);
+        
+        error_log('[SiteDriver->getRiderByNameHackForAppUsers] $authMgr->getMyEventId()=' . $eventId);
+        
+        // Fallback #1, is we do not know the event,
+        // and there is only 1, pick that one
         if (!$eventId) {
-            $allEvents = $this->getEventsForOrganisation($authMgr->getMyOrganisationId());
+            $allEvents = $this->getMyEvents();
+            if (count($allEvents == 1)) {
+                $eventId = $allEvents[0]->getId();
+            }
+        }
+        // Fallback #2, hardcode it to Jotihunt of this year
+        if (!$eventId) {
+            $allEvents = $this->getMyEvents();
             foreach ($allEvents as $event) {
-                if ($event->getName() == 'Jotihunt 2017') {
+                if ($event->getName() == 'Jotihunt ' . date('Y')) {
                     $eventId = $event->getId();
                     break;
                 }

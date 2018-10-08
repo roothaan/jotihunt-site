@@ -47,14 +47,14 @@ class RiderApi {
                 error_log('[RiderApi->init] $this->siteDriver->getUser($authCode):' . print_r($user->toArray(), true));
                 // So, we have a USER now, but we need to find the rider team that goes along with it
                 //
-                $this->riderTeam = $this->siteDriver->getRiderByNameHackForJotihunt2017($user->getUsername());
+                $this->riderTeam = $this->siteDriver->getRiderByNameHackForAppUsers($user->getUsername());
                 error_log('[RiderApi->init] riderTeam for ' . $user->getUsername() . '=' . print_r($this->riderTeam, true));
                 error_log('[RiderApi->init] If the above riderTeam is null, that is a BUG!');
             } else {
                 error_log('[RiderApi->init] Cannot find the "me" rider!');
             }
         } else if (null != $riderTeamName) {
-            $this->riderTeam = $this->siteDriver->getRiderByNameHackForJotihunt2017($riderTeamName);
+            $this->riderTeam = $this->siteDriver->getRiderByNameHackForAppUsers($riderTeamName);
         }
         
         if (count($this->apiParts) > 0) {
@@ -193,6 +193,10 @@ class RiderApi {
     // $data should be an ARRAY!
     // Returns $numRows
     private function addLocation($data) {
+        if (null == $this->riderTeam) {
+            error_log('[RiderApi->addLocation] no team for data, skipping. Data:' . print_r($data, true));
+            return;
+        }
         $location = new RiderLocation();
         $location->setRiderId($this->riderTeam->getId());
         
