@@ -29,7 +29,10 @@ function localizeImagesInText($text) {
         foreach ($images as $image) {
             $imageUrl = $image->getAttribute('src');
 
-            $imageFile = file_get_contents(pathinfo($imageUrl, PATHINFO_DIRNAME)."/".rawurlencode(pathinfo($imageUrl, PATHINFO_BASENAME)));
+            // Removed "rawurlencode" from the pathinfo part, since it seems to be encoded already now
+            $imageFile = file_get_contents(pathinfo($imageUrl, PATHINFO_DIRNAME)
+                        .'/'.
+                        pathinfo($imageUrl, PATHINFO_BASENAME));
             $imageSha = sha1($imageFile);
 
             if(!$image = $driver->imageGetBySha($imageSha)) {
