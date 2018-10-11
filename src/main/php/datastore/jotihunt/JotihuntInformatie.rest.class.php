@@ -43,6 +43,25 @@ class JotihuntInformatieRest {
         }
         return $result;
     }
+    
+    public function fixHintUrls($original) {
+        if ($this->debug) {
+            echo "<br /><br /><span> [fixHintUrls] BEFORE" . 
+            $original . 
+            "</span><br /><br />";
+        }
+                // This is for protocol-less URLs, we assume https here
+        $patterns[0] = '/\/\//';
+        $replacement = $this->protocolPrefix;
+        $result = preg_replace($patterns, $replacement, $original);
+        
+        if ($this->debug) {
+            echo "<br /><br /><span>[fixHintUrls] AFTER: " . 
+            $result . 
+            "</span><br /><br />";
+        }
+        return $result;
+    }
 
     public function updateOpdrachten() {
         global $authMgr;
@@ -149,23 +168,25 @@ class JotihuntInformatieRest {
         return $collection;
     }
 
+    function getHintAsHTMLByDeelgebied($hint, $deelgebied) {
+        $inhoud = "<div class='hintDeelgebied hintDeelgebied_".$deelgebied."'><div class='label'>".$deelgebied."</div><div class='hintContent'>";
+        if(is_array($hint)) {
+            foreach($hint as $hintPart) {
+                $hintPart = $this->fixHintUrls($hintPart);
+                if (filter_var($hintPart, FILTER_VALIDATE_URL) && is_array(getimagesize($hintPart))) { 
+                    $hintPart = "<img src='".$hintPart."' />";
+                }
+                $inhoud .= "<div class='hintPart'>".$hintPart."</div>";
+            }
+        } else {
+            $inhoud .= $hint;
+        }
+        $inhoud .= "</div> </div>";
+        return $inhoud;
+    }
     public function updateHints() {
         global $authMgr;
-        function getHintAsHTMLByDeelgebied($hint, $deelgebied) {
-            $inhoud = "<div class='hintDeelgebied hintDeelgebied_".$deelgebied."'><div class='label'>".$deelgebied."</div><div class='hintContent'>";
-            if(is_array($hint)) {
-                foreach($hint as $hintPart) {
-                    if (filter_var($hintPart, FILTER_VALIDATE_URL) && is_array(getimagesize($hintPart))) { 
-                        $hintPart = "<img src='".$hintPart."' />";
-                    }
-                    $inhoud .= "<div class='hintPart'>".$hintPart."</div>";
-                }
-            } else {
-                $inhoud .= $hint;
-            }
-            $inhoud .= "</div> </div>";
-            return $inhoud;
-        }
+        
         
         $collection = array ();
         $nieuwitemlist = $this->getJsonFromJotihunt($this->apiBase . 'hint');
@@ -207,22 +228,22 @@ class JotihuntInformatieRest {
                                 $inhoud = "<div class='inhoud'>".$inhoud."</div>";
                                 
                                 if(isset($nieuwsitem->Alpha)) {
-                                    $inhoud .= getHintAsHTMLByDeelgebied($nieuwsitem->Alpha, "Alpha");
+                                    $inhoud .= $this->getHintAsHTMLByDeelgebied($nieuwsitem->Alpha, "Alpha");
                                 }
                                 if(isset($nieuwsitem->Bravo)) {
-                                    $inhoud .= getHintAsHTMLByDeelgebied($nieuwsitem->Bravo, "Bravo");
+                                    $inhoud .= $this->getHintAsHTMLByDeelgebied($nieuwsitem->Bravo, "Bravo");
                                 }
                                 if(isset($nieuwsitem->Charlie)) {
-                                    $inhoud .= getHintAsHTMLByDeelgebied($nieuwsitem->Charlie, "Charlie");
+                                    $inhoud .= $this->getHintAsHTMLByDeelgebied($nieuwsitem->Charlie, "Charlie");
                                 }
                                 if(isset($nieuwsitem->Delta)) {
-                                    $inhoud .= getHintAsHTMLByDeelgebied($nieuwsitem->Delta, "Delta");
+                                    $inhoud .= $this->getHintAsHTMLByDeelgebied($nieuwsitem->Delta, "Delta");
                                 }
                                 if(isset($nieuwsitem->Echo)) {
-                                    $inhoud .= getHintAsHTMLByDeelgebied($nieuwsitem->Echo, "Echo");
+                                    $inhoud .= $this->getHintAsHTMLByDeelgebied($nieuwsitem->Echo, "Echo");
                                 }
                                 if(isset($nieuwsitem->Foxtrot)) {
-                                    $inhoud .= getHintAsHTMLByDeelgebied($nieuwsitem->Foxtrot, "Foxtrot");
+                                    $inhoud .= $this->getHintAsHTMLByDeelgebied($nieuwsitem->Foxtrot, "Foxtrot");
                                 }
                                 
                                 $bericht->setInhoud($inhoud);

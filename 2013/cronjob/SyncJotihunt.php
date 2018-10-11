@@ -16,6 +16,10 @@ if (isset($_GET['sessionId'])) {
 
 $authMgr->requireAdmin();
 
+if ($authMgr->isSuperAdmin()) {
+    die('do not run this as the superadmin (there is no event to attach this to)');
+}
+
 function localizeImagesInText($text) {
     global $driver;
     
