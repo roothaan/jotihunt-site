@@ -41,7 +41,17 @@ function make_map($mapOptions) {
                        
                        for (var prop in vossenLocaties) { // alle locaties
                           if(vossenLocaties.hasOwnProperty(prop)){
-                              addVosLocatie(map, vossenLocaties[prop].type, vossenLocaties[prop].new_coord, vossenLocaties[prop].adres, vossenLocaties[prop].last_in_line, vossenLocaties[prop].old_coord, vossenLocaties[prop].naam, vossenLocaties[prop].formatted_datetime, vossenLocaties[prop].active_counterhuntrondje_id, vossenLocaties[prop].locatie_counterhuntrondje_id);
+                              addVosLocatie(
+                                  map, 
+                                  vossenLocaties[prop].type, 
+                                  vossenLocaties[prop].new_coord, 
+                                  vossenLocaties[prop].adres, 
+                                  vossenLocaties[prop].last_in_line, 
+                                  vossenLocaties[prop].old_coord, 
+                                  vossenLocaties[prop].naam, 
+                                  vossenLocaties[prop].formatted_datetime, 
+                                  vossenLocaties[prop].active_counterhuntrondje_id, 
+                                  vossenLocaties[prop].locatie_counterhuntrondje_id);
                               
                           }
                        }
@@ -435,7 +445,7 @@ function make_map($mapOptions) {
 			    infotext += vos_formatted_datetime+"<br />";
 			    infotext += adres+"<br />";
 			    
-			    infowindow.setContent("<div style=\"width:200px; height:100px\">"+infotext+"</div>"); 
+			    infowindow.setContent("<div>"+infotext+"</div>"); 
 			    infowindow.open(map,this); 
 		    });
     	}
@@ -457,18 +467,6 @@ function make_map($mapOptions) {
             if (! empty($vos_locations)) {
                 $i = 0;
                 foreach ( $vos_locations as $location ) {
-                    switch ($location->getType()) {
-                        case 2 :
-                            $type = "hunt";
-                        break;
-                        case 3 :
-                            $type = "spot";
-                        break;
-                        default :
-                            $type = "hint";
-                        break;
-                    }
-                    
                     if ($i === 0) {
                         $last_in_line = 'true';
                     } else {
@@ -482,17 +480,32 @@ function make_map($mapOptions) {
                     if ($counterhuntrondje) {
                         $counterhuntrondjeId = $counterhuntrondje->getId();
                     }
+                    $riderLine = '';
+                    if ($location->getRiderId() > 0) {
+                        $riderUser = $driver->getRider($location->getRiderId())->getUser();
+                        if ($riderUser) {
+                            $riderLine = '<br /><br />Gehunt door <strong>' . $riderUser->getDisplayName() . '</strong>';
+                        }
+                    }
+                    if ($location->getTypeName() == 'hunt' && empty($riderLine)) {
+                        $riderLine = '<br /><br />Onbekende hunt of geen huntcode doorgegeven';
+                    }
+                    
+                    $addressLine = $location->getAddress();
+                    if (empty($addressLine)) {
+                        $addressLine = 'Onbekend/leeg adres (of bug in de Jotihunt app)';
+                    }
                     ?>
         			    
         			    addVosLocatie(
         			        map,
-        			        "<?= $type; ?>", 
-        			        "<?= $new_coord; ?>", 
-        			        "<?= $location->getAddress(); ?>", 
-        			        <?= $last_in_line; ?>, 
-        			        "<?= $old_coord; ?>", 
-        			        "<?= $vos->getName(); ?>", 
-        			        "<?= $formatted_datetime; ?>", 
+        			        "<?= $location->getTypeName() ?>", 
+        			        "<?= $new_coord ?>", 
+        			        "<?= $addressLine ?> <?= $riderLine ?>", 
+        			        <?= $last_in_line ?>, 
+        			        "<?= $old_coord ?>", 
+        			        "<?= $vos->getName() ?>", 
+        			        "<?= $formatted_datetime ?>", 
         			        <?= $counterhuntrondjeId ?>, 
         			        <?= $location->getCounterhuntrondjeId() ?>);
         				
@@ -546,11 +559,6 @@ function make_map($mapOptions) {
             		case 'homebase':
     		            if (!img) {
                 		    img = "<?= BASE_URL; ?>images/maps-scoutinggroep-home.png";
-    		            }
-            		    break;
-            		case 'pont':
-    		            if (!img) {
-                		    img = "https://maps.google.com/mapfiles/ms/icons/ferry.png";
     		            }
             		    break;
     		    }
