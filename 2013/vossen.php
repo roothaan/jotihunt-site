@@ -316,7 +316,7 @@ $(document).ready(function() {
 		<?php
 		function createVosLocationRow($nummer, $locatie, $deelgebiedName, $isAdmin) { ?>
 			<div class="vosLocation">
-				#<?=$nummer?>: <a href="<?=WEBSITE_URL?>vossen/<?=$deelgebiedName?>?id=<?=$locatie->getId()?>" ><?=$locatie->getDate()?> : <?=$locatie->getX()?>, <?=$locatie->getY() ?></a>
+				#<?=$nummer?>: <a href="<?=WEBSITE_URL?>vossen/<?=$deelgebiedName?>?id=<?=$locatie->getId()?>" ><?=$locatie->getDate()?> : <?=$locatie->getX()?>, <?=$locatie->getY() ?> - <?=$locatie->getTypeName() ?></a>
 	            <?php
 	            if ($isAdmin) { ?>
 	                &nbsp;<a href="<?=WEBSITE_URL?>delete_locatie/<?=$locatie->getId()?>/<?=$deelgebiedName?>" class="delVos">[x]</a>
