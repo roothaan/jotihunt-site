@@ -102,6 +102,17 @@ class Location {
     public function getCounterhuntrondjeId() {
         return $this->counterhuntrondjeId;
     }
+    
+    public function getTypeName() {
+        switch ($this->getType()) {
+            case 2 :
+                return 'hunt';
+            case 3 :
+                return 'spot';
+            default :
+                return 'hint';
+        }
+    }
 
     public function toArray() {
         return array (
