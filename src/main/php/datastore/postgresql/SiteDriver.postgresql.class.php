@@ -1383,8 +1383,6 @@ class SiteDriverPostgresql {
                 $rider->getId(),
                 $deelgebiedId,
                 $rider->getUser()->getId(),
-                //$rider->getBijrijder(),
-                //$rider->getTel(),
                 $van,
                 $tot,
                 $rider->getAuto()

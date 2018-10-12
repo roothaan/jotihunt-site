@@ -4,7 +4,6 @@ class Rider {
     private $id;
     private $userId;
     private $deelgebied;
-    private $bijrijder;
     private $tel;
     private $van;
     private $tot;
@@ -12,10 +11,9 @@ class Rider {
     private $user;
     private $locations;
 
-    public function __construct($userId = null, $deelgebied = null, $bijrijder = null, $tel = null, $van = null, $tot = null, $auto = null) {
+    public function __construct($userId = null, $deelgebied = null, $tel = null, $van = null, $tot = null, $auto = null) {
         $this->userId = $userId;
         $this->deelgebied = $deelgebied;
-        $this->bijrijder = $bijrijder;
         $this->tel = $tel;
         $this->van = $van;
         $this->tot = $tot;
@@ -44,14 +42,6 @@ class Rider {
 
     public function getDeelgebied() {
         return $this->deelgebied;
-    }
-
-    public function setBijrijder($bijrijder) {
-        $this->bijrijder = $bijrijder;
-    }
-
-    public function getBijrijder() {
-        return $this->bijrijder;
     }
 
     public function setTel($tel) {
@@ -111,7 +101,6 @@ class Rider {
                 'id' => $this->getId(),
                 'user_id' => $this->getUserId(),
                 'deelgebied' => $this->getDeelgebied(),
-                'bijrijder' => $this->getBijrijder(),
                 'tel' => $this->getTel(),
                 'van' => $this->getVan(),
                 'tot' => $this->getTot(),

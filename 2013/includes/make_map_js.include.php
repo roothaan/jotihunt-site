@@ -90,7 +90,6 @@ function make_map($mapOptions) {
                            hunterLocatiesDeelgebieden[key].latitude,
                            hunterLocatiesDeelgebieden[key].longitude,
                            hunterLocatiesDeelgebieden[key].naam, 
-                           hunterLocatiesDeelgebieden[key].bijrijder, 
                            hunterLocatiesDeelgebieden[key].formatted_date, 
                            hunterLocatiesDeelgebieden[key].tel,
                            hunterLocatiesDeelgebieden[key].stale,
@@ -224,7 +223,7 @@ function make_map($mapOptions) {
     	initialize();
     	
     	<?php if ($mapOptions->showHuntersLastLocation) { ?>
-	    function addHunter(map, latitude, longitude, naam, bijrijder, formatted_time, tel_nr, stale, auto) {
+	    function addHunter(map, latitude, longitude, naam, formatted_time, tel_nr, stale, auto) {
 	        var img = "<?= BASE_URL;?>images/hunter_small.png";
 	        
 	        if(auto !== "" && auto != undefined) {
@@ -271,10 +270,6 @@ function make_map($mapOptions) {
 			        info_text = "<b>"+naam+"</b> (oud!)<br />";
 			    }
 			    
-			    
-			    if(bijrijder != '') { 
-			        info_text += bijrijder+"<br />";
-			    }
 			    info_text += formatted_time+"<br />";
 			    info_text += "Tel: "+tel_nr+"<br />";
 			    
@@ -306,7 +301,6 @@ function make_map($mapOptions) {
 			        <?= $riderlocation->getLatitude(); ?>, 
 			        <?= $riderlocation->getLongitude(); ?>, 
 			        "<?= $hunter->getUser()->getDisplayName(); ?>", 
-			        "<?= $hunter->getBijrijder(); ?>", 
 			        "<?= strftime('%R, %a, %d %b',strtotime($riderlocation->getTime())); ?>", 
 			        "<?= $hunter->getTel(); ?>",
 			        "<?= ($diff > $staleHunterAfter ? 'true' : 'false'); ?>",

@@ -45,7 +45,6 @@ if ($handle = opendir('images/cars')) {
                 {sName: "status" },
                 {sName: "deelgebied" },
                 {sName: "naam" },
-                {sName: "bijrijders" },
                 {sName: "tel" },
                 {sName: "van" },
                 {sName: "tot" },
@@ -98,7 +97,6 @@ if ($handle = opendir('images/cars')) {
                 <th style="width: 20px;"><b><span title="Status">S</span></b></th>
                 <th style="width: 70px;"><b>Deelgebied</b></th>
                 <th style="width: 100px;"><b>Chaffeur</b></th>
-                <th style="width: 200px;"><b>Bijrijders</b></th>
                 <th style="width: 120px;"><b>Tel. nummer</b></th>
                 <th style="width: 120px;"><b>Van</b></th>
                 <th style="width: 120px;"><b>Tot</b></th>
@@ -111,10 +109,10 @@ if ($handle = opendir('images/cars')) {
             ?>
             <tfoot>
             <tr>
-                <td colspan="8"><hr style="float: left; width: 785px; height: 0px; border: 0px; border-top: 1px solid #512e6b; display: block;" /> <br /></td>
+                <td colspan="7"><hr style="float: left; width: 785px; height: 0px; border: 0px; border-top: 1px solid #512e6b; display: block;" /> <br /></td>
             </tr>
             <tr id="rijtoggle" style="height: 30px;">
-                <td colspan="8" style="text-align: left;"><small><a href="javascript:void(0);" onclick="showRij();" style="text-decoration: none;">Voeg rijder toe</a></small></td>
+                <td colspan="7" style="text-align: left;"><small><a href="javascript:void(0);" onclick="showRij();" style="text-decoration: none;">Voeg rijder toe</a></small></td>
             </tr>
             <tr id="rijform" style="height: 30px; display: none;">
                 <td>&nbsp;</td>
@@ -134,7 +132,6 @@ if ($handle = opendir('images/cars')) {
                     }
                 ?>
                 </select></td>
-                <td><input type="text" name="bijrijders" value="Bijrijders" style="width: 90px;" /></td>
                 <td><em>Wordt automatisch ingevuld</em></td>
                 <td><input type="text" name="startdatum" value="<?= date('d-m-Y') ?>" style="width: 70px;" class="datepicker" /><input type="text" name="starttijd" value="<?= date('H:i') ?>" class="timepicker" style="width: 70px;" /></td>
                 <td><input type="text" name="einddatum" value="<?= date('d-m-Y') ?>" style="width: 70px;" class="datepicker" /><input type="text" name="eindtijd" value="<?= date('H:i') ?>" class="timepicker" style="width: 70px;" /></td>
@@ -172,9 +169,7 @@ if ($handle = opendir('images/cars')) {
 	            </td>
                 <td><?= $rider->getDeelgebied() ?></td>
                 <td class="read_only"><?= $rider->getUser()->getDisplayName() ?></td>
-                <td><?= $rider->getBijrijder() ?></td>
-        
-                <td><?= JotihuntUtils::getPhoneNumbersForUserId($rider->getUser()->getId()) ?></td>
+                <td class="read_only"><?= JotihuntUtils::getPhoneNumbersForUserId($rider->getUser()->getId()) ?></td>
                 <td><?= date('d-m-Y H:i:s',$rider->getVan()) ?></td>
                 <td><?= date('d-m-Y H:i:s',$rider->getTot()) ?></td>
                 <td><img src="<?= BASE_URL."images/cars/".$rider->getAuto() ?>" title="auto" alt="<?= $rider->getAuto() ?>" /></td>
