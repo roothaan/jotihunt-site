@@ -298,9 +298,6 @@ $(document).ready(function() {
 						<?php
 					    foreach ( $ridercollection as $rider ) {
 							echo '<li>' . $rider->getUser()->getDisplayName();
-							if ($rider->getBijrijder()) {
-					    		echo '('.$rider->getBijrijder().')';
-							}
 							$telNummers = JotihuntUtils::getPhoneNumbersForUserId($rider->getUser()->getId());
 							if ($telNummers) {
 								echo ': ' . $telNummers;

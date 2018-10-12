@@ -7,7 +7,6 @@ if (isset($_POST ["submitrij"])) {
     $rider = new Rider();
     $rider->setUserId($_POST ["userId"]);
     $rider->setDeelgebied($_POST ["deelgebied"]);
-    $rider->setBijrijder($_POST ["bijrijders"]);
     $rider->setTel($_POST ["tel"]);
     $rider->setVan(strtotime($_POST ['startdatum'] . ' ' . $_POST ['starttijd']));
     $rider->setTot(strtotime($_POST ['einddatum'] . ' ' . $_POST ['eindtijd']));
@@ -27,10 +26,6 @@ if (isset($_POST ['columnName'])) {
     if ($_POST ['columnName'] == 'deelgebied') {
         $changed = true;
         $rider->setDeelgebied($newValue);
-    }
-    if ($_POST ['columnName'] == 'bijrijders') {
-        $changed = true;
-        $rider->setBijrijder($newValue);
     }
     if ($_POST ['columnName'] == 'tel') {
         $changed = true;

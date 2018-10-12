@@ -24,7 +24,6 @@ foreach ( $hunterlocationcollection as $riderlocation ) {
     $rider_array ['latitude'] = $riderlocation->getLatitude();
     $rider_array ['longitude'] = $riderlocation->getLongitude();
     $rider_array ['naam'] = $hunter->getUser()->getDisplayName();
-    $rider_array ['bijrijder'] = $hunter->getBijrijder();
     $rider_array ['formatted_date'] = strftime('%R, %a, %d %b', strtotime($riderlocation->getTime()));
     $rider_array ['tel'] = $hunter->getTel();
     $rider_array ['stale'] = ($diff > $staleHunterAfter ? 'true' : 'false');
@@ -39,7 +38,6 @@ if (defined('DEV_MODE') && DEV_MODE == true) {
         $rider_array ['latitude'] = '52.036576456008405';
         $rider_array ['longitude'] = '6.136371488119137';
         $rider_array ['naam'] = 'Test user';
-        $rider_array ['bijrijder'] = 'Test bijrijder';
         $rider_array ['formatted_date'] = 'Test datum';
         $rider_array ['tel'] = 'Test tel';
         $rider_array ['stale'] = 'true';
