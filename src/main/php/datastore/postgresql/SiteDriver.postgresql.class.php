@@ -469,7 +469,11 @@ class SiteDriverPostgresql {
         global $authMgr;
         $orgId = $authMgr->getMyOrganisationId();
         $org = $this->getOrganisationById($orgId);
-        return $this->getScoreByGroep($org->getName());
+        if ($org) {
+            return $this->getScoreByGroep($org->getName());
+        } else {
+            return 0;
+        }
     }
     
     public function getScoreByGroep($groepnaam) {
