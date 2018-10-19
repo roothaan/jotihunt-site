@@ -1,23 +1,20 @@
-FROM nimmis/apache-php7
+FROM php:7.2-apache
 
 MAINTAINER Jasper Roel <jasperroel@gmail.com>
 
-RUN groupadd -r jotihunt-site && useradd --no-log-init -r -g jotihunt-site jotihunt-site
-
 ## Setup apache
-COPY docker/jotihunt-vhost.conf /etc/apache2/sites-available/000-default.conf
 RUN a2enmod rewrite
 
-# Make sure we can log apache
-RUN ln -sf /dev/stdout /var/log/apache2/access.log && \
-    ln -sf /dev/stderr /var/log/apache2/error.log
+# Install PostgreSQL PDO
+RUN apt-get update && apt-get install -y libpq-dev \
+    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+    && docker-php-ext-install pdo pdo_pgsql pgsql
 
 # Setup the site
-WORKDIR /var/www/jotihunt-site
+WORKDIR /var/www/html
 COPY . .
 
-COPY docker/docker-entrypoint.sh /
-ENTRYPOINT ["/docker-entrypoint.sh"]
+# Setup error logging
+COPY docker/php.ini $PHP_INI_DIR/conf.d/error-log.ini
 
 EXPOSE 80
-CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
