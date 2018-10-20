@@ -79,12 +79,14 @@ function afterParsing() {
 		$('#rank').html('#' + (rank == 0 ? '?' : rank ));
 	}
 	
-	function showMessage(msg, lastHunt) {
-		if (typeof msg !== 'undefined') {
-		    $('#msgcontainer').html(msg);
+	function showMessage(newMessage, lastHunt) {
+		if (typeof newMessage !== 'undefined') {
+		    $('#msgcontainer').html(newMessage);
+		    msg = newMessage;
 		}
 		if (typeof lastHunt !== 'undefined') {
 		    $('#huntcontainer').html(lastHunt);
+		    hunt = lastHunt;
 		}
 	}
 	function getJotihuntData() {
@@ -135,7 +137,7 @@ function showVossen(vossen){
 	<?php }?>
 }
 
-function compareData(){		
+function compareData(){
 	if(msg != msg_old){
 		$('#arrow_msg').css('visibility','visible');
 		jwplayer('player1').play();
