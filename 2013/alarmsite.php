@@ -62,9 +62,6 @@ function beforeParsing() {
 }
 
 function afterParsing() {
-	rank_old = rank;
-	msg_old = msg;
-	hunt_old = hunt;
 	first = 0;
 	
 	//Hide preloader animation
@@ -75,8 +72,9 @@ function afterParsing() {
 	hideAudio();
 }
 
-	function showRank(rank) {
-		$('#rank').html('#' + (rank == 0 ? '?' : rank ));
+	function showRank(newRank) {
+		$('#rank').html('#' + (newRank == 0 ? '?' : newRank ));
+		rank = newRank;
 	}
 	
 	function showMessage(newMessage, lastHunt) {
