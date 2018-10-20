@@ -42,6 +42,14 @@ $mapOptions = new MapOptions();
 $mapOptions->special = false;
 $mapOptions->zoom = 11;
 $mapOptions->team = $team;
+if (!empty($_GET['marker_x']) && !empty($_GET['marker_y'])) {
+	$mapOptions->marker_x = $_GET['marker_x'] ?: null;
+	$mapOptions->marker_y = $_GET['marker_y'] ?: null;
+	if(strlen($mapOptions->marker_x) == 5) $mapOptions->marker_x .= "0";
+	if(strlen($mapOptions->marker_y) == 5) $mapOptions->marker_y .= "0";
+	$mapOptions->crosshair = true;
+	$mapOptions->centerOnCrosshair = true;
+}
 make_map($mapOptions);
 
 $footerOptions = array();

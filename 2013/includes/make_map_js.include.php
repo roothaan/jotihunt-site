@@ -52,12 +52,12 @@ function make_map($mapOptions) {
                                   vossenLocaties[prop].formatted_datetime, 
                                   vossenLocaties[prop].active_counterhuntrondje_id, 
                                   vossenLocaties[prop].locatie_counterhuntrondje_id);
-                              
+
                           }
                        }
                     }
                     
-                    <?php if (isset($mapOptions->team) && !empty($mapOptions->team)) { ?>
+                    <?php if (isset($mapOptions->team) && !empty($mapOptions->team) && !$mapOptions->centerOnCrosshair) { ?>
                     if (vossenLocatiesDeelgebieden['<?= $mapOptions->team ?>'] && vossenLocatiesDeelgebieden['<?= $mapOptions->team ?>'][0]) { 
                         coord_array = vossenLocatiesDeelgebieden['<?= $mapOptions->team ?>'][0].new_coord.split(',');
                         map.setZoom(13);
@@ -216,9 +216,23 @@ function make_map($mapOptions) {
     	    <?php } ?>
     	    
     		<?php
-    if ($mapOptions->crosshair == true)
-        echo "var marker_center = new google.maps.Marker({position: new google.maps.LatLng(" . JotihuntUtils::convert($mapOptions->x, $mapOptions->y) . "), map: map, title:\"\", icon: new google.maps.MarkerImage(\"" . BASE_URL . "images/crosshair.png\",null,null,new google.maps.Point(10,10)), zIndex:1000 });";
-    ?>
+            if ($mapOptions->crosshair == true) {
+                echo "var marker_center = new google.maps.Marker({position: new google.maps.LatLng(" . JotihuntUtils::convert($mapOptions->x, $mapOptions->y) . "), map: map, title:\"\", icon: new google.maps.MarkerImage(\"" . BASE_URL . "images/crosshair.png\",null,null,new google.maps.Point(10,10)), zIndex:1000 });";
+            }
+            if ($mapOptions->marker_x && $mapOptions->marker_y) {
+                echo "var checkMarker = new google.maps.Marker({position: new google.maps.LatLng(" . JotihuntUtils::convert($mapOptions->marker_x, $mapOptions->marker_y) . "), map: map, title:\"".$mapOptions->marker_x.",".$mapOptions->marker_y."\", zIndex:1000 });";
+                if($mapOptions->centerOnCrosshair) { ?>
+                console.log("<?= JotihuntUtils::convert($mapOptions->marker_x, $mapOptions->marker_y) ?>");
+                map.setCenter(new google.maps.LatLng(<?= JotihuntUtils::convert($mapOptions->marker_x, $mapOptions->marker_y) ?>));
+                google.maps.event.addListener(checkMarker, "click", function() { 
+			    var info_text = "<b>Marker locatie</b><br /><?= substr($mapOptions->marker_x,0,5) . "-" . substr($mapOptions->marker_y,0,5) ?>";
+			    infowindow.setContent("<div style=\"width:200px; height:100px\">"+info_text+"</div>"); 
+                infowindow.open(map,this); 
+            });
+                <?php
+                }
+            }
+            ?>
     	}
     	initialize();
     	

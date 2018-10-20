@@ -356,10 +356,10 @@ class PostgresqlQueries {
         $this->prepareInternal($sqlName, $sqlQuery);
         
         $sqlName = 'getBerichtCollection';
-        $sqlQuery = 'SELECT DISTINCT ON (bericht_id) bericht.id, event_id, bericht_id, titel, datum, eindtijd, maxpunten, inhoud, lastupdate, type 
+        $sqlQuery = 'SELECT DISTINCT ON (bericht_id::int) bericht.id, event_id, bericht_id, titel, datum, eindtijd, maxpunten, inhoud, lastupdate, type 
                         FROM bericht JOIN events ON bericht.event_id = events.id
                         WHERE events.id = $1
-                        ORDER BY bericht_id DESC, lastupdate DESC';
+                        ORDER BY bericht_id::int DESC, lastupdate DESC';
         $this->prepareInternal($sqlName, $sqlQuery);
         
         $sqlName = 'getAllRidersSu';
