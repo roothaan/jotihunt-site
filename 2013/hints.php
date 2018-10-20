@@ -91,7 +91,7 @@ if (!empty($_POST)) {
         // Calculate distance between new coords and old coords
         $resultArrayWithCalculatedDistance = [];
         foreach ($resultArray as $key => $result) {
-            $result = calculateDistance($result, $oldCoords, $newCoords, $_POST['ignore']);
+            $result = calculateDistance($result, $oldCoords, $newCoords, (isset($_POST['ignore']) ? $_POST['ignore'] : []));
             if(!empty($result)) {
                 $resultArrayWithCalculatedDistance[$key] = $result;
             }
@@ -160,9 +160,9 @@ function calculateDistance($legendArray, $oldCoords, $newCoords, $ignoreArray)
 {
     $totalDistance = 0;
     foreach ($newCoords as $team => $coords) {
-        if ($ignoreArray[$team] != '1') {
-            $oldX = intval($oldCoords[$team]['x']);
-            $oldY = intval($oldCoords[$team]['y']);
+        if (empty($ignoreArray[$team]) || $ignoreArray[$team] != '1') {
+            $oldX = isset($oldCoords[$team]['x']) ? intval($oldCoords[$team]['x']) : 0;
+            $oldY = isset($oldCoords[$team]['y']) ? intval($oldCoords[$team]['y']) : 0;
             $newX = intval(strtr($coords['x'], $legendArray['legend']));
             $newY = intval(strtr($coords['y'], $legendArray['legend']));
             if($newX > 12000 && $newX < 26000 && $newY > 41000 && $newY < 51000) {
@@ -256,7 +256,13 @@ function printCoords($words, $legend)
 {
     $html = '';
     foreach ($words as $key => $word) {
-        $html .= strtoupper(substr($key, 0, 1)) . ":" . strtr($word, $legend) . ', ';
+        $coord = strtr($word, $legend);
+        $x = explode('-', $coord)[0];
+        $y = explode('-', $coord)[1];
+        $html .= '<a class="openMap" href="/2013/fullscreen_map.php?team='.ucfirst($key).'&marker_x='.$x.'&marker_y='.$y.'">';
+        $html .= strtoupper(substr($key, 0, 1)) . ":" . $coord;
+        $html .= '</a>';
+        $html .= ', ';
     }
     return substr($html, 0, -2);
 }
@@ -280,9 +286,26 @@ function printLegend($legend)
 }
 
 ?>
+<style>
+    .openMap {
+        color: black;
+        text-decoration: none;
+    }
+    .openMap:hover {
+        color: inherit;
+    }
+</style>
 <script type="text/javascript">
     var fetchIsRunning = false;
     $(document).ready(function(){
+        $('.openMap').click(function(e){
+            e.preventDefault();
+            window.open(
+                $(this).attr('href'),
+                null,
+                "height=500,width=650,status=no,toolbar=no,menubar=no,location=no"
+            );
+        });
         $('#fetchHintLetters').click(function(e){
             e.preventDefault();
             if(!fetchIsRunning) {
@@ -345,7 +368,7 @@ het berekenen van de kortste afstand, bijvoorbeeld omdat een groep net een verpl
                 <td><input type="text" name="numbers[<?= strtolower($deelgebied->getName()) ?>][y]"
                            value="<?= $deelgebieden_locs[$deelgebied->getId()][1] ?>"/></td>
                 <td><input type="checkbox" name="ignore[<?= strtolower($deelgebied->getName()) ?>]"
-                           value="1" <?= $_POST['ignore'][strtolower($deelgebied->getName())] == 1 ? 'checked="checked"' : '' ?>/>
+                           value="1" <?= isset($_POST['ignore'][strtolower($deelgebied->getName())]) && $_POST['ignore'][strtolower($deelgebied->getName())] == 1 ? 'checked="checked"' : '' ?>/>
                     Negeer (groep is verplaatst of hint ontbreekt)
                 </td>
             </tr>
@@ -358,10 +381,10 @@ het berekenen van de kortste afstand, bijvoorbeeld omdat een groep net een verpl
             <tr>
                 <td><?= $deelgebied->getName() ?></td>
                 <td><input type="text" name="letters[<?= strtolower($deelgebied->getName()) ?>][x]"
-                           value="<?= $_POST['letters'][strtolower($deelgebied->getName())]['x'] ?>"/>
+                           value="<?= isset($_POST['letters'][strtolower($deelgebied->getName())]['x']) ? $_POST['letters'][strtolower($deelgebied->getName())]['x'] : "" ?>"/>
                 </td>
                 <td><input type="text" name="letters[<?= strtolower($deelgebied->getName()) ?>][y]"
-                           value="<?= $_POST['letters'][strtolower($deelgebied->getName())]['y'] ?>"/>
+                           value="<?= isset($_POST['letters'][strtolower($deelgebied->getName())]['y']) ? $_POST['letters'][strtolower($deelgebied->getName())]['y'] : "" ?>"/>
                 </td>
             </tr>
         <?php } ?>
