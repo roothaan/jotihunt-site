@@ -266,6 +266,19 @@ foreach($deelgebieden as $deelgebied){
                 $('#pasteCoords').val('');
             }
         });
+        
+        $('.invoerInputLabel').click(function(e){
+            e.preventDefault();
+            var $parent = $(this).closest('.invoerItem');
+            var deelgebied = $parent.find('.invoerInputLabel').html().slice(0, -1);
+            var x = $parent.find('#invoer'+deelgebied+'x').val();
+            var y = $parent.find('#invoer'+deelgebied+'y').val();
+            window.open(
+                '/2013/fullscreen_map.php?team='+deelgebied+'&marker_x='+x+'&marker_y='+y,
+                null,
+                "height=500,width=650,status=no,toolbar=no,menubar=no,location=no"
+            );
+        });
     });
 </script>
 <div class="invoerLeft">
@@ -285,7 +298,7 @@ foreach($deelgebieden as $deelgebied){
 <?php foreach($deelgebieden as $deelgebied){ ?>
         <div class="invoerItem item<?= $deelgebied->getId() ?>">
             <div class="inner">
-                <div class="invoerInputLabel"><?= $deelgebied->getName() ?>:</div>
+                <div class="invoerInputLabel" style="text-decoration: underline;color:black;cursor: pointer;"><?= $deelgebied->getName() ?>:</div>
                 <input class="invoerRD" id="invoer<?= $deelgebied->getName() ?>x" type="text" name="<?= $deelgebied->getId() ?>x" autocomplete="off" placeholder="<?= $deelgebieden_locs[$deelgebied->getId()][0] ?>" maxlength="5" />
                 <input class="invoerRD" id="invoer<?= $deelgebied->getName() ?>y" type="text" name="<?= $deelgebied->getId() ?>y" autocomplete="off" placeholder="<?= $deelgebieden_locs[$deelgebied->getId()][1] ?>" maxlength="5" />
             </div>
