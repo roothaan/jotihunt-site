@@ -103,6 +103,20 @@ class VossenApi {
         // $this->team komt uit URL /vossen/DEELGEBIEDNAME
         $location->setCounterhuntRondjeId($this->siteDriver->getActiveCounterhuntRondje($this->team->getName())->getId());
         
+        
+        // If it's a hunt, check if it hasn't been added before
+        if (isset($data ['code']) && ! empty($data ['code']) && $data ['code'] != "null") {
+            $existingHunt = $this->siteDriver->getHuntByCode($data ['code']);
+            if ($existingHunt) {
+                // Already exists, skip!
+                header("HTTP/1.0 406 Not Acceptable");
+                return array (
+                        'error' => 'Hunt already exists',
+                        'success' => false 
+                );
+            }
+        }
+        
         $newLocation = $this->siteDriver->addLocation($this->team, $location);
         
         if (null != $newLocation) {
