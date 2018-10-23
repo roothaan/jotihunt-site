@@ -61,10 +61,10 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 echo '<kml xmlns="http://www.opengis.net/kml/2.2">';
 echo '<Document>';
 echo getStyles();
-echo '<name>Jotihunt ' + date('Y') +'</name>';
+echo '<name>Jotihunt ' . date('Y') . '</name>';
 echo '<description></description>';
 
-$max = 20;
+$max = (isset($_GET['max']) ? $_GET['max'] : 20 );
 $offset = (isset($_GET['offset']) ? $_GET['offset'] : 0 );
 
 // Get all riders

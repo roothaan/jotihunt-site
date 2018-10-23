@@ -198,6 +198,24 @@ class SiteDriverPostgresql {
         return $this->createHunt($row);        
     }
 
+    public function getHuntByCode($huntCode) {
+        global $authMgr;
+        $sqlName = 'getHuntByCode';
+        
+        $values = array (
+            $huntCode,
+            $authMgr->getMyOrganisationId(),
+            $authMgr->getMyEventId()
+        );
+        
+        $result = pg_execute($this->conn, $sqlName, $values);
+        $row = pg_fetch_assoc($result);
+        
+        if (!$row) {
+            return;
+        }
+        return $this->createHunt($row);
+    }
     public function addGcm($gcm) {
         $sqlName = 'addGcm';
         

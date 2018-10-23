@@ -134,6 +134,26 @@ class PostgresqlQueries {
                     AND hunts.id = $1';
         $this->prepareInternal($sqlName, $sqlQuery);
         
+        $sqlName = 'getHuntByCode';
+        $sqlQuery = 'SELECT 
+                    hunts.id, hunts.hunter_id, hunts.vossentracker_id, hunts.code, hunts.goedgekeurd,
+                    hunter.user_id, 
+                    vossentracker.time, vossentracker.adres, 
+                    deelgebied.name AS deelgebied
+                    FROM hunts
+                    JOIN hunter ON hunts.hunter_id = hunter.id
+                    LEFT OUTER JOIN vossentracker ON hunts.vossentracker_id = vossentracker.id
+                    JOIN vossen ON vossentracker.vossen_id = vossen.id
+                    JOIN deelgebied ON vossen.deelgebied_id = deelgebied.id
+                    JOIN user_organisation ON user_organisation.user_id = hunter.user_id
+                    JOIN events_has_organisation ON user_organisation.organisation_id = events_has_organisation.organisation_id
+                    
+                    WHERE vossentracker.organisation_id = $2
+                    AND events_has_organisation.events_id = $3
+                    AND deelgebied.event_id = $3
+                    AND hunts.code = $1';
+        $this->prepareInternal($sqlName, $sqlQuery);
+        
         $sqlName = 'getAllHunts';
         $sqlQuery  = 'SELECT 
                     hunts.id, hunts.hunter_id, hunts.vossentracker_id, hunts.code, hunts.goedgekeurd,
