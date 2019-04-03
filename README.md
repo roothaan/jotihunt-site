@@ -98,7 +98,7 @@ Als deze aanstaat is het mogelijk om:
 - De Google maps kaart toont een dummy hunter
 
 `API_TOKEN`
-Momenteel ongebruikt, maar wellicht later voor de cronjob richting the Jotihunt API
+Te verkrijgen via https://jotihunt.net/subscription/apikey, wordt gebruikt om de scorelijst mee in te laden.
 
 `REDIRECT_TO_HTTPS`
 Forceert het gebruik van https door een 301 redirect to sturen in het geval van http URLs.

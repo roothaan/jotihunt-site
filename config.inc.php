@@ -47,6 +47,9 @@ if (getenv('SITE_DESCRIPTION')) {
 if (getenv('REDIRECT_TO_HTTPS')) {
     define('REDIRECT_TO_HTTPS', boolval(getenv('REDIRECT_TO_HTTPS')));
 }
+if (getenv('API_TOKEN')) {
+    define('API_TOKEN', getenv('API_TOKEN'));
+}
 
 $urlBase = $_SERVER ['SERVER_NAME'] . $port;
 
