@@ -285,7 +285,7 @@ class JotihuntInformatieRest {
     }
 
     public function getScorelijst() {
-        $scorelijst = $this->getJsonFromJotihunt($this->apiBase . 'scorelijst');
+        $scorelijst = $this->getJsonFromJotihunt($this->apiBase . 'scorelijst', true);
         if (isset($scorelijst->error) && ! empty($scorelijst->error)) {
             if ($this->debug) {
             echo "<br /><br /><span style='color:red;'>" . 
@@ -338,11 +338,16 @@ class JotihuntInformatieRest {
         return false;
     }
 
-    private function getJsonFromJotihunt($url) {
+    private function getJsonFromJotihunt($url, $useAuthToken=false) {
+        $header = "Accept-language: en\r\n";
+        if ($useAuthToken && defined('API_TOKEN')) {
+            $token = API_TOKEN;
+            $header .= "token: $token\r\n";
+        }
         $opts = array (
                 'http' => array (
                         'method' => "GET",
-                        'header' => "Accept-language: en\r\n" 
+                        'header' => $header
                 ) 
         );
         

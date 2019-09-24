@@ -87,9 +87,9 @@ function parseJotihuntIniFile($user_config) {
         if (array_key_exists('redirect-to-https', $jotihunt_config)) {
             putenv('REDIRECT_TO_HTTPS=' . $jotihunt_config['redirect-to-https']);
         }
-        
-        // TODO api-token?
-        
+        if (array_key_exists('api-token', $jotihunt_config)) {
+            putenv('API_TOKEN=' . $jotihunt_config['api-token']);
+        }
     }
     // Themes
     if (array_key_exists('theme', $user_config)) {
