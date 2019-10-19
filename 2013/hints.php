@@ -24,9 +24,9 @@ foreach ($deelgebieden as $deelgebied) {
         $vos_x = "00000";
         $vos_y = "00000";
     }
-    if (strlen($vos_x) > 5) {
-        $vos_x = substr($vos_x, 0, 5);
-        $vos_y = substr($vos_y, 0, 5);
+    if (strlen($vos_x) > 4) {
+        $vos_x = substr($vos_x, 0, 4);
+        $vos_y = substr($vos_y, 0, 4);
     }
     $deelgebieden_locs[$deelgebied->getId()] = [$vos_x, $vos_y];
 }
@@ -47,8 +47,8 @@ if (!empty($_POST)) {
             $chars = trim($chars);
             if (empty($chars)) {
                 $_POST['ignore'][$team] = 1;
-            } elseif(strlen($chars) != 5) {
-                $error .= 'Hint letters niet compleet. Controleer of ze allemaal 5 tekens bevatten.<br />';
+            } elseif(strlen($chars) != 4) {
+                $error .= 'Hint letters niet compleet. Controleer of ze allemaal 4 tekens bevatten.<br />';
             } else {
                 for ($i = 0; $i < strlen($chars); $i++) {
                     $char = substr($chars, $i, 1);
@@ -165,11 +165,11 @@ function calculateDistance($legendArray, $oldCoords, $newCoords, $ignoreArray)
             $oldY = isset($oldCoords[$team]['y']) ? intval($oldCoords[$team]['y']) : 0;
             $newX = intval(strtr($coords['x'], $legendArray['legend']));
             $newY = intval(strtr($coords['y'], $legendArray['legend']));
-            if($newX > 12000 && $newX < 26000 && $newY > 41000 && $newY < 51000) {
+            if($newX > 1200 && $newX < 2600 && $newY > 4100 && $newY < 5100) {
                 $diffX = abs($oldX - $newX);
                 $diffY = abs($oldY - $newY);
                 $distance = intval(sqrt(pow($diffX, 2) + pow($diffY, 2))) / 100;
-                if ($distance > 50) {
+                if ($distance > 5) {
                     // Team walked over 50km in an hour?! Not very likely
                     return [];
                 }
