@@ -237,26 +237,32 @@ foreach($deelgebieden as $deelgebied){
                                     case 'A':
                                         $('#invoerAlphax').val(coordMatches[2]);
                                         $('#invoerAlphay').val(coordMatches[3]);
+										$('#invoerAlphay').blur();
                                         break;
                                     case 'B':
                                         $('#invoerBravox').val(coordMatches[2]);
                                         $('#invoerBravoy').val(coordMatches[3]);
+										$('#invoerBravoy').blur();
                                         break;
                                     case 'C':
                                         $('#invoerCharliex').val(coordMatches[2]);
                                         $('#invoerCharliey').val(coordMatches[3]);
+										$('#invoerCharliey').blur();
                                         break;
                                     case 'D':
                                         $('#invoerDeltax').val(coordMatches[2]);
                                         $('#invoerDeltay').val(coordMatches[3]);
+										$('#invoerDeltay').blur();
                                         break;
                                     case 'E':
                                         $('#invoerEchox').val(coordMatches[2]);
                                         $('#invoerEchoy').val(coordMatches[3]);
+										$('#invoerEchoy').blur();
                                         break;
                                     case 'F':
                                         $('#invoerFoxtrotx').val(coordMatches[2]);
                                         $('#invoerFoxtroty').val(coordMatches[3]);
+										$('#invoerFoxtroty').blur();
                                         break;
                                 }
                             }
