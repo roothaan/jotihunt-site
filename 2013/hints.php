@@ -260,7 +260,7 @@ function printCoords($words, $legend)
         $x = explode('-', $coord)[0].'0';
         $y = explode('-', $coord)[1].'0';
         $html .= '<a class="openMap" href="/2013/fullscreen_map.php?team='.ucfirst($key).'&marker_x='.$x.'&marker_y='.$y.'">';
-        $html .= strtoupper(substr($key, 0, 1)) . ":" . $coord;
+        $html .= strtoupper(substr($key, 0, 1)) . ":" . $x.'-'.$y;
         $html .= '</a>';
         $html .= ', ';
     }
