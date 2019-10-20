@@ -257,8 +257,8 @@ function printCoords($words, $legend)
     $html = '';
     foreach ($words as $key => $word) {
         $coord = strtr($word, $legend);
-        $x = explode('-', $coord)[0];
-        $y = explode('-', $coord)[1];
+        $x = explode('-', $coord)[0].'0';
+        $y = explode('-', $coord)[1].'0';
         $html .= '<a class="openMap" href="/2013/fullscreen_map.php?team='.ucfirst($key).'&marker_x='.$x.'&marker_y='.$y.'">';
         $html .= strtoupper(substr($key, 0, 1)) . ":" . $coord;
         $html .= '</a>';
