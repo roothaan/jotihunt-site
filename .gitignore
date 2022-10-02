@@ -14,3 +14,6 @@ config/user.ini
 # Eclipse files
 .buildpath
 .settings
+
+# Intellij
+.idea

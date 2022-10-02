@@ -1,9 +1,10 @@
-FROM php:7.2-apache
+FROM php:8.1-apache
 
 MAINTAINER Jasper Roel <jasperroel@gmail.com>
 
 ## Setup apache
-RUN a2enmod rewrite
+RUN a2enmod rewrite headers
+RUN a2dissite 000-default
 
 # Install PostgreSQL PDO
 RUN apt-get update && apt-get install -y libpq-dev \

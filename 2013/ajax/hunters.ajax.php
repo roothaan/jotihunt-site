@@ -58,4 +58,31 @@ if (isset($_POST ['id'])) {
     echo 'ok';
     die();
 }
-?>
+
+
+if (isset($_POST ['copy_hunters_from_event'])) {
+    $id = intval($_POST ['event_id']);
+    $ridercollection = [];
+    if ($id > 0) {
+        // Get all riders from that event
+        $ridercollection = $driver->getAllRiders($id);
+        $current_riders = $driver->getAllRiders();
+        $diff = array_udiff($ridercollection, $current_riders, function ($obj_a, $obj_b) {
+            return intval($obj_a->getUserId()) - intval($obj_b->getUserId());
+        });
+
+        $event_id = $authMgr->getMyEventId();
+        $event = $driver->getEventById($event_id);
+
+        foreach ($diff as $rider) {
+            // Reset deelgebied
+            $rider->setDeelgebied($_POST ["deelgebied"]);
+            // Reset start / end
+            $rider->setVan(strtotime($event->getStarttime()));
+            $rider->setTot(strtotime($event->getEndtime()));
+            $driver->addRider($rider);
+        }
+    }
+    echo json_encode(['id' => $id, 'success' => $id > 0, 'riders' => $ridercollection]);
+    die();
+}

@@ -2,6 +2,7 @@
 if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
 
 JotihuntUtils::requireLogin();
+global $driver, $authMgr;
 
 $car_array = array ();
 if ($handle = opendir('images/cars')) {
@@ -71,6 +72,22 @@ if ($handle = opendir('images/cars')) {
         });
         
         $('#carsselect input.dd-selected-value').attr("name","auto");
+
+        $('#btnCopyHuntersFromEvent').on('click', () => {
+            $.ajax({
+                url: "<?= BASE_URL ?>ajax/hunters.ajax.php",
+                type: "POST",
+                data: {
+                    copy_hunters_from_event: true,
+                    event_id: $('select[name="copy_hunters_from_event_id"]').val(),
+                    deelgebied: <?php echo $driver->getAllDeelgebieden()[0]->getId() ?>
+                },
+                success: function (response) {
+                    const json = $.parseJSON(response)
+                    console.log(json)
+                }
+            });
+        })
     });
 
     var ddData = [
@@ -88,6 +105,20 @@ if ($handle = opendir('images/cars')) {
 
 <?php if ($authMgr->isAdmin()) { ?>
 <button id="btnDeleteRow">Verwijder rijder</button>
+    <?php
+    // Only do this if there are no riders yet
+    $events = $driver->getMyEvents();
+    $event_id = $authMgr->getMyEventId();
+    echo '<select name="copy_hunters_from_event_id">';
+    // Display them
+    foreach ($events as $event) {
+        if ($event->getId() === $event_id) continue;
+        echo '<option value="'.$event->getId().'"'.'>'.$event->getName(). '</option>';
+    }
+    echo '</select>';
+    ?>
+    <button id="btnCopyHuntersFromEvent">Kopieer alle rijders</button>
+
 <?php } ?>
 
 <form action="<?=BASE_URL . 'ajax/hunters.ajax.php'?>" method="POST">
@@ -104,6 +135,8 @@ if ($handle = opendir('images/cars')) {
             </tr>
         </thead>
         <?php
+        $ridercollection = $driver->getAllRiders();
+
         if ($authMgr->isAdmin()) {
             // http://gta.wikia.com/Vehicles_in_GTA_1
             ?>
@@ -127,7 +160,11 @@ if ($handle = opendir('images/cars')) {
                 <td><select name="userId">
                 <?php
                     $users = $driver->getAllUsers();
-                    foreach ( $users as $user ) {
+                    $users_in = array_map(function($rider) { return $rider->getUser(); }, $ridercollection);
+                    $diff = array_udiff($users, $users_in, function ($obj_a, $obj_b) {
+                        return intval($obj_a->getId()) - intval($obj_b->getId());
+                    });
+                    foreach ( $diff as $user ) {
                         echo '<option value="' . $user->getId() . '">' . $user->getDisplayName() . '</option>';
                     }
                 ?>
@@ -142,7 +179,6 @@ if ($handle = opendir('images/cars')) {
         <?php } ?>
         <tbody>
         <?php
-        $ridercollection = $driver->getAllRiders();
         $lastriderlocationcollection = $driver->getLastRiderLocations();
         foreach ( $ridercollection as $rider ) {
             ?>

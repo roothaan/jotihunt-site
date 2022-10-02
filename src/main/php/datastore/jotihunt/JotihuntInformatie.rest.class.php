@@ -2,11 +2,13 @@
 
 class JotihuntInformatieRest {
     
-    var $debug;
+    var bool $debug;
     var $conn;
-    var $protocolPrefix = 'https://';
-    var $jhBase = 'https://jotihunt.net/';
-    var $apiBase = 'https://jotihunt.net/api/1.0/';
+    var string $protocolPrefix = 'https://';
+    var string $jhBase = 'https://jotihunt.net/';
+    var string $apiBase = 'https://jotihunt.net/api/1.0/';
+    var string $jhBase20 = 'https://jotihunt.nl/';
+    var string $apiBase20 = 'https://jotihunt.nl/api/2.0/';
 
     public function __construct() {
         $conn = Datastore::getDatastore();
@@ -259,6 +261,43 @@ class JotihuntInformatieRest {
         return $collection;
     }
 
+    public function getVossenStatusen20() {
+        $vossenstatuslijst = $this->getJsonFromJotihunt($this->apiBase20 . 'areas');
+        if (isset($vossenstatuslijst->error) && ! empty($vossenstatuslijst->error)) {
+            if ($this->debug) {
+                echo "<br /><br /><span style='color:red;'>" .
+                     $vossenstatuslijst->error .
+                     "</span><br /><br />";
+            }
+        } else {
+            if (! empty($vossenstatuslijst) && isset($vossenstatuslijst->data) && count($vossenstatuslijst->data) > 0) {
+                $collection = array ();
+                foreach ( $vossenstatuslijst->data as $vossenstatus ) {
+                    $vossenteam = new VossenTeam();
+                    $vossenteam->setName($vossenstatus->name);
+                    $vossenteam->setDeelgebied($vossenstatus->name);
+                    // Convert status
+                    $status = 'rood';
+                    switch ($vossenstatus->status) {
+                        case 'red':
+                            $status = 'rood';
+                            break;
+                        case 'green':
+                            $status = 'groen';
+                            break;
+                        case 'orange':
+                            $status = 'oranje';
+                            break;
+                    }
+                    $vossenteam->setStatus($status);
+
+                    $collection [] = $vossenteam;
+                }
+                return $collection;
+            }
+        }
+        return false;
+    }
     public function getVossenStatusen() {
         $vossenstatuslijst = $this->getJsonFromJotihunt($this->apiBase . 'vossen');
         if (isset($vossenstatuslijst->error) && ! empty($vossenstatuslijst->error)) {

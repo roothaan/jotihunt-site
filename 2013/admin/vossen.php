@@ -1,5 +1,7 @@
 <?php
 if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
+global $driver, $authMgr;
+
 $authMgr->requireSuperAdmin();
 
 $teams = $driver->getAllTeams();
@@ -27,6 +29,11 @@ $('#vossen').dataTable( {
 	    sUpdateURL: "<?= BASE_URL . 'ajax/vossen.ajax.php' ?>",
 	    sDeleteURL: "<?= BASE_URL . 'ajax/vossen.ajax.php' ?>"
 	})
+    $('select[name="deelgebied_id"]').on('load change', (e) => {
+        $('input[name="name"]').val($(e.target).find('option:selected').text())
+    })
+    $('input[name="name"]').val($('select[name="deelgebied_id"] option:selected').text())
+
 });
 </script>
 
@@ -54,6 +61,9 @@ $('#vossen').dataTable( {
                     foreach ($driver->getAllEvents() as $event) {
                         $areas = $driver->getAllDeelgebiedenForEvent($event->getId());
                         foreach ($areas as $area) {
+                            // Check if $area (deelgebied) is already in $teams
+                            $found = array_filter($teams, function($team) use ( $area ) { return $area->getId() === $team->getDeelgebied(); });
+                            if (count($found) > 0) continue;
                             echo '<option value="'.$area->getId().'">'.
                             $area->getName().
                             ' (' .$event->getName().')</option>';
@@ -69,11 +79,14 @@ $('#vossen').dataTable( {
                     </select>
                 </td>
                 <td><select name="speelhelft_id">
-                    <?php 
-                    foreach ($driver->getAllEvents() as $event) {
+                    <?php
+                    $events = $driver->getAllEvents();
+                    foreach ($events as $key => $event) {
                         $speelhelften = $driver->getAllSpeelhelftenForEvent($event->getId());
                         foreach ($speelhelften as $speelhelft) {
-                            echo '<option value="'.$speelhelft->getId().'">'.
+                            echo '<option value="'.$speelhelft->getId() . '"' .
+                                 (($key === array_key_last($events)) ? 'selected="selected"' : '') .
+                                 '>'.
                             $speelhelft->getId().
                             ' (' .$event->getName().')</option>';
                         }

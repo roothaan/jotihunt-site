@@ -1153,13 +1153,13 @@ class SiteDriverPostgresql {
         return $_result;
     }
 
-    public function getAllRiders() {
+    public function getAllRiders( int $event_id = 0) {
         global $authMgr;
         $sqlName = 'getAllRiders';
         
         $values = array (
             $authMgr->getMyOrganisationId(),
-            $authMgr->getMyEventId()
+            $event_id === 0 ? $authMgr->getMyEventId() : $event_id
         );
         
         $result = pg_execute($this->conn, $sqlName, $values);
