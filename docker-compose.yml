@@ -18,15 +18,15 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     restart: on-failure
+    expose:
+      - "80"
     ports:
       - "8081:80"
-#    volumes:
-#      - ./docker/2021-dump:/pgadmin4/2021-dump.backup
     depends_on:
       - db
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@jotihunters.nl
-      PGADMIN_DEFAULT_PASSWORD: akq*yzg-rpt-UCF5uem
+      PGADMIN_DEFAULT_EMAIL: admin@example.org
+      PGADMIN_DEFAULT_PASSWORD: admin
   db:
     image: postgres
     environment:
