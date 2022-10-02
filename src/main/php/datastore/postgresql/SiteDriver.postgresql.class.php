@@ -142,7 +142,7 @@ class SiteDriverPostgresql {
         }
     }
 
-    public function addHunt($hunter_id, $vossentracker_id = null, $code) {
+    public function addHunt($hunter_id, $vossentracker_id, $code) {
         $sqlName = 'addHunt';
         
         $values = array (
@@ -1118,7 +1118,7 @@ class SiteDriverPostgresql {
                     $bericht->setDatum($row ['datum']);
                     $bericht->setEindtijd($row ['eindtijd']);
                     $bericht->setMaxpunten($row ['maxpunten']);
-                    $bericht->setInhoud(str_replace('__WEBSITE_URL__', WEBSITE_URL, $row ['inhoud']));
+                    $bericht->setInhoud(str_replace('__WEBSITE_URL__', WEBSITE_URL, $row ['inhoud'] ?? ''));
                     $bericht->setLastupdate($row ['lastupdate']);
                     $bericht->setType($row ['type']);
                     

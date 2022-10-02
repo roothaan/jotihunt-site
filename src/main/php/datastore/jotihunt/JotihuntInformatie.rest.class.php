@@ -5,10 +5,8 @@ class JotihuntInformatieRest {
     var bool $debug;
     var $conn;
     var string $protocolPrefix = 'https://';
-    var string $jhBase = 'https://jotihunt.net/';
-    var string $apiBase = 'https://jotihunt.net/api/1.0/';
-    var string $jhBase20 = 'https://jotihunt.nl/';
-    var string $apiBase20 = 'https://jotihunt.nl/api/2.0/';
+    var string $jhBase = 'https://jotihunt.nl/';
+    var string $apiBase = 'https://jotihunt.nl/api/2.0/';
 
     public function __construct() {
         $conn = Datastore::getDatastore();
@@ -68,7 +66,7 @@ class JotihuntInformatieRest {
     public function updateOpdrachten() {
         global $authMgr;
         $collection = array ();
-        $nieuwitemlist = $this->getJsonFromJotihunt($this->apiBase . 'opdracht');
+        $nieuwitemlist = $this->getJsonFromJotihunt($this->apiBase . 'articles');
         if (isset($nieuwitemlist->error) && ! empty($nieuwitemlist->error)) {
             if ($this->debug) {
                 echo '<br /><br /><span style="color:red;">' .
@@ -78,38 +76,21 @@ class JotihuntInformatieRest {
         } else {
             if (! empty($nieuwitemlist) && isset($nieuwitemlist->data) && count($nieuwitemlist->data) > 0) {
                 foreach ( $nieuwitemlist->data as $nieuwsitem ) {
-                    $bericht = new Bericht();
-                    $bericht->setEventId($authMgr->getMyEventId());
+                    if ($nieuwsitem->type !== 'assignment') continue;
 
-                    if(is_array($nieuwsitem->ID)) {
-                        $bericht->setBericht_id(end($nieuwsitem->ID));
-                    } else {
-                        $bericht->setBericht_id($nieuwsitem->ID);
-                    }
-                    
-                    $bericht->setTitel($nieuwsitem->titel);
-                    $bericht->setDatum($nieuwsitem->datum);
-                    $bericht->setEindtijd($nieuwsitem->eindtijd);
-                    $bericht->setMaxpunten($nieuwsitem->maxpunten);
-                    $bericht->setLastupdate($nieuwitemlist->last_update);
+                    $bericht = new Bericht();
                     $bericht->setType('opdracht');
-                    
-                    $itemdetails = $this->getJsonFromJotihunt($this->apiBase . 'opdracht/' . $bericht->getBericht_id());
-                    if (isset($itemdetails->error) && ! empty($itemdetails->error)) {
-                        if ($this->debug) {
-                            echo '<br /><br /><span style="color:red;">' .
-                            $itemdetails->error .
-                            '</span><br /><br />';
-                        }
-                    } else {
-                        if (! empty($itemdetails) && isset($itemdetails->data) && count($itemdetails->data) > 0) {
-                            foreach ( $itemdetails->data as $itemdetail ) {
-                                $inhoud = $this->fixUrls($itemdetail->inhoud);
-                                $bericht->setInhoud($inhoud);
-                            }
-                        }
-                    }
-                    
+                    $bericht->setEventId($authMgr->getMyEventId());
+                    $bericht->setBericht_id($nieuwsitem->id);
+                    $bericht->setTitel($nieuwsitem->title);
+                    $bericht->setDatum($nieuwsitem->publish_at);
+                    $bericht->setLastupdate($nieuwsitem->publish_at);
+                    $bericht->setInhoud($nieuwsitem->message->content);
+
+                    // Unique to assignment
+                    $bericht->setEindtijd($nieuwsitem->message->end_time);
+                    $bericht->setMaxpunten($nieuwsitem->message->max_points);
+
                     $collection [] = $bericht;
                 }
             }
@@ -121,7 +102,7 @@ class JotihuntInformatieRest {
     public function updateNieuws() {
         global $authMgr;
         $collection = array ();
-        $nieuwitemlist = $this->getJsonFromJotihunt($this->apiBase . 'nieuws');
+        $nieuwitemlist = $this->getJsonFromJotihunt($this->apiBase . 'articles');
         if (isset($nieuwitemlist->error) && ! empty($nieuwitemlist->error)) {
             if ($this->debug) {
                 echo '<br /><br /><span style="color:red;">' . 
@@ -131,37 +112,17 @@ class JotihuntInformatieRest {
         } else {
             if (! empty($nieuwitemlist) && isset($nieuwitemlist->data) && count($nieuwitemlist->data) > 0) {
                 foreach ( $nieuwitemlist->data as $nieuwsitem ) {
+                    if ($nieuwsitem->type !== 'news') continue;
 
                     $bericht = new Bericht();
-                    $bericht->setEventId($authMgr->getMyEventId());
-                    
-                    if(is_array($nieuwsitem->ID)) {
-                        $bericht->setBericht_id(end($nieuwsitem->ID));
-                    } else {
-                        $bericht->setBericht_id($nieuwsitem->ID);
-                    }
-                    
-                    $bericht->setTitel($nieuwsitem->titel);
-                    $bericht->setDatum($nieuwsitem->datum);
-                    $bericht->setLastupdate($nieuwitemlist->last_update);
                     $bericht->setType('nieuws');
+                    $bericht->setEventId($authMgr->getMyEventId());
+                    $bericht->setBericht_id($nieuwsitem->id);
+                    $bericht->setTitel($nieuwsitem->title);
+                    $bericht->setDatum($nieuwsitem->publish_at);
+                    $bericht->setLastupdate($nieuwsitem->publish_at);
+                    $bericht->setInhoud($nieuwsitem->message->content);
 
-                    $itemdetails = $this->getJsonFromJotihunt($this->apiBase . 'nieuws/' . $bericht->getBericht_id());
-                    if (isset($itemdetails->error) && ! empty($itemdetails->error)) {
-                        if ($this->debug) {
-                            echo "<br /><br /><span style='color:red;'>" . 
-                                $itemdetails->error . 
-                                    "</span><br /><br />";
-                        }
-                    } else {
-                        if (! empty($itemdetails) && isset($itemdetails->data) && count($itemdetails->data) > 0) {
-                            foreach ( $itemdetails->data as $itemdetail ) {
-                                $inhoud = $this->fixUrls($itemdetail->inhoud);
-                                $bericht->setInhoud($inhoud);
-                            }
-                        }
-                    }
-                    
                     $collection [] = $bericht;
                 }
             }
@@ -188,10 +149,9 @@ class JotihuntInformatieRest {
     }
     public function updateHints() {
         global $authMgr;
-        
-        
+
         $collection = array ();
-        $nieuwitemlist = $this->getJsonFromJotihunt($this->apiBase . 'hint');
+        $nieuwitemlist = $this->getJsonFromJotihunt($this->apiBase . 'articles');
         if (isset($nieuwitemlist->error) && ! empty($nieuwitemlist->error)) {
             if ($this->debug) {
                 echo "<br /><br /><span style='color:red;'>" . 
@@ -201,58 +161,39 @@ class JotihuntInformatieRest {
         } else {
             if (! empty($nieuwitemlist) && isset($nieuwitemlist->data) && count($nieuwitemlist->data) > 0) {
                 foreach ( $nieuwitemlist->data as $nieuwsitem ) {
-                    $bericht = new Bericht();
-                    $bericht->setEventId($authMgr->getMyEventId());
-                    
-                    if(is_array($nieuwsitem->ID)) {
-                        $bericht->setBericht_id(end($nieuwsitem->ID));
-                    } else {
-                        $bericht->setBericht_id($nieuwsitem->ID);
-                    }
-                    
-                    $bericht->setTitel($nieuwsitem->titel);
-                    $bericht->setDatum($nieuwsitem->datum);
-                    $bericht->setLastupdate($nieuwitemlist->last_update);
+                    if ($nieuwsitem->type !== 'hint') continue;
 
+                    $bericht = new Bericht();
                     $bericht->setType('hint');
-                    
-                    $itemdetails = $this->getJsonFromJotihunt($this->apiBase . 'hint/' . $bericht->getBericht_id());
-                    if (isset($itemdetails->error) && ! empty($itemdetails->error)) {
-                        if ($this->debug) {
-                            echo "<br /><br /><span style='color:red;'>" . 
-                                $itemdetails->error . 
-                                "</span><br /><br />";
-                        }
-                    } else {
-                        if (! empty($itemdetails) && isset($itemdetails->data) && count($itemdetails->data) > 0) {
-                            foreach ( $itemdetails->data as $itemdetail ) {
-                                $inhoud = $this->fixUrls($itemdetail->inhoud);
-                                $inhoud = "<div class='inhoud'>".$inhoud."</div>";
+                    $bericht->setEventId($authMgr->getMyEventId());
+                    $bericht->setBericht_id($nieuwsitem->id);
+                    $bericht->setTitel($nieuwsitem->title);
+                    $bericht->setDatum($nieuwsitem->publish_at);
+                    $bericht->setLastupdate($nieuwsitem->publish_at);
+
+                    $inhoud = "<div class='inhoud'>".$nieuwsitem->message->content."</div>";
                                 
-                                if(isset($nieuwsitem->Alpha)) {
-                                    $inhoud .= $this->getHintAsHTMLByDeelgebied($nieuwsitem->Alpha, "Alpha");
-                                }
-                                if(isset($nieuwsitem->Bravo)) {
-                                    $inhoud .= $this->getHintAsHTMLByDeelgebied($nieuwsitem->Bravo, "Bravo");
-                                }
-                                if(isset($nieuwsitem->Charlie)) {
-                                    $inhoud .= $this->getHintAsHTMLByDeelgebied($nieuwsitem->Charlie, "Charlie");
-                                }
-                                if(isset($nieuwsitem->Delta)) {
-                                    $inhoud .= $this->getHintAsHTMLByDeelgebied($nieuwsitem->Delta, "Delta");
-                                }
-                                if(isset($nieuwsitem->Echo)) {
-                                    $inhoud .= $this->getHintAsHTMLByDeelgebied($nieuwsitem->Echo, "Echo");
-                                }
-                                if(isset($nieuwsitem->Foxtrot)) {
-                                    $inhoud .= $this->getHintAsHTMLByDeelgebied($nieuwsitem->Foxtrot, "Foxtrot");
-                                }
-                                
-                                $bericht->setInhoud($inhoud);
-                            }
-                        }
+                    if(isset($nieuwsitem->Alpha)) {
+                        $inhoud .= $this->getHintAsHTMLByDeelgebied($nieuwsitem->Alpha, "Alpha");
                     }
-                    
+                    if(isset($nieuwsitem->Bravo)) {
+                        $inhoud .= $this->getHintAsHTMLByDeelgebied($nieuwsitem->Bravo, "Bravo");
+                    }
+                    if(isset($nieuwsitem->Charlie)) {
+                        $inhoud .= $this->getHintAsHTMLByDeelgebied($nieuwsitem->Charlie, "Charlie");
+                    }
+                    if(isset($nieuwsitem->Delta)) {
+                        $inhoud .= $this->getHintAsHTMLByDeelgebied($nieuwsitem->Delta, "Delta");
+                    }
+                    if(isset($nieuwsitem->Echo)) {
+                        $inhoud .= $this->getHintAsHTMLByDeelgebied($nieuwsitem->Echo, "Echo");
+                    }
+                    if(isset($nieuwsitem->Foxtrot)) {
+                        $inhoud .= $this->getHintAsHTMLByDeelgebied($nieuwsitem->Foxtrot, "Foxtrot");
+                    }
+
+                    $bericht->setInhoud($inhoud);
+
                     $collection [] = $bericht;
                 }
             }
@@ -261,8 +202,8 @@ class JotihuntInformatieRest {
         return $collection;
     }
 
-    public function getVossenStatusen20() {
-        $vossenstatuslijst = $this->getJsonFromJotihunt($this->apiBase20 . 'areas');
+    public function getVossenStatusen() {
+        $vossenstatuslijst = $this->getJsonFromJotihunt($this->apiBase . 'areas');
         if (isset($vossenstatuslijst->error) && ! empty($vossenstatuslijst->error)) {
             if ($this->debug) {
                 echo "<br /><br /><span style='color:red;'>" .
@@ -291,30 +232,6 @@ class JotihuntInformatieRest {
                     }
                     $vossenteam->setStatus($status);
 
-                    $collection [] = $vossenteam;
-                }
-                return $collection;
-            }
-        }
-        return false;
-    }
-    public function getVossenStatusen() {
-        $vossenstatuslijst = $this->getJsonFromJotihunt($this->apiBase . 'vossen');
-        if (isset($vossenstatuslijst->error) && ! empty($vossenstatuslijst->error)) {
-            if ($this->debug) {
-                echo "<br /><br /><span style='color:red;'>" . 
-                    $vossenstatuslijst->error . 
-                    "</span><br /><br />";
-            }
-        } else {
-            if (! empty($vossenstatuslijst) && isset($vossenstatuslijst->data) && count($vossenstatuslijst->data) > 0) {
-                $collection = array ();
-                foreach ( $vossenstatuslijst->data as $vossenstatus ) {
-                    $vossenteam = new VossenTeam();
-                    $vossenteam->setName($vossenstatus->team);
-                    $vossenteam->setDeelgebied($vossenstatus->team);
-                    $vossenteam->setStatus($vossenstatus->status);
-                    
                     $collection [] = $vossenteam;
                 }
                 return $collection;

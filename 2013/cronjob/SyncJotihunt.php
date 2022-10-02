@@ -88,7 +88,7 @@ foreach ( $nieuwscollection as $nieuwsitem ) {
         print_debug_pre($nieuwsitem);
         continue;
     }
-    $nieuwsitem->setInhoud(localizeImagesInText($nieuwsitem->getInhoud()));
+    //$nieuwsitem->setInhoud(localizeImagesInText($nieuwsitem->getInhoud()));
     $driver->addBericht($nieuwsitem);
 }
 
@@ -99,7 +99,7 @@ foreach ( $opdrachtcollection as $opdracht ) {
         print_debug_pre($opdracht);
         continue;
     }
-    $opdracht->setInhoud(localizeImagesInText($opdracht->getInhoud()));
+    //$opdracht->setInhoud(localizeImagesInText($opdracht->getInhoud()));
     $driver->addBericht($opdracht);
 }
 
@@ -110,14 +110,14 @@ foreach ( $hintcollection as $hint ) {
         print_debug_pre($hint);
         continue;
     }
-    $hint->setInhoud(localizeImagesInText($hint->getInhoud()));
+    //$hint->setInhoud(localizeImagesInText($hint->getInhoud()));
     $driver->addBericht($hint);
 }
 
 print_debug('<h1>Vossen Statussen</h1>');
 $berichtcollection = $driver->getBerichtCollection();
 
-$vossenstatuscollection = $jotihuntinformatie->getVossenStatusen20();
+$vossenstatuscollection = $jotihuntinformatie->getVossenStatusen();
 $allGcmIds = $driver->getAllActiveGcms();
 // $vossenstatuscollection == Warning: Invalid argument supplied for foreach() in /app/2013/cronjob/SyncJotihunt.php on line 114
 foreach ( $vossenstatuscollection as $vossenstatus ) {
