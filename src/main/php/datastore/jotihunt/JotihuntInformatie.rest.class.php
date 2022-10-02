@@ -63,7 +63,7 @@ class JotihuntInformatieRest {
         return $result;
     }
 
-    public function updateOpdrachten() {
+    public function updateArticles() {
         global $authMgr;
         $collection = array ();
         $nieuwitemlist = $this->getJsonFromJotihunt($this->apiBase . 'articles');
@@ -76,10 +76,21 @@ class JotihuntInformatieRest {
         } else {
             if (! empty($nieuwitemlist) && isset($nieuwitemlist->data) && count($nieuwitemlist->data) > 0) {
                 foreach ( $nieuwitemlist->data as $nieuwsitem ) {
-                    if ($nieuwsitem->type !== 'assignment') continue;
+                    $type = '';
+                    switch ($nieuwsitem->type) {
+                        case 'assignment':
+                            $type = 'opdracht';
+                            break;
+                        case 'hint':
+                            $type = 'hint';
+                            break;
+                        case 'news':
+                            $type = 'nieuws';
+                            break;
+                    }
 
                     $bericht = new Bericht();
-                    $bericht->setType('opdracht');
+                    $bericht->setType($type);
                     $bericht->setEventId($authMgr->getMyEventId());
                     $bericht->setBericht_id($nieuwsitem->id);
                     $bericht->setTitel($nieuwsitem->title);
@@ -88,40 +99,10 @@ class JotihuntInformatieRest {
                     $bericht->setInhoud($nieuwsitem->message->content);
 
                     // Unique to assignment
-                    $bericht->setEindtijd($nieuwsitem->message->end_time);
-                    $bericht->setMaxpunten($nieuwsitem->message->max_points);
-
-                    $collection [] = $bericht;
-                }
-            }
-        }
-        
-        return $collection;
-    }
-
-    public function updateNieuws() {
-        global $authMgr;
-        $collection = array ();
-        $nieuwitemlist = $this->getJsonFromJotihunt($this->apiBase . 'articles');
-        if (isset($nieuwitemlist->error) && ! empty($nieuwitemlist->error)) {
-            if ($this->debug) {
-                echo '<br /><br /><span style="color:red;">' . 
-                    $nieuwitemlist->error . 
-                    '</span><br /><br />';
-            }
-        } else {
-            if (! empty($nieuwitemlist) && isset($nieuwitemlist->data) && count($nieuwitemlist->data) > 0) {
-                foreach ( $nieuwitemlist->data as $nieuwsitem ) {
-                    if ($nieuwsitem->type !== 'news') continue;
-
-                    $bericht = new Bericht();
-                    $bericht->setType('nieuws');
-                    $bericht->setEventId($authMgr->getMyEventId());
-                    $bericht->setBericht_id($nieuwsitem->id);
-                    $bericht->setTitel($nieuwsitem->title);
-                    $bericht->setDatum($nieuwsitem->publish_at);
-                    $bericht->setLastupdate($nieuwsitem->publish_at);
-                    $bericht->setInhoud($nieuwsitem->message->content);
+                    if ($nieuwsitem->type === 'assignment') {
+                        $bericht->setEindtijd( $nieuwsitem->message?->end_time );
+                        $bericht->setMaxpunten( $nieuwsitem->message?->max_points );
+                    }
 
                     $collection [] = $bericht;
                 }
@@ -146,60 +127,6 @@ class JotihuntInformatieRest {
         }
         $inhoud .= "</div> </div>";
         return $inhoud;
-    }
-    public function updateHints() {
-        global $authMgr;
-
-        $collection = array ();
-        $nieuwitemlist = $this->getJsonFromJotihunt($this->apiBase . 'articles');
-        if (isset($nieuwitemlist->error) && ! empty($nieuwitemlist->error)) {
-            if ($this->debug) {
-                echo "<br /><br /><span style='color:red;'>" . 
-                    $nieuwitemlist->error . 
-                    "</span><br /><br />";
-            }
-        } else {
-            if (! empty($nieuwitemlist) && isset($nieuwitemlist->data) && count($nieuwitemlist->data) > 0) {
-                foreach ( $nieuwitemlist->data as $nieuwsitem ) {
-                    if ($nieuwsitem->type !== 'hint') continue;
-
-                    $bericht = new Bericht();
-                    $bericht->setType('hint');
-                    $bericht->setEventId($authMgr->getMyEventId());
-                    $bericht->setBericht_id($nieuwsitem->id);
-                    $bericht->setTitel($nieuwsitem->title);
-                    $bericht->setDatum($nieuwsitem->publish_at);
-                    $bericht->setLastupdate($nieuwsitem->publish_at);
-
-                    $inhoud = "<div class='inhoud'>".$nieuwsitem->message->content."</div>";
-                                
-                    if(isset($nieuwsitem->Alpha)) {
-                        $inhoud .= $this->getHintAsHTMLByDeelgebied($nieuwsitem->Alpha, "Alpha");
-                    }
-                    if(isset($nieuwsitem->Bravo)) {
-                        $inhoud .= $this->getHintAsHTMLByDeelgebied($nieuwsitem->Bravo, "Bravo");
-                    }
-                    if(isset($nieuwsitem->Charlie)) {
-                        $inhoud .= $this->getHintAsHTMLByDeelgebied($nieuwsitem->Charlie, "Charlie");
-                    }
-                    if(isset($nieuwsitem->Delta)) {
-                        $inhoud .= $this->getHintAsHTMLByDeelgebied($nieuwsitem->Delta, "Delta");
-                    }
-                    if(isset($nieuwsitem->Echo)) {
-                        $inhoud .= $this->getHintAsHTMLByDeelgebied($nieuwsitem->Echo, "Echo");
-                    }
-                    if(isset($nieuwsitem->Foxtrot)) {
-                        $inhoud .= $this->getHintAsHTMLByDeelgebied($nieuwsitem->Foxtrot, "Foxtrot");
-                    }
-
-                    $bericht->setInhoud($inhoud);
-
-                    $collection [] = $bericht;
-                }
-            }
-        }
-        
-        return $collection;
     }
 
     public function getVossenStatusen() {
@@ -240,8 +167,12 @@ class JotihuntInformatieRest {
         return false;
     }
 
+    // API 2.0 is:
+    // - english instead of dutch
+    // - has no "regio" (now deleted)
+    // - has no "plaats" (???)
     public function getScorelijst() {
-        $scorelijst = $this->getJsonFromJotihunt($this->apiBase . 'scorelijst', true);
+        $scorelijst = $this->getJsonFromJotihunt($this->apiBase . 'subscriptions', true);
         if (isset($scorelijst->error) && ! empty($scorelijst->error)) {
             if ($this->debug) {
             echo "<br /><br /><span style='color:red;'>" . 
@@ -251,13 +182,8 @@ class JotihuntInformatieRest {
         } else {
             if (! empty($scorelijst) && isset($scorelijst->data) && count($scorelijst->data) > 0) {
                 $collection = array ();
-                
-                // Sometimes (during development of 2017, for example)
-                // the last_update stamp was not part of the API response.
-                // This is dirty hack to have a fallback timestamp
-                // '2017-10-21 08:00:00' == 1508572800
-                $timestamp = 1508572800;
 
+                $timestamp = time();
                 if (!empty($scorelijst->last_update)) {
                     $timestamp = strtotime($scorelijst->last_update);
                 }
@@ -265,25 +191,29 @@ class JotihuntInformatieRest {
                     $score = new Score();
                     
                     // Check for the bare minimum
-                    if (!isset($scoreitem->plaats) ||
-                        !isset($scoreitem->groep) ||
-                        !isset($scoreitem->woonplaats) ||
-                        !isset($scoreitem->regio)
+                    if (!isset($scoreitem->name) ||
+                        !isset($scoreitem->hunt_points)
                     ) {
                         // If there is none of the items above, skip it.
                         continue;
                     }
-                
-                    $score->setPlaats($scoreitem->plaats);
-                    $score->setGroep($scoreitem->groep);
-                    $score->setWoonplaats($scoreitem->woonplaats);
-                    $score->setRegio($scoreitem->regio);
-                    $score->setHunts((!empty($scoreitem->hunts))?$scoreitem->hunts:0);
-                    $score->setTegenhunts((!empty($scoreitem->tegenhunts))?$scoreitem->tegenhunts:0);
-                    $score->setOpdrachten((!empty($scoreitem->opdrachten))?$scoreitem->opdrachten:0);
-                    $score->setFotoopdrachten((!empty($scoreitem->fotoopdrachten))?$scoreitem->fotoopdrachten:0);
-                    $score->setHints((!empty($scoreitem->hints))?$scoreitem->hints:0);
-                    $score->setTotaal((!empty($scoreitem->totaal))?$scoreitem->totaal:0);
+
+                    $total = $score->getHunts()
+                             - $score->getTegenhunts()
+                             + $score->getOpdrachten()
+                             + $score->getFotoopdrachten()
+                             + $score->getHints();
+
+                    $score->setPlaats($total ?? 0);
+                    $score->setGroep($scoreitem->name);
+                    $score->setWoonplaats($scoreitem->city);
+                    //$score->setRegio($scoreitem->regio);
+                    $score->setHunts((!empty($scoreitem->hunt_points))?$scoreitem->hunt_points:0);
+                    $score->setTegenhunts((!empty($scoreitem->counter_hunt_points))?$scoreitem->counter_hunt_points:0);
+                    $score->setOpdrachten((!empty($scoreitem->assignment_points))?$scoreitem->assignment_points:0);
+                    $score->setFotoopdrachten((!empty($scoreitem->photo_assignment_points))?$scoreitem->photo_assignment_points:0);
+                    $score->setHints((!empty($scoreitem->hint_points))?$scoreitem->hint_points:0);
+                    $score->setTotaal((!empty($total))?$total:0);
                     $score->setLastupdate($timestamp);
                     
                     $collection [] = $score;

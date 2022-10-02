@@ -505,13 +505,15 @@ class SiteDriverPostgresql {
         );
         
         $result = pg_execute($this->conn, $sqlName, $values);
-        
+
         if (! $result) {
             throw new DatastoreException('Could not get score for group ' . $groepnaam);
         }
         
         $row = pg_fetch_assoc($result);
-        
+
+        if (!$row) return false;
+
         $score = new Score();
         $score->setGroep($row ['groep']);
         $score->setPlaats($row ['plaats']);
@@ -1013,10 +1015,10 @@ class SiteDriverPostgresql {
                 $bericht->getEventId(),
                 $bericht->getTitel(),
                 $bericht->getDatum(),
-                strlen($bericht->getEindtijd()) > 0 ? $bericht->getEindtijd() : null,
+                strlen($bericht->getEindtijd() ?? '') > 0 ? $bericht->getEindtijd() : null,
                 $bericht->getMaxpunten(),
                 $bericht->getInhoud(),
-                strlen($bericht->getLastupdate()) > 0 ? $bericht->getLastupdate() : null,
+                strlen($bericht->getLastupdate() ?? '') > 0 ? $bericht->getLastupdate() : null,
                 $bericht->getType() 
         );
         

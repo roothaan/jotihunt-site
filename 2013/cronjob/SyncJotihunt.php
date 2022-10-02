@@ -3,6 +3,7 @@ require_once '../init.php';
 
 require_once CLASS_DIR . 'jotihunt/Gcm.class.php';
 require_once CLASS_DIR . 'jotihunt/GcmSender.class.php';
+global $authMgr, $driver;
 
 $debug = isset($_GET['debug']) ? '1' === $_GET['debug'] : false;
 
@@ -79,21 +80,8 @@ function print_debug($message) {
 $jotihuntinformatie = new JotihuntInformatieRest();
 $jotihuntinformatie->setDebug($debug);
 
-print_debug('<h1>Nieuws</h1>');
-$nieuwscollection = $jotihuntinformatie->updateNieuws();
-
-foreach ( $nieuwscollection as $nieuwsitem ) {
-    if($debug) {
-        print_debug('<h2>Nieuws bericht</h2>');
-        print_debug_pre($nieuwsitem);
-        continue;
-    }
-    //$nieuwsitem->setInhoud(localizeImagesInText($nieuwsitem->getInhoud()));
-    $driver->addBericht($nieuwsitem);
-}
-
-print_debug('<h1>Opdrachten</h1>');
-$opdrachtcollection = $jotihuntinformatie->updateOpdrachten();
+print_debug('<h1>Articles (Opdrachten, Hints, Nieuws)</h1>');
+$opdrachtcollection = $jotihuntinformatie->updateArticles();
 foreach ( $opdrachtcollection as $opdracht ) {
     if($debug) {
         print_debug_pre($opdracht);
@@ -103,16 +91,6 @@ foreach ( $opdrachtcollection as $opdracht ) {
     $driver->addBericht($opdracht);
 }
 
-print_debug('<h1>Hints</h1>');
-$hintcollection = $jotihuntinformatie->updateHints();
-foreach ( $hintcollection as $hint ) {
-    if($debug) {
-        print_debug_pre($hint);
-        continue;
-    }
-    //$hint->setInhoud(localizeImagesInText($hint->getInhoud()));
-    $driver->addBericht($hint);
-}
 
 print_debug('<h1>Vossen Statussen</h1>');
 $berichtcollection = $driver->getBerichtCollection();
@@ -172,26 +150,32 @@ foreach ( $vossenstatuscollection as $vossenstatus ) {
 $scorecollection = $jotihuntinformatie->getScorelijst();
 
 $changed = false;
-if(!empty($scorecollection) && count($scorecollection) > 0) {
+if ( ! empty( $scorecollection ) && count( $scorecollection ) > 0 ) {
     foreach ( $scorecollection as $score ) {
-        $huidigeScore = $driver->getScoreByGroep($score->getGroep());
-        if ($score->getPlaats() != $huidigeScore->getPlaats() || $score->getHunts() != $huidigeScore->getHunts()) {
+        $huidigeScore = $driver->getScoreByGroep( $score->getGroep() );
+
+        // New score
+        if (!$huidigeScore) {
+            $changed = true;
+        } else if ( $score->getPlaats() != $huidigeScore->getPlaats() || $score->getHunts() != $huidigeScore->getHunts() ) {
             $changed = true;
         }
     }
 }
 
-print_debug('<h1>Scorelijst</h1>');
-if ($changed) {
+print_debug( '<h1>Scorelijst</h1>' );
+if ( $changed ) {
     foreach ( $scorecollection as $score ) {
-    if ($debug) {
-        print_debug('<h2>Updating score</h2>');
-        print_debug_pre($score);
-        continue;
+        if ( $debug ) {
+            print_debug( '<h2>Updating score</h2>' );
+            print_debug_pre( $score );
+            continue;
+        }
+        $driver->addScore( $score );
     }
-        $driver->addScore($score);
-    }
-    print_debug('Scores updated.');
+    print_debug( 'Scores updated.' );
+} else {
+    print_debug( 'Scores NOT updated.' );
 }
 
 foreach (libxml_get_errors() as $error) {

@@ -42,7 +42,7 @@ class GcmSender {
         if (sizeof($this->receiverIds) == 0) {
             return 'No receiverIds, nothing to send, cancelling GCM request';
         }
-        if (strlen($this->googleApiKey) === 0) {
+        if (strlen($this->googleApiKey ?? '') === 0) {
             return 'No GCM API key set';
         }
         $data = array (
