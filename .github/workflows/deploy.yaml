@@ -19,5 +19,8 @@ jobs:
       - run: docker-compose stop jotihunt
         working-directory: /home/jroel/scripts/${{ matrix.sites }}-jotihunt-site
 
+      - run: docker-compose rm jotihunt
+        working-directory: /home/jroel/scripts/${{ matrix.sites }}-jotihunt-site
+
       - run: docker-compose start jotihunt
         working-directory: /home/jroel/scripts/${{ matrix.sites }}-jotihunt-site
