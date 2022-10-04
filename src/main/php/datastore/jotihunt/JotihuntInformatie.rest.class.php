@@ -2,7 +2,7 @@
 
 class JotihuntInformatieRest {
     
-    var bool $debug;
+    var bool $debug = false;
     var $conn;
     var string $protocolPrefix = 'https://';
     var string $jhBase = 'https://jotihunt.nl/';
@@ -165,6 +165,40 @@ class JotihuntInformatieRest {
             }
         }
         return false;
+    }
+
+    /**
+     * @return Deelnemer[]
+     */
+    public function getDeelnemers() {
+        $subscriptions = $this->getJsonFromJotihunt( $this->apiBase . 'subscriptions', true );
+        $deelnemers = array();
+
+        if (isset($subscriptions->error) && ! empty($subscriptions->error)) {
+            if ($this->debug) {
+                echo "<br /><br /><span style='color:red;'>" .
+                     $subscriptions->error .
+                     "</span><br /><br />";
+            }
+        } else {
+            if ( ! empty( $subscriptions ) && isset( $subscriptions->data ) && count( $subscriptions->data ) > 0 ) {
+                foreach ( $subscriptions->data as $deelnemerData ) {
+                    $deelnemer = new Deelnemer();
+                    $deelnemer
+                        ->setName( $deelnemerData->name )
+                        ->setAccomodation( $deelnemerData->accomodation )
+                        ->setStreet( $deelnemerData->street )
+                        ->setHousenumber( $deelnemerData->housenumber )
+                        ->setHousenumberAddition( $deelnemerData->housenumber_addition )
+                        ->setPostcode( $deelnemerData->postcode )
+                        ->setCity( $deelnemerData->city )
+                        ->setLat( $deelnemerData->lat )
+                        ->setLong( $deelnemerData->long );
+                    $deelnemers[] = $deelnemer;
+                }
+            }
+        }
+        return $deelnemers;
     }
 
     // API 2.0 is:

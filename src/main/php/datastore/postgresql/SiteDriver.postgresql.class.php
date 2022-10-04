@@ -24,6 +24,7 @@ require_once CLASS_DIR . 'jotihunt/Counterhuntrondje.class.php';
 require_once CLASS_DIR . 'jotihunt/Image.class.php';
 require_once CLASS_DIR . 'jotihunt/Opziener.class.php';
 require_once CLASS_DIR . 'jotihunt/Hunt.class.php';
+require_once CLASS_DIR . 'jotihunt/Deelnemer.class.php';
 
 require_once CLASS_DIR . 'datastore/jotihunt/JotihuntInformatie.rest.class.php';
 
