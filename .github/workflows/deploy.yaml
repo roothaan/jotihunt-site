@@ -1,0 +1,23 @@
+name: deploy
+
+on:
+  workflow_run:
+    workflows: [docker]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: roothaan-server-nuc-02
+    strategy:
+      matrix:
+        sites: [ '111-roothaan', '117-lunteren' ]
+    steps:
+      - run: docker-compose pull jotihunt
+        working-directory: /home/jroel/scripts/${{ matrix.sites }}-jotihunt-site
+
+      - run: docker-compose stop jotihunt
+        working-directory: /home/jroel/scripts/${{ matrix.sites }}-jotihunt-site
+
+      - run: docker-compose start jotihunt
+        working-directory: /home/jroel/scripts/${{ matrix.sites }}-jotihunt-site
