@@ -13,11 +13,6 @@ if (defined('WELCOME_MESSAGE')) {
 }
 
 if ($authMgr->isLoggedIn()) { ?>
-    <h2>
-        <a href="<?= WEBSITE_URL ?>scores">Scorelijst</a>
-    </h2>
-    <br />
-    
     <h2>Hunter Highscores</h2>
     <div>
         <table>
