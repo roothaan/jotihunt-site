@@ -22,6 +22,7 @@ if ($driver->isReady()) {
     <li><a href="<?=WEBSITE_URL?>admin-gcm">Android GCM IDs</a></li>
     <li><a href="<?=WEBSITE_URL?>admin-poi">Pois</a></li>
     <li><a href="<?=WEBSITE_URL?>admin-poi-types">Poi Types</a></li>
+    <li><a href="<?=WEBSITE_URL?>admin-subscriptions-kml">Deelnemers KLM export</a></li>
 </ul>
     <?php if (!$driver->isReady() || $authMgr->isSuperAdmin()) { ?>
     <h2>Super Admin</h2>
@@ -34,7 +35,7 @@ if ($driver->isReady()) {
         <li><a href="<?=WEBSITE_URL?>suadmin-speelhelften">Speelhelften</a> (<?= $driver->getAllSpeelhelftenCount() ?>)</li>
         <li><a href="<?=WEBSITE_URL?>suadmin-counterhunt">Counterhunt rondes</a> (<?= $driver->getAllCounterhuntrondjesCount() ?>)</li>
         <li><a href="<?=WEBSITE_URL?>suadmin-vossen">Vossen</a>  (<?= $driver->getAllTeamsCount() ?>)</li>
-        
+
         <li><a href="<?=WEBSITE_URL?>suadmin-showdatabase">Show database</a></li>
         <li><a href="<?=WEBSITE_URL?>suadmin-phpinfo">phpinfo();</a></li>
     </ul>

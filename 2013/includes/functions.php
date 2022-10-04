@@ -93,9 +93,10 @@ class JotihuntUtils {
         'kaart',
         'delete_locatie',
         'kml',
-        'deelgebieden-kml'
+        'deelgebieden-kml',
+        'admin-subscriptions-kml'
     );
-    
+
     private static $urlParts = array();
     
     public static function setUrlParts($urlToParse) {

@@ -13,9 +13,9 @@ class DeelgebiedHelper {
      * Sets the right headers and outputs the KmlOutput
      * Probably smart to call a "die()" after this..
      */
-    public function outputAsKml($kmlOutput) {
+    public function outputAsKml($kmlOutput, string $filename = "deelgebiedInfo.kml") {
         header('Content-type: application/vnd.google-earth.kml+xml');
-        header('Content-Disposition: attachment; filename="deelgebiedInfo.kml"');
+        header("Content-Disposition: attachment; filename=\"$filename\"");
         echo $kmlOutput;    
     }
 

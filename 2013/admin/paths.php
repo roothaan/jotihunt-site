@@ -36,6 +36,7 @@ $paths = array(
     'admin-poi' => 'admin/poi.php',
     'admin-poi-types' => 'admin/poitypes.php',
     'admin-gcm' => 'gcm.php',
+    'admin-subscriptions-kml' => 'admin/subscriptions-kml.php',
     'suadmin-config' => 'admin/config.php',
     'suadmin-kml-import' => 'admin/kml-import.php',
     'suadmin-events' => 'admin/events.php',
@@ -45,8 +46,7 @@ $paths = array(
     'suadmin-counterhunt' => 'admin/counterhunt.php',
     'suadmin-vossen' => 'admin/vossen.php',
     'suadmin-showdatabase' => 'admin/showdatabase.php',
-    'suadmin-phpinfo' => 'admin/phpinfo.php'
-
+    'suadmin-phpinfo' => 'admin/phpinfo.php',
 );
 
 $needsNoEvent = array(
