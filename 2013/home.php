@@ -32,5 +32,5 @@ if ($authMgr->isLoggedIn()) { ?>
 }
 ?>
 <div class="jotihuntBanner">
-    <a href="https://www.jotihunt.net" target="_blank"><img src="<?=BASE_URL?>images/themes/<?= THEME_NAME ?>/banner.jpg" /></a>
+    <a href="https://www.jotihunters.nl" target="_blank"><img src="<?=BASE_URL?>images/themes/<?= THEME_NAME ?>/banner.jpg" /></a>
 </div>
