@@ -56,12 +56,13 @@ if($_headerOptions['includeBody']) { ?>
         <div id="menu">
 		    <?php 
 		    function setPage($page) {
-                $pageURL = $_SERVER ["SCRIPT_NAME"];
+                $pageURL = $_SERVER ["REQUEST_URI"];
                 $pageURLAr = explode("/", $pageURL);
                 
                 $curPage = $pageURLAr [count($pageURLAr) - 1];
+
                 if ($page == $curPage) {
-                    echo " class=\"current_page_item\"";
+                    echo "current_page_item";
                 }
             }
 		    
@@ -69,22 +70,23 @@ if($_headerOptions['includeBody']) { ?>
     			<ul class="menu_container">
     			    <?php 
     			    if ($driver->isReady() && ($authMgr->isSuperAdmin() || $authMgr->getMyEventId() > 0)) { ?>
-        				<li class="menu_item berichtenItem" <?php setPage("berichten.php"); ?>><a href="<?=WEBSITE_URL?>berichten" class="first" title="Berichten"></a></li>
+        				<li class="menu_item berichtenItem <?php setPage("berichten"); ?>"><a href="<?=WEBSITE_URL?>berichten" class="first" title="Berichten"></a></li>
                         <?php if (!$authMgr->isSuperAdmin()) { ?>
-                            <li class="menu_item vossenItem" <?php setPage("vossen.php"); ?>><a href="<?=WEBSITE_URL?>vossen" title="Vossen"></a></li>
-                            <li class="menu_item huntsItem" <?php setPage("edithunts.php"); ?>><a href="<?=WEBSITE_URL?>hunts" title="Hunts"></a></li>
-                            <li class="menu_item huntersItem" <?php setPage("hunters.php"); ?>><a href="<?=WEBSITE_URL?>hunters" title="Hunters"></a></li>
-                            <li class="menu_item opzienersItem" <?php setPage("opzieners.php"); ?>><a href="<?=WEBSITE_URL?>opzieners" title="Opzieners"></a></li>
-                            <li class="menu_item telItem" <?php setPage("telnummers.php"); ?>><a href="<?=WEBSITE_URL?>telefoonnummers" title="Telefoonnummers"></a></li>
-                            <li class="menu_item alarmItem" <?php setPage("alarmsite.php"); ?>><a href="<?=WEBSITE_URL?>alarm" title="Alarm pagina"></a></li>
-                            <li class="menu_item fullscreenItem" <?php setPage("fullscreen.php"); ?>><a href="<?=WEBSITE_URL?>beamer" title="Beamer pagina"></a></li>
-                            <li class="menu_item mapItem" <?php setPage("map.php"); ?>><a href="<?=WEBSITE_URL?>kaart" title="Fullscreen kaart"></a></li>
-        				<?php 
+                            <li class="menu_item vossenItem <?php setPage("vossen"); ?>"><a href="<?=WEBSITE_URL?>vossen" title="Vossen"></a></li>
+                            <li class="menu_item huntsItem <?php setPage("hunts"); ?>"><a href="<?=WEBSITE_URL?>hunts" title="Hunts"></a></li>
+                            <li class="menu_item huntersItem <?php setPage("hunters"); ?>"><a href="<?=WEBSITE_URL?>hunters" title="Hunters"></a></li>
+                            <li class="menu_item opzienersItem <?php setPage("opzieners"); ?>"><a href="<?=WEBSITE_URL?>opzieners" title="Opzieners"></a></li>
+                            <li class="menu_item telItem <?php setPage("telefoonnummers"); ?>"><a href="<?=WEBSITE_URL?>telefoonnummers" title="Telefoonnummers"></a></li>
+                            <li class="menu_item alarmItem <?php setPage("alarm"); ?>"><a href="<?=WEBSITE_URL?>alarm" title="Alarm pagina"></a></li>
+                            <li class="menu_item fullscreenItem <?php setPage("beamer"); ?>"><a href="<?=WEBSITE_URL?>beamer" title="Beamer pagina"></a></li>
+                            <li class="menu_item mapItem <?php setPage("kaart"); ?>"><a href="<?=WEBSITE_URL?>kaart" title="Fullscreen kaart"></a></li>
+                            <li class="menu_item scoreItem <?php setPage("scores"); ?>"><a href="<?=WEBSITE_URL?>scores" title="Scorelijst"></a></li>
+        				<?php
                         }
     				} ?>
     				
     				<?php if(!$driver->isReady() || ($authMgr->isAdmin() && $authMgr->getMyEventId() > 0) || $authMgr->isSuperAdmin()) { ?>
-    					<li class="menu_item adminItem" <?php setPage("admin.php"); ?>><a href="<?=WEBSITE_URL?>admin" title="Admin"></a></li>
+    					<li class="menu_item adminItem <?php setPage("admin"); ?>"><a href="<?=WEBSITE_URL?>admin" title="Admin"></a></li>
     				<?php } ?>
     				<li class="menu_item logoutItem"><a href="<?=WEBSITE_URL?>logout" title="Uitloggen"></a></li>
     				<li class="menu_item showMenuItem"><a href="#" title="Menu tonen"></a></li>
