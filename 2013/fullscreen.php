@@ -6,7 +6,6 @@ $headerOptions = array();
 $headerOptions['title'] = 'Fullscreen Kaart';
 $headerOptions['includeBody'] = false;
 require_once BASE_DIR . 'header.php';
-define('BEAMER_GOOGLE_MAPS_ENABLED', false);
 ?>
 
 <style>
@@ -23,7 +22,7 @@ define('BEAMER_GOOGLE_MAPS_ENABLED', false);
 	}
 </style>
 
-<?php if(BEAMER_GOOGLE_MAPS_ENABLED && GOOGLE_MAPS_ENABLED) { ?>
+<?php if(GOOGLE_MAPS_ENABLED) { ?>
 <script type="text/javascript" src="<?= GOOGLE_MAPS_URI ?>"></script>
 <?php } ?>
 
@@ -283,7 +282,6 @@ var team<?= $deelgebied->getId() ?>_old = {
         		</a>
         	</td>
         	</tr><tr>
-        	<?php if (BEAMER_GOOGLE_MAPS_ENABLED) { ?>
             <td
             	id="mapcon_<?= $deelgebied->getId() ?>"
             	style="min-height: 300px; width: 33%; overflow-x: hidden; overflow-y: hidden;">
@@ -296,9 +294,6 @@ var team<?= $deelgebied->getId() ?>_old = {
             	</iframe>
             	<?php } ?>
             </td>
-            <?php } else { ?>
-            <td></td>
-            <?php } ?>
         	</tr><tr>
             <td 
             	id="loc_<?= $deelgebied->getId() ?>" 
