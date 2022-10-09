@@ -11,7 +11,7 @@ jobs:
     runs-on: roothaan-server-nuc-02
     strategy:
       matrix:
-        sites: [ '111-roothaan', '117-lunteren' ]
+        sites: [ '111-roothaan', '117-lunteren', '118-bemmel' ]
       fail-fast: false
     steps:
       - run: docker-compose pull jotihunt
