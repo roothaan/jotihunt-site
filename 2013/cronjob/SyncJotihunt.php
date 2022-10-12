@@ -93,8 +93,6 @@ foreach ( $opdrachtcollection as $opdracht ) {
 
 
 print_debug('<h1>Vossen Statussen</h1>');
-$berichtcollection = $driver->getBerichtCollection();
-
 $vossenstatuscollection = $jotihuntinformatie->getVossenStatusen();
 $allGcmIds = $driver->getAllActiveGcms();
 // $vossenstatuscollection == Warning: Invalid argument supplied for foreach() in /app/2013/cronjob/SyncJotihunt.php on line 114
