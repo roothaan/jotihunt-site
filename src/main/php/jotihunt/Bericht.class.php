@@ -56,11 +56,24 @@ class Bericht {
     }
 
     public function getFormattedDatum() {
-        return date("d-m-Y H:i", strtotime($this->getDatum()));
+        $datum = $this->getDatum();
+        $strtotime = strtotime($datum);
+        // Compensate for the API (who now does UTC instead of Europe/Amsterdam)
+        $strtotime = strtotime('+2 hours', $strtotime);
+        return date("d-m-Y H:i", $strtotime);
     }
 
     public function setEindtijd($eindtijd) {
         $this->eindtijd = $eindtijd;
+    }
+
+    public function getFormattedEindtijd() {
+        $eindtijd = $this->getEindtijd();
+        $strtotime = strtotime($eindtijd);
+        // Compensate for the API (who now does UTC instead of Europe/Amsterdam)
+        $strtotime = strtotime('+2 hours', $strtotime);
+        $strftime = strftime('%a, %d %b %H:%M', $strtotime);
+        return ucfirst($strftime);
     }
 
     public function getEindtijd() {
