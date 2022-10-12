@@ -362,7 +362,21 @@ $(document).ready(function() {
 	</div>
 	
 	<div id="voscontainer">&nbsp;&nbsp;</div>
-	
+
+    <script>
+        function setTrafficLayerCheckBox() {
+            jQuery('#jotihunt-trafficlayer').prop('checked', sessionStorage.getItem('jotihunt.trafficlayer') === '1')
+            setTrafficLayer()
+        }
+        jQuery(() => {
+            jQuery('#jotihunt-trafficlayer').on('click', () => {
+                sessionStorage.setItem('jotihunt.trafficlayer', sessionStorage.getItem('jotihunt.trafficlayer') === '1' ? '0' : '1')
+                setTrafficLayerCheckBox()
+            })
+            setTrafficLayerCheckBox()
+        })
+    </script>
+    <input id="jotihunt-trafficlayer" type="checkbox" name="jotihunt.trafficlayer"> Toon verkeersdrukte
 	<?php
 	$amountOfVossenLocations = $driver->getTotalAmountOfVossenLocations(); ?>
 	<p>Totaal aantal vossenlocaties: <strong><?=$amountOfVossenLocations?></strong></p>

@@ -259,8 +259,11 @@ var team<?= $deelgebied->getId() ?>_old = {
 			</td>
         </tr>
 	</table>
-		<?php foreach ($driver->getAllDeelgebieden() as $deelgebied) { ?>
-            <table style="width: 33%; display: inline-table;">
+		<?php
+        $deelgebieden = $driver->getAllDeelgebieden();
+        $height = 100 / (count($deelgebieden) / 3);
+        foreach ($deelgebieden as $deelgebied) { ?>
+            <table style="width: 33%; display: inline-table;height: calc(<?= $height ?>vh - <?= $height ?>px)">
             <tr>
             <td
             	id="status_<?= $deelgebied->getId() ?>"
