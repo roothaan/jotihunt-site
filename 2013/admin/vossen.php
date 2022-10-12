@@ -30,9 +30,9 @@ $('#vossen').dataTable( {
 	    sDeleteURL: "<?= BASE_URL . 'ajax/vossen.ajax.php' ?>"
 	})
     $('select[name="deelgebied_id"]').on('load change', (e) => {
-        $('input[name="name"]').val($(e.target).find('option:selected').text())
+        $('input[name="name"]').val($(e.target).find('option:selected').text().split('(')[0].trim())
     })
-    $('input[name="name"]').val($('select[name="deelgebied_id"] option:selected').text())
+    $('input[name="name"]').val($('select[name="deelgebied_id"] option:selected').text().split('(')[0].trim())
 
 });
 </script>
