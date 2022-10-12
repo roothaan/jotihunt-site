@@ -27,12 +27,12 @@ if (sizeof($berichtcollection) === 0) {
             <h1><?= $bericht->getTitel();?></h1>
         </div>
         <div class="type"><?= ucfirst($bericht->getType());?></div>
-        <div class="datum"><?= strftime('%a, %d %b %H:%M', strtotime($bericht->getDatum()))?></div>
+        <div class="datum"><?= strftime('%a, %d %b %H:%M', strtotime($bericht->getFormattedDatum()))?></div>
         <div class="inhoud"><?= $message; ?></div>
             <?php
             if ($bericht->getType() == 'opdracht') {
                 ?>
-                    <div class="einddatum">Deadline: <?= ucfirst(strftime('%a, %d %b %H:%M', strtotime($bericht->getEindtijd())))?></div>
+                    <div class="einddatum">Deadline: <?= $bericht->getFormattedEindtijd() ?></div>
                     <?php
             } ?>
         </div>

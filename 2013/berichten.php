@@ -50,13 +50,13 @@ var syncJotihunt = function() {
 			        <a href="<?=WEBSITE_URL?>bericht/<?=$bericht->getBericht_id()?>"><?=$bericht->getTitel()?></a>
 			    </div>
 			    <div class="type"><?=ucfirst($bericht->getType())?></div>
-			    <div class="datum"><?=strftime('%a, %d %b %H:%M', strtotime($bericht->getDatum()))?></div>
+			    <div class="datum"><?=strftime('%a, %d %b %H:%M', strtotime($bericht->getFormattedDatum()))?></div>
 			    
 			    <div class="clear"></div>
 			    <div class="inhoud"><?=$bericht->getInhoud()?></div>
 		        <?php
 			    if ($bericht->getType() == 'opdracht') { ?>
-		            <div class="einddatum">Deadline: <?=ucfirst(strftime('%a, %d %b %H:%M', strtotime($bericht->getEindtijd())))?></div>
+		            <div class="einddatum">Deadline: <?= $bericht->getFormattedEindtijd() ?></div>
 		            <?php
 			    } ?>
 			    </div>
