@@ -164,8 +164,9 @@ function make_map($mapOptions) {
     	var a = [];
     	var b = [];
     	var i = 0;
-    	var map; 
-    	
+    	var map;
+        const trafficLayer = new google.maps.TrafficLayer();
+
     	function initialize() {
     		var myOptions = {
     			zoom: mapzoom,
@@ -182,7 +183,7 @@ function make_map($mapOptions) {
     			}
     		};
     		map = new google.maps.Map(document.getElementById("map"), myOptions);
-    
+
             <?php if ($mapOptions->showPlayground) {
                 $eventId = 0;
                 if ($mapOptions->getEventId()) {
@@ -235,8 +236,17 @@ function make_map($mapOptions) {
             ?>
     	}
     	initialize();
-    	
-    	<?php if ($mapOptions->showHuntersLastLocation) { ?>
+
+        function setTrafficLayer() {
+            if (sessionStorage.getItem('jotihunt.trafficlayer') === '1') {
+                trafficLayer.setMap(map);
+            } else {
+                trafficLayer.setMap(null);
+            }
+        }
+        setTrafficLayer();
+
+        <?php if ($mapOptions->showHuntersLastLocation) { ?>
 	    function addHunter(map, latitude, longitude, naam, formatted_time, tel_nr, stale, auto) {
 	        var img = "<?= BASE_URL;?>images/hunter_small.png";
 	        
