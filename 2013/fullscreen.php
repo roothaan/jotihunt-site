@@ -293,7 +293,8 @@ var team<?= $deelgebied->getId() ?>_old = {
             		src="<?=BASE_URL?>fullscreen_map.php?team=<?= $deelgebied->getName() ?>"
             		id="iframe_<?= $deelgebied->getId() ?>"
             		width="100%"
-            		height="100%">
+            		height="100%"
+			style="min-height: 300px;">
             	</iframe>
             	<?php } ?>
             </td>
