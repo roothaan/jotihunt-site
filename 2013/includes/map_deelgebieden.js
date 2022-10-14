@@ -1,9 +1,11 @@
 function drawDeelgebieden(map, eventId) {
+    let params = ''
     const cacheToken = sessionStorage.getItem('jotihunt.kmlCache')
-    if (!cacheToken) {
-        sessionStorage.setItem('jotihunt.kmlCache', Math.random().toString(36).substr(2))
+    if (cacheToken) {
+        params = '?cb=' + cacheToken
     }
-    const kmlUrl = window.location.origin + '/deelgebieden-kml/' + eventId + '?cb=' + sessionStorage.getItem('jotihunt.kmlCache');
+
+    const kmlUrl = window.location.origin + '/deelgebieden-kml/' + eventId + params
     console.log("Using kmlUrl: " + kmlUrl);
     const kmlOptions = {
         suppressInfoWindows: false,
