@@ -109,6 +109,20 @@ class KmlHelper {
                             }
                             echo 'Created <strong>'.$deelgebiedName.'</strong> (ID:'.$deelgebiedId.')
                                     with' . count($split_coordinates) . ' coordinates <br />';
+
+                            // Add vos
+                            $speelhelften = $driver->getAllSpeelhelftenForEvent($eventId);
+                            if ($speelhelften && count($speelhelften) > 0) {
+                                $team = new VossenTeam();
+                                $team->setDeelgebied( $deelgebiedId );
+                                $team->setName( $deelgebiedName );
+                                $team->setStatus( 'rood' );
+
+                                $team->setSpeelhelftId( $speelhelften[0]->getId() );
+
+                                $driver->addTeam( $team );
+                            }
+
                         }
                     }
                 }
