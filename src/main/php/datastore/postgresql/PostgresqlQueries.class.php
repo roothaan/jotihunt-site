@@ -694,7 +694,10 @@ class PostgresqlQueries {
         $sqlQuery = 'INSERT INTO deelgebied_coord(deelgebied_id, longitude, latitude, order_id) VALUES ($1, $2, $3, $4) RETURNING id';
         $this->prepareInternal($sqlName, $sqlQuery);
 
-        
+        $sqlName = 'removeCoordinateForDeelgebied';
+        $sqlQuery = 'DELETE FROM deelgebied_coord WHERE deelgebied_id = $1';
+        $this->prepareInternal($sqlName, $sqlQuery);
+
         $sqlName = 'getAllCoordinatesForDeelgebied';
         $sqlQuery = 'SELECT id, deelgebied_id, longitude, latitude, order_id
                         FROM deelgebied_coord

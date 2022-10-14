@@ -40,7 +40,7 @@ class KmlHelper {
             
             foreach($kml['Document']['Folder'] as $folder) {
                 if (isset ($folder['name']) && $folder['name'] == 'Deelgebieden') {
-                    echo 'Found <strong>Deelgebieden</strong> with ' . 
+                    echo 'Found <strong>Deelgebieden</strong> layer with ' .
                          count($folder['Placemark']) .' Placemarks!<br />';
                     $deelgebiedCoordinates = array();
                     $deelgebiedColours = array();
@@ -94,35 +94,44 @@ class KmlHelper {
                             $eventId = $_POST['event_id'];
                         }
                         // Actually import
+                        $createOrUpdate = '';
                         foreach ($deelgebiedCoordinates as $deelgebiedName => $split_coordinates) {
-                            // TODO actually add colors
-                            $deelgebied = new Deelgebied(
-                                                        null,
-                                                        $eventId,
-                                                        $deelgebiedName, 
-                                                        $deelgebiedColours[$deelgebiedName]['linecolor'],
-                                                        $deelgebiedColours[$deelgebiedName]['polycolor']);
-                            $deelgebiedId = $driver->addDeelgebied($deelgebied);
+                            // replace
+                            $deelgebied = $driver->getDeelgebiedByName($deelgebiedName);
+                            if ($deelgebied) {
+                                $deelgebiedId = $deelgebied->getId();
+                                $driver->removeCoordinateForDeelgebied($deelgebiedId);
+                                $createOrUpdate = 'Updated';
+                            } else {
+                                // TODO actually add colors
+                                $deelgebied   = new Deelgebied(
+                                    null,
+                                    $eventId,
+                                    $deelgebiedName,
+                                    $deelgebiedColours[ $deelgebiedName ]['linecolor'],
+                                    $deelgebiedColours[ $deelgebiedName ]['polycolor'] );
+                                $deelgebiedId = $driver->addDeelgebied( $deelgebied );
+
+                                // Add vos
+                                $speelhelften = $driver->getAllSpeelhelftenForEvent($eventId);
+                                if ($speelhelften && count($speelhelften) > 0) {
+                                    $team = new VossenTeam();
+                                    $team->setDeelgebied( $deelgebiedId );
+                                    $team->setName( $deelgebiedName );
+                                    $team->setStatus( 'rood' );
+
+                                    $team->setSpeelhelftId( $speelhelften[0]->getId() );
+
+                                    $driver->addTeam( $team );
+                                }
+                                $createOrUpdate = 'Created';
+                            }
                             foreach ($split_coordinates as $split_coordinate) {
                                 $split_coordinate->setDeelgebiedId($deelgebiedId);
                                 $driver->addCoordinate($split_coordinate);
                             }
-                            echo 'Created <strong>'.$deelgebiedName.'</strong> (ID:'.$deelgebiedId.')
-                                    with' . count($split_coordinates) . ' coordinates <br />';
-
-                            // Add vos
-                            $speelhelften = $driver->getAllSpeelhelftenForEvent($eventId);
-                            if ($speelhelften && count($speelhelften) > 0) {
-                                $team = new VossenTeam();
-                                $team->setDeelgebied( $deelgebiedId );
-                                $team->setName( $deelgebiedName );
-                                $team->setStatus( 'rood' );
-
-                                $team->setSpeelhelftId( $speelhelften[0]->getId() );
-
-                                $driver->addTeam( $team );
-                            }
-
+                            echo $createOrUpdate . ' <strong>'.$deelgebiedName.'</strong> (ID:'.$deelgebiedId.')
+                                    with <strong>' . count($split_coordinates) . '</strong> coordinates <br />';
                         }
                     }
                 }
