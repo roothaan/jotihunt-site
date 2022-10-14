@@ -23,6 +23,7 @@ if ($driver->isReady()) {
     <li><a href="<?=WEBSITE_URL?>admin-poi">Pois</a></li>
     <li><a href="<?=WEBSITE_URL?>admin-poi-types">Poi Types</a></li>
     <li><a href="<?=WEBSITE_URL?>admin-subscriptions-kml">Deelnemers KLM export</a></li>
+    <li><a href="<?=WEBSITE_URL?>suadmin-deelgebieden">Deelgebieden</a> (<?= $driver->getAllDeelgebiedenCount() ?>)</li>
 </ul>
     <?php if (!$driver->isReady() || $authMgr->isSuperAdmin()) { ?>
     <h2>Super Admin</h2>

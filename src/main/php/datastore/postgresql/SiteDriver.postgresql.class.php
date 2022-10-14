@@ -1605,8 +1605,8 @@ class SiteDriverPostgresql {
         if (! $result) {
             throw new DatastoreException('Could not get deelgebied by name: ' . $deelgebied);
         }
-        
-        if (pg_num_rows($result) == 1) {
+
+        if (pg_num_rows($result)  > 0) {
             $row = pg_fetch_assoc($result);
             return new Deelgebied($row ['id'], $row ['event_id'], $row ['name'], $row ['linecolor'], $row['polycolor']);
         }

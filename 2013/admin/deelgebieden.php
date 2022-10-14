@@ -1,6 +1,6 @@
 <?php
 if(!defined("opoiLoaded")) die('Incorrect or unknown use of application');
-$authMgr->requireSuperAdmin();
+$authMgr->requireAdmin();
 
 require_once BASE_DIR . 'includes/KmlHelper.class.php';
 
@@ -13,6 +13,17 @@ if (isset($_POST['event_id']) && isset($_POST['name']) && isset($_POST['colour']
 }
 
 if (isset($_GET['action']) && 'remove' == $_GET['action']) {
+    // Verwijder counterhunt rondjes
+    $deelgebied = $driver->getDeelgebiedById($_GET['deelgebied_id']);
+    $counterhuntrondjes = $driver->getCounterhuntrondjeForDeelgebied($deelgebied->getName());
+    foreach ($counterhuntrondjes as $counterhuntrondje) {
+        $driver->removeCounterhuntrondje($counterhuntrondje->getId());
+        }
+    // Verwijder vos
+    $vos = $driver->getVosXYByDeelgebied($deelgebied->getName());
+    if ($vos) {
+        $driver->removeTeam( $vos->getId() );
+    }
     $driver->removeDeelgebied($_GET['deelgebied_id']);
 }
 
@@ -92,6 +103,6 @@ foreach ($events as $event) {
 <h2>KML import</h2>
 <form action="<?=WEBSITE_URL?>suadmin-deelgebieden" method="POST" enctype="multipart/form-data">
     KML File: <input type="file" name="kml_file"><br />
-    import: <input type="checkbox" name="import"><br />
+    <label>import: <input type="checkbox" name="import"></label><br />
     <input type="submit" value="Upload KML file">
 </form>
