@@ -1,11 +1,17 @@
 function drawDeelgebieden(map, eventId) {
-    var kmlUrl =  window.location.origin + '/deelgebieden-kml/' + eventId
+    let params = ''
+    const cacheToken = sessionStorage.getItem('jotihunt.kmlCache')
+    if (cacheToken) {
+        params = '?cb=' + cacheToken
+    }
+
+    const kmlUrl = window.location.origin + '/deelgebieden-kml/' + eventId + params
     console.log("Using kmlUrl: " + kmlUrl);
-    var kmlOptions = {
-      suppressInfoWindows: false,
-      preserveViewport: false,
-      map: map
+    const kmlOptions = {
+        suppressInfoWindows: false,
+        preserveViewport: false,
+        map: map
     };
-    
+
     return new google.maps.KmlLayer(kmlUrl, kmlOptions);
 }
