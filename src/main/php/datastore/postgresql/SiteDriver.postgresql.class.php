@@ -1705,7 +1705,22 @@ class SiteDriverPostgresql {
             
         return $_result;
     }
-    
+
+    public function removeDeelgebiedFull($deelgebiedId) {
+        // Verwijder counterhunt rondjes
+        $deelgebied = $this->getDeelgebiedById($deelgebiedId);
+        $counterhuntrondjes = $this->getCounterhuntrondjeForDeelgebied($deelgebied->getName());
+        foreach ($counterhuntrondjes as $counterhuntrondje) {
+            $this->removeCounterhuntrondje($counterhuntrondje->getId());
+        }
+        // Verwijder vos
+        $vos = $this->getVosXYByDeelgebied($deelgebied->getName());
+        if ($vos) {
+            $this->removeTeam( $vos->getId() );
+        }
+        $this->removeDeelgebied($deelgebiedId);
+    }
+
     public function removeDeelgebied($deelgebiedId) {
         $sqlName = 'removeDeelgebied';
         $values = array (
@@ -1718,7 +1733,18 @@ class SiteDriverPostgresql {
         }
         return true;
     }
-    
+
+    public function removeCoordinateForDeelgebied($deelgebiedId) {
+        $sqlName = 'removeCoordinateForDeelgebied';
+
+        $values = array ( $deelgebiedId );
+
+        $result = pg_execute($this->conn, $sqlName, $values);
+
+        if (! $result) {
+            throw new DatastoreException('Could not remove coordinates for deelgebied ' . $deelgebiedId);
+        }
+    }
     public function addCoordinate($coordinate) {
         $sqlName = 'addCoordinate';
         
@@ -1732,7 +1758,7 @@ class SiteDriverPostgresql {
         $result = pg_execute($this->conn, $sqlName, $values);
         
         if (! $result) {
-            throw new DatastoreException('Could not add hunt, hunter_id:' . $hunter_id . ',code:' . $code . ',vossentracker_id:' . $vossentracker_id);
+            throw new DatastoreException('Could not add coordidate, getDeelgebiedId:' . $coordinate->getDeelgebiedId());
         }
     }
     public function getAllCoordinatesForDeelgebied($deelgebied_id) {
@@ -1824,7 +1850,9 @@ class SiteDriverPostgresql {
         $result = pg_execute($this->conn, $sqlName, $values);
         
         if (! $result) {
-            throw new DatastoreException('Could not add team');
+            throw new DatastoreException('Could not add team with name' . $vossenteam->getName() .
+                                         ' to deelgebied ' . $vossenteam->getDeelgebied() .
+            ' speelhelft ' . $vossenteam->getSpeelhelftId());
         }
         
         return true;
