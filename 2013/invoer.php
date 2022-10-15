@@ -133,6 +133,15 @@ foreach($deelgebieden as $deelgebied){
             $('.item'+team).removeClass('success').removeClass('fail');
             var x = $('input[name="'+team+'x"]').val();
             var y = $('input[name="'+team+'y"]').val();
+            if (x && x.length == 4) {
+                x = x+"0";
+                $('input[name="'+team+'x"]').val(x);
+            }
+
+            if (y && y.length == 4) {
+                y = y+"0";
+                $('input[name="'+team+'y"]').val(y);
+            }
             if(x && x.length == 5 && x > 12000 && x < 26000 && y && y.length == 5 && y > 41000 && y < 51000){
                 $('.item'+team).addClass('success');
                 var fl = getLatLong(x,y);
