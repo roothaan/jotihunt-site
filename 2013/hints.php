@@ -236,7 +236,11 @@ function cmpLegend($a, $b)
  */
 function printLegendAndCoords($words, $legendArray)
 {
-    $html = '<tr>';
+    $html = '<tr class="answerRow" ';
+    foreach($legendArray['legend'] as $letter => $number) {
+        $html .= ' data-'.strtolower($letter).'="'.$number.'"';
+    }
+    $html .= '>';
     $html .= '<td>'.$legendArray['distance'].' km</td>';
     $html .= '<td>'.printLegend($legendArray['legend']).'</td>';
     $html .= '<td>'.printCoords($words, $legendArray['legend']).'</td>';
@@ -298,6 +302,21 @@ function printLegend($legend)
 <script type="text/javascript">
     var fetchIsRunning = false;
     $(document).ready(function(){
+        $('.fixedCombination').change(function(){
+            // reiterate through all known combinations
+            $('.answerRow').show();
+            $('.fixedCombination').each(function(){
+                var letter = $(this).attr("data-letter");
+                var knownCombination = $(this).val();
+                if (knownCombination != "") {
+                    $('.answerRow').each(function(){
+                        if ($(this).attr("data-"+letter) != knownCombination) {
+                            $(this).hide();
+                        }
+                    });
+                }
+            });
+        });
         $('.openMap').click(function(e){
             e.preventDefault();
             window.open(
@@ -373,6 +392,20 @@ het berekenen van de kortste afstand, bijvoorbeeld omdat een groep net een verpl
                 </td>
             </tr>
         <?php } ?>
+    </table>
+    <hr id="hrheader">
+    <h2>Bekende getallen</h2>
+    <table>
+        <tr><td>A</td><td><select class="fixedCombination" data-letter="A" name="fixedA"><option value="">Niet bekend</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="0">0</option></select></td></tr>
+        <tr><td>B</td><td><select class="fixedCombination" data-letter="B" name="fixedB"><option value="">Niet bekend</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="0">0</option></select></td></tr>
+        <tr><td>C</td><td><select class="fixedCombination" data-letter="C" name="fixedC"><option value="">Niet bekend</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="0">0</option></select></td></tr>
+        <tr><td>D</td><td><select class="fixedCombination" data-letter="D" name="fixedD"><option value="">Niet bekend</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="0">0</option></select></td></tr>
+        <tr><td>E</td><td><select class="fixedCombination" data-letter="E" name="fixedE"><option value="">Niet bekend</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="0">0</option></select></td></tr>
+        <tr><td>F</td><td><select class="fixedCombination" data-letter="F" name="fixedF"><option value="">Niet bekend</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="0">0</option></select></td></tr>
+        <tr><td>G</td><td><select class="fixedCombination" data-letter="G" name="fixedG"><option value="">Niet bekend</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="0">0</option></select></td></tr>
+        <tr><td>H</td><td><select class="fixedCombination" data-letter="H" name="fixedH"><option value="">Niet bekend</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="0">0</option></select></td></tr>
+        <tr><td>I</td><td><select class="fixedCombination" data-letter="I" name="fixedI"><option value="">Niet bekend</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="0">0</option></select></td></tr>
+        <tr><td>J</td><td><select class="fixedCombination" data-letter="J" name="fixedJ"><option value="">Niet bekend</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="0">0</option></select></td></tr>
     </table>
     <hr id="hrheader">
     <h2>Hint letters</h2>
