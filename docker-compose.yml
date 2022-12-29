@@ -29,6 +29,14 @@ services:
       PGADMIN_DEFAULT_PASSWORD: admin
   db:
     image: postgres
+    ports:
+      - "54321:5432"
     environment:
       POSTGRES_USER: jotihunt
       POSTGRES_PASSWORD: jotihunt
+      TZ: Europe/Amsterdam
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+
+volumes:
+  dbdata:

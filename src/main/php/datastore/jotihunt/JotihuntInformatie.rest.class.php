@@ -241,7 +241,7 @@ class JotihuntInformatieRest {
                     $score->setPlaats($total ?? 0);
                     $score->setGroep($scoreitem->name);
                     $score->setWoonplaats($scoreitem->city);
-                    //$score->setRegio($scoreitem->regio);
+                    $score->setRegio($scoreitem->area);
                     $score->setHunts((!empty($scoreitem->hunt_points))?$scoreitem->hunt_points:0);
                     $score->setTegenhunts((!empty($scoreitem->counter_hunt_points))?$scoreitem->counter_hunt_points:0);
                     $score->setOpdrachten((!empty($scoreitem->assignment_points))?$scoreitem->assignment_points:0);
